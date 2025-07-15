@@ -1,4 +1,4 @@
-// src/pages/auth/CadastroPage.jsx - VERSÃO FINAL E CORRETA
+// src/pages/auth/CadastroPage.jsx - VERSÃO COM REDIRECIONAMENTO CORRETO
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -32,7 +32,6 @@ function CadastroPage() {
 
     setLoading(true);
 
-    // 1. Verifica se o username já existe (esta parte continua igual e correta)
     const { data: existingUser, error: usernameError } = await supabase
       .from('profiles')
       .select('username')
@@ -50,22 +49,27 @@ function CadastroPage() {
       return;
     }
 
-    // 2. Cria o usuário, passando o 'username' como metadados.
+    // 2. Cria o usuário, passando o 'username' e a URL de redirecionamento.
     const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { 
           username: username 
-        }
+        },
+        // NOVO: Aqui está a mágica! Especificamos para onde o link de confirmação deve levar.
+        // Ele vai usar a URL base do seu site e adicionar o caminho '/painel'.
+        // Isso funciona tanto em localhost quanto em produção!
+        emailRedirectTo: `${window.location.origin}/painel`,
       }
     });
 
     if (signUpError) {
       setError(signUpError.message);
     } else {
-      alert('Cadastro realizado! Por favor, verifique seu email para confirmar sua conta e depois faça o login.');
-      navigate('/login');
+      // ALTERADO: Mensagem mais clara para o usuário.
+      alert('Cadastro realizado! ✨ Enviamos um link de confirmação para o seu e-mail. Clique nele para validar sua conta e acessar seu painel.');
+      // Removemos o navigate('/login') para que o usuário foque em checar o e-mail.
     }
     setLoading(false);
   };
@@ -78,6 +82,7 @@ function CadastroPage() {
         <div className={styles.authContainer}>
           <h1 className={styles.title}>Criar Conta</h1>
           <form onSubmit={handleSubmit} className={styles.form}>
+            {/* ... o resto do seu formulário JSX continua o mesmo ... */}
             <div className={styles.inputGroup}>
               <label htmlFor="username">Nome de Usuário</label>
               <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
