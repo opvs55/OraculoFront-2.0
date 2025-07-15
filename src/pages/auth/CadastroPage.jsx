@@ -60,7 +60,7 @@ function CadastroPage() {
         // NOVO: Aqui está a mágica! Especificamos para onde o link de confirmação deve levar.
         // Ele vai usar a URL base do seu site e adicionar o caminho '/painel'.
         // Isso funciona tanto em localhost quanto em produção!
-        emailRedirectTo: `${https://oraculo-front-2-0.vercel.app/}/painel`,
+        emailRedirectTo: `https://oraculo-front-2-0.vercel.app/painel`,
       }
     });
 
