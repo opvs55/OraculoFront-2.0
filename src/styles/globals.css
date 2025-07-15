@@ -1,0 +1,61 @@
+/* src/styles/globals.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap');
+
+:root {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  background-color: #0D0C1D;
+  color: #E0E0E0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+/* O #root é nosso container principal da aplicação */
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+/* O 'main' agora é um container flexível que ocupa o espaço restante */
+main {
+  flex-grow: 1;
+  width: 100%;
+  /* Permite que o conteúdo interno role, se necessário */
+  overflow-y: auto;
+}
+
+/* CLASSE DE AJUDA GLOBAL: Este é o container que você usará DENTRO das suas páginas
+   para centralizar o conteúdo e limitar a largura para boa legibilidade. */
+.content_wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto; /* Centraliza o container */
+  padding: 3rem 2rem; /* Adiciona espaçamento vertical e lateral */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1, h2, h3 {
+  font-family: 'Cinzel', serif;
+  color: #E1B382;
+}
+
+a {
+  color: #C36E97;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #E0E0E0;
+}

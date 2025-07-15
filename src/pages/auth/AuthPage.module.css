@@ -1,0 +1,66 @@
+/* src/pages/AuthPage.module.css */
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  width: 100%;
+  max-width: 450px;
+  background-color: #1A1A2E;
+  border-radius: 12px;
+  border: 1px solid #C36E97;
+}
+.title {
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.inputGroup label {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #c7c7c7;
+}
+.inputGroup input {
+  background: #0D0C1D;
+  border: 1px solid #2c2c54;
+  color: #E0E0E0;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.button {
+  background-color: #E1B382;
+  color: #0D0C1D;
+  font-weight: bold;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s;
+}
+.button:disabled { background-color: #555; cursor: not-allowed; }
+.button:hover:not(:disabled) { background-color: #d1a372; }
+.error {
+  color: #ff8a80;
+  background-color: rgba(255, 138, 128, 0.1);
+  border: 1px solid #ff8a80;
+  padding: 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.link {
+  margin-top: 2rem;
+}

@@ -1,0 +1,68 @@
+/* src/components/common/Loader/Loader.module.css */
+
+/* ... (seu .loaderContainer e .spinner continuam aqui) ... */
+.loaderContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background-color: rgba(13, 12, 29, 0.85); 
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem; /* Aumentei um pouco o gap */
+  animation: fadeInLoader 0.5s ease-in-out;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(225, 179, 130, 0.2);
+  border-top-color: #E1B382;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+/* Remova a estilização antiga de 'p' e adicione a nova classe */
+.loadingText {
+  color: #E1B382;
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  /* Aplica nossa nova animação */
+  animation: fadeInText 0.8s ease-in-out;
+}
+
+
+/* --- Animações --- */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeInLoader {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* NOVA ANIMAÇÃO PARA O TEXTO */
+@keyframes fadeInText {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

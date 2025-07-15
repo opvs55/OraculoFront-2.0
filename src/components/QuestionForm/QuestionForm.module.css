@@ -1,0 +1,42 @@
+/* src/components/QuestionForm/QuestionForm.module.css */
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  background-color: #4a148c; /* Um roxo místico */
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover:not(:disabled) {
+  background-color: #6a1b9a;
+  transform: translateY(-2px);
+}
+
+.button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}

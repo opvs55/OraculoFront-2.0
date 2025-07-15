@@ -1,0 +1,49 @@
+/* src/pages/ResultsPage.module.css */
+
+.container {
+  width: 100%;
+}
+
+.question {
+  font-size: 1.8rem;
+  margin: 0 auto 3rem auto;
+  font-style: italic;
+  color: #c7c7c7;
+  max-width: 800px;
+  text-align: center;
+}
+
+.resultsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 4rem;
+}
+
+.cardsSection {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.readingSection {
+  width: 100%;
+  /* MUDANÇA AQUI: Em vez de max-width fixo, usamos uma porcentagem */
+  max-width: 80%; /* Ocupará 80% da largura do container pai (o <main>) */
+  display: flex;
+  justify-content: center;
+}
+
+/* Ajuste para telas pequenas */
+@media (max-width: 768px) {
+  .question {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+  }
+  
+  .readingSection {
+    /* MUDANÇA AQUI: No mobile, voltamos para 100% para não ficar com bordas */
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,60 @@
+/* src/components/CelticCrossLayout/CelticCrossLayout.module.css */
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: auto;
+  
+  /* MUDANÇA AQUI: Aumentamos drasticamente o espaçamento para 60px */
+  gap: 60px;
+  
+  width: 100%;
+  /* MUDANÇA AQUI: Aumentamos a largura máxima para acomodar o novo gap */
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ... as regras .positionX e .cardLink continuam as mesmas ... */
+.position1 { grid-area: 2 / 2 / 3 / 3; }
+.position2 { grid-area: 2 / 2 / 3 / 3; transform: rotate(90deg); z-index: 2; }
+.position3 { grid-area: 3 / 2 / 4 / 3; }
+.position4 { grid-area: 2 / 1 / 3 / 2; }
+.position5 { grid-area: 1 / 2 / 2 / 3; }
+.position6 { grid-area: 2 / 3 / 3 / 4; }
+.position7 { grid-area: 4 / 4 / 5 / 5; }
+.position8 { grid-area: 3 / 4 / 4 / 5; }
+.position9 { grid-area: 2 / 4 / 3 / 5; }
+.position10 { grid-area: 1 / 4 / 2 / 5; }
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: contents;
+}
+
+.cardPosition {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Media Query para Telas Pequenas --- */
+@media (max-width: 768px) {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: auto;
+    gap: 20px; /* Mantemos o gap de 20px para mobile, que já está bom */
+    max-width: 380px;
+  }
+  /* ... as regras de posição para mobile continuam as mesmas ... */
+  .position1 { grid-area: 2 / 2 / 3 / 3; }
+  .position2 { grid-area: 2 / 2 / 3 / 3; transform: rotate(90deg); }
+  .position3 { grid-area: 3 / 2 / 4 / 3; }
+  .position4 { grid-area: 2 / 1 / 3 / 2; }
+  .position5 { grid-area: 1 / 2 / 2 / 3; }
+  .position6 { grid-area: 2 / 3 / 3 / 4; }
+  .position7 { grid-area: 4 / 1 / 5 / 2; }
+  .position8 { grid-area: 4 / 2 / 5 / 3; }
+  .position9 { grid-area: 4 / 3 / 5 / 4; }
+  .position10 { grid-area: 5 / 2 / 6 / 3; }
+}

@@ -1,0 +1,20 @@
+/* src/components/Card/Card.module.css */
+/* ... suas regras existentes ... */
+.card {
+  width: 120px; /* Tamanho padrão para desktop */
+  /* ... */
+}
+
+/* EM TELAS MENORES QUE 768PX */
+@media (max-width: 768px) {
+  .card {
+    width: 80px; /* As cartas ficam menores */
+  }
+
+  .positionName {
+    font-size: 0.7rem;
+  }
+  .cardName {
+    font-size: 0.6rem;
+  }
+}

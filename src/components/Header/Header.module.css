@@ -1,0 +1,94 @@
+/* src/components/Header/Header.module.css */
+
+.header {
+  width: 100%; /* Ocupa a largura total */
+  padding: 1rem 2rem;
+  display: flex; /* USA FLEXBOX */
+  justify-content: space-between; /* MÁGICA: empurra os filhos para os cantos opostos */
+  align-items: center; /* Alinha verticalmente */
+  background-color: #0D0C1D;
+  border-bottom: 1px solid #2c2c54;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  color: #E1B382;
+  text-decoration: none;
+  letter-spacing: 2px;
+}
+
+.nav { 
+  display: flex; 
+  align-items: center; 
+  gap: 2rem; 
+}
+
+.navLink { 
+  color: #a0a0a0;
+  text-decoration: none; 
+  font-weight: bold; 
+  padding-bottom: 5px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.navLink:hover { 
+  color: #E0E0E0; 
+}
+
+.activeLink {
+  composes: navLink;
+  color: #E1B382;
+  border-bottom-color: #E1B382;
+}
+
+.navButton { 
+  background: none; border: none; color: #a0a0a0; font-family: inherit; font-size: 1rem;
+  font-weight: bold; cursor: pointer; transition: color 0.2s; padding-bottom: 5px;
+}
+.navButton:hover { color: #E0E0E0; }
+
+.signUpButton {
+  background-color: #E1B382;
+  color: #0D0C1D !important;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: transform 0.2s;
+  border-bottom: none !important;
+}
+.signUpButton:hover { transform: scale(1.05); color: #0D0C1D !important; }
+
+/* --- Responsividade para Telas Pequenas --- */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column; /* Empilha o logo e a navegação */
+    gap: 1rem;
+  }
+  .nav {
+    width: 100%;
+    justify-content: space-around; /* Espalha os links */
+  }
+}
+
+
+.signOutButtonHeader {
+  background: none;
+  border: 1px solid #555;
+  color: #a0a0a0;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 2rem; /* Separa dos outros links */
+  transition: all 0.2s;
+}
+
+.signOutButtonHeader:hover {
+  background-color: #c7c7c7;
+  color: #0D0C1D;
+  border-color: #c7c7c7;
+}
