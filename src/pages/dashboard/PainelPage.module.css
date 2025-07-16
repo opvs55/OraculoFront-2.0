@@ -1,5 +1,48 @@
 /* src/pages/dashboard/PainelPage.module.css */
 
+/* --- NOVAS CLASSES PARA O FUNDO DE VÍDEO --- */
+.painelContainer {
+  position: relative;
+  width: 100%;
+  min-height: 100vh; /* Garante que o fundo cubra a tela inteira, no mínimo */
+  overflow: hidden;   /* Esconde qualquer parte do vídeo que vaze */
+  display: flex;      /* Usado para ajudar a centralizar o conteúdo */
+  justify-content: center;
+}
+
+.videoFundo {
+  position: fixed; /* O vídeo fica fixo e não rola com a página */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 1; 
+}
+
+.videoOverlay {
+  position: fixed; /* O overlay também fica fixo, cobrindo o vídeo */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(13, 12, 29, 0.8); /* Overlay escuro para garantir legibilidade */
+  z-index: 2;
+}
+
+.conteudoSobreposto {
+  position: relative;
+  z-index: 3; /* Conteúdo principal fica acima de tudo */
+  width: 100%;
+  padding-top: 4rem; 
+  padding-bottom: 4rem;
+}
+
+
+/* --- O RESTANTE DO SEU CSS CONTINUA ABAIXO, SEM ALTERAÇÕES --- */
+
 /* --- Container e Layouts --- */
 .dashboardContainer, .editPageContainer {
   width: 100%;
@@ -52,17 +95,17 @@
 }
 
 .avatar {
-  width: 200px;  /* Largura da carta */
-  height: 350px; /* Altura para manter a proporção de uma carta de tarot (aprox. 1:1.75) */
-  border-radius: 8px; /* Cantos arredondados, como uma carta real, em vez de 50% (círculo) */
-  object-fit: cover;  /* Garante que a imagem preencha o espaço sem distorcer */
+  width: 200px;
+  height: 350px;
+  border-radius: 8px;
+  object-fit: cover;
   border: 3px solid #C36E97;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra sutil para dar profundidade */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
 }
 
 .avatar:hover {
-  transform: scale(1.03) rotate(-1deg); /* Leve efeito de inclinação ao passar o mouse */
+  transform: scale(1.03) rotate(-1deg);
 }
 
 .profileInfo h2 { font-family: 'Cinzel', serif; font-size: 2rem; margin: 0; }
@@ -85,11 +128,9 @@
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  /* MUDANÇA 2: REMOVEMOS O position: sticky que fazia o container "flutuar" */
 }
 .avatarPicker p { font-weight: bold; font-family: 'Cinzel', serif; color: #E0E0E0; font-size: 1.2rem; }
 .avatarPreview { width: 200px; height: 307px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); border: 1px solid #3a3a50; }
-
 
 .profileActions {
   margin-top: 1.5rem;
@@ -98,9 +139,8 @@
   align-items: center;
 }
 
-/* Ajuste o botão de sair para ficar mais sutil ao lado do de editar */
 .signOutButton { 
-  margin-top: 0; /* Remove a margem superior que ele tinha */
+  margin-top: 0;
   background: none; 
   border: none; 
   color: #c7c7c7; 
@@ -114,7 +154,6 @@
 }
 
 /* --- Histórico de Leituras e outros estilos --- */
-/* ... (todo o resto do arquivo continua exatamente igual, sem alterações) ... */
 .historySection { width: 100%; text-align: center; }
 .historySection h1, .historySection h2 { text-align: center; font-size: 2.5rem; margin-bottom: 0.5rem; }
 .historySection > .content_wrapper > p, .historySection > p { text-align: center; color: #c7c7c7; margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
@@ -131,8 +170,6 @@
 .deleteAllContainer { margin-top: 3rem; padding-top: 2rem; width: 100%; border-top: 1px solid #2c2c54; text-align: center; }
 .deleteAllButton { background-color: transparent; border: 1px solid #b71c1c; color: #ff8a80; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
 .deleteAllButton:hover { background-color: #b71c1c; color: white; }
-.signOutButton { margin-top: 3rem; background: none; border: 1px solid #555; color: #c7c7c7; padding: 0.8rem 1.5rem; cursor: pointer; border-radius: 6px; }
-.signOutButton:hover { border-color: #ff8a80; color: #ff8a80; }
 .profileForm { width: 100%; display: flex; flex-direction: column; gap: 1.5rem; text-align: left; }
 .formGroup { display: flex; flex-direction: column; }
 .formGroup label { margin-bottom: 0.5rem; color: #c7c7c7; font-weight: bold; }
