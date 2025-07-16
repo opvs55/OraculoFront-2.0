@@ -1,94 +1,88 @@
-/* src/components/Header/Header.module.css */
+/* src/components/Header/Header.module.css - VERSÃO ATUALIZADA */
 
 .header {
-  width: 100%; /* Ocupa a largura total */
+  width: 100%;
   padding: 1rem 2rem;
-  display: flex; /* USA FLEXBOX */
-  justify-content: space-between; /* MÁGICA: empurra os filhos para os cantos opostos */
-  align-items: center; /* Alinha verticalmente */
+  display: flex;
+  /* ALTERADO: Centraliza o conteúdo (a <nav>) horizontalmente */
+  justify-content: center; 
+  align-items: center;
   background-color: #0D0C1D;
+  position: relative;
+  z-index: 10;
   border-bottom: 1px solid #2c2c54;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  flex-shrink: 0;
 }
 
-.logo {
-  font-family: 'Cinzel', serif;
-  font-size: 1.8rem;
-  color: #E1B382;
-  text-decoration: none;
-  letter-spacing: 2px;
+/* REMOVIDO: A classe .logo foi movida para o CSS da HomePage */
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem; /* Aumentei um pouco o espaçamento para um visual mais limpo */
 }
 
-.nav { 
-  display: flex; 
-  align-items: center; 
-  gap: 2rem; 
-}
-
-.navLink { 
+.navLink {
   color: #a0a0a0;
-  text-decoration: none; 
-  font-weight: bold; 
+  text-decoration: none;
+  font-weight: bold;
   padding-bottom: 5px;
   border-bottom: 2px solid transparent;
   transition: color 0.3s, border-color 0.3s;
 }
 
-.navLink:hover { 
-  color: #E0E0E0; 
+.navLink:hover {
+  color: #E0E0E0;
 }
 
+/* IMPORTANTE: Esta classe aplica o estilo ativo */
 .activeLink {
-  composes: navLink;
   color: #E1B382;
   border-bottom-color: #E1B382;
 }
 
-.navButton { 
-  background: none; border: none; color: #a0a0a0; font-family: inherit; font-size: 1rem;
-  font-weight: bold; cursor: pointer; transition: color 0.2s; padding-bottom: 5px;
+.newReadingLink {
+  background-color: #C36E97;
+  color: #fff !important;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s;
+  border-bottom: none !important;
 }
-.navButton:hover { color: #E0E0E0; }
+
+.newReadingLink:hover {
+  background-color: #ad5f85;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(195, 110, 151, 0.4);
+}
 
 .signUpButton {
   background-color: #E1B382;
   color: #0D0C1D !important;
   padding: 0.5rem 1rem;
   border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
   transition: transform 0.2s;
   border-bottom: none !important;
 }
-.signUpButton:hover { transform: scale(1.05); color: #0D0C1D !important; }
 
-/* --- Responsividade para Telas Pequenas --- */
-@media (max-width: 768px) {
+.signUpButton:hover {
+  transform: scale(1.05);
+  color: #0D0C1D !important;
+}
+
+/* A media query permanece a mesma para responsividade */
+@media (max-width: 820px) {
   .header {
-    flex-direction: column; /* Empilha o logo e a navegação */
+    flex-direction: column;
     gap: 1rem;
   }
   .nav {
     width: 100%;
-    justify-content: space-around; /* Espalha os links */
+    justify-content: space-around;
+    gap: 1.5rem;
   }
-}
-
-
-.signOutButtonHeader {
-  background: none;
-  border: 1px solid #555;
-  color: #a0a0a0;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-left: 2rem; /* Separa dos outros links */
-  transition: all 0.2s;
-}
-
-.signOutButtonHeader:hover {
-  background-color: #c7c7c7;
-  color: #0D0C1D;
-  border-color: #c7c7c7;
 }

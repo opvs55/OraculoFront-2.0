@@ -24,7 +24,6 @@ function PastReadingPage() {
   return (
     <div className="content_wrapper">
       <div className={styles.container}>
-        <Link to="/painel" style={{marginBottom: '2rem', alignSelf: 'flex-start'}}>← Voltar para o Painel</Link>
         <h2 className={styles.question}>Revisitando sua pergunta: "{currentReading.question}"</h2>
         <div className={styles.resultsContainer}>
           <div className={styles.cardsSection}>

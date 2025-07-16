@@ -1,59 +1,53 @@
-// src/components/Header/Header.jsx - VERSÃO CORRIGIDA
+// src/components/Header/Header.jsx - VERSÃO ATUALIZADA
 
 import React from 'react';
-import { useAuth } from '../../context/AuthContext'; // 1. Usa o hook customizado em vez do useContext genérico
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { NavLink } from 'react-router-dom';
 import styles from './Header.module.css';
 
 function Header() {
-  // 2. O hook nos dá o estado de autenticação de forma limpa e confiável.
-  const { user, signOut, loading } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      navigate('/');
-    } catch (error) {
-      console.error("Erro ao fazer logout:", error);
-    }
-  };
+  const { user, loading } = useAuth();
+  
+  // REMOVIDO: O logo foi movido para a HomePage.
+  // REMOVIDO: A função handleSignOut e o botão "Sair".
 
   return (
     <header className={styles.header}>
-      <Link to="/" className={styles.logo}>
-        ORÁCULO IA
-      </Link>
-      
+      {/* A navegação agora é o elemento principal do header */}
       <nav className={styles.nav}>
-        {/* Enquanto a autenticação carrega, não mostramos os botões para evitar um "flash" */}
+        {/* Não mostra nada enquanto a autenticação carrega para evitar "piscar" de conteúdo */}
         {!loading && (
           user ? (
             <>
               <NavLink to="/" className={styles.newReadingLink}>
                 Fazer Leitura
               </NavLink>
-              <NavLink to="/painel" className={({ isActive }) => isActive ? styles.activeLink : styles.navLink}>
+              {/* Este NavLink já funciona como solicitado para o "Meu Perfil" */}
+              <NavLink 
+                to="/painel" 
+                className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+              >
                 Meu Perfil
               </NavLink>
             </>
           ) : (
             <>
-              <NavLink to="/login" className={({ isActive }) => isActive ? styles.activeLink : styles.navLink}>
+              <NavLink 
+                to="/login" 
+                className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+              >
                 Entrar
               </NavLink>
-              <NavLink to="/cadastro" className={({ isActive }) => isActive ? `${styles.navLink} ${styles.signUpButton}` : `${styles.navLink} ${styles.signUpButton}`}>
+              <NavLink 
+                to="/cadastro" 
+                className={styles.signUpButton}
+              >
                 Cadastrar
               </NavLink>
             </>
           )
         )}
       </nav>
-      
-      {/* 3. O botão de sair só aparece se não estiver carregando E se o usuário existir. */}
-      {!loading && user && (
-         <button onClick={handleSignOut} className={styles.signOutButtonHeader}>Sair</button>
-      )}
     </header>
   );
 }

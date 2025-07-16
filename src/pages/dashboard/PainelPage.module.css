@@ -140,18 +140,26 @@
 }
 
 .signOutButton { 
-  margin-top: 0;
+  /* Aumentamos a margem superior para distanciar do botão "Apagar Histórico" */
+  margin-top: 2rem; 
   background: none; 
-  border: none; 
+  border: 1px solid #555; 
   color: #c7c7c7; 
   padding: 0.8rem 1.5rem; 
   cursor: pointer; 
+  border-radius: 6px;
   font-weight: bold;
-  font-size: 1rem;
+  transition: all 0.2s;
 }
+
 .signOutButton:hover {
-  color: #ff8a80;
+  border-color: #c7c7c7;
+  background-color: #c7c7c7;
+  color: #0D0C1D;
 }
+
+
+
 
 /* --- Histórico de Leituras e outros estilos --- */
 .historySection { width: 100%; text-align: center; }

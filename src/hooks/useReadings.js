@@ -71,9 +71,37 @@ export function useGenerateReading() {
       if (insertError) throw new Error(insertError.message);
       return newReading;
     },
+
+    
     // 3. Após o sucesso, invalida o cache do histórico para que ele seja atualizado automaticamente.
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['readings', 'history', variables.user.id] });
+    },
+  });
+}
+
+
+// HOOK 4 (Mutation): Para ATUALIZAR uma leitura com o texto didático
+export function useUpdateDidacticCache() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    // A função de mutação recebe as variáveis que passamos a ela
+    mutationFn: async ({ readingId, updatedInterpretations }) => {
+      const { error } = await supabase
+        .from('readings')
+        .update({ didactic_interpretations: updatedInterpretations })
+        .eq('id', readingId);
+      
+      if (error) throw new Error(error.message);
+    },
+    // Após o sucesso da mutação...
+    onSuccess: (data, variables) => {
+      // ...nós dizemos ao React Query para invalidar (marcar como obsoleto)
+      // o cache daquela leitura específica. Isso forçará o useSingleReading
+      // a buscar os dados mais recentes do banco na próxima vez que for necessário.
+      console.log('CACHE INVALIDATED: Marcando a leitura como obsoleta para forçar a recarga.');
+      queryClient.invalidateQueries({ queryKey: ['readings', 'detail', variables.readingId] });
     },
   });
 }

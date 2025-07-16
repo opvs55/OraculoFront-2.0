@@ -117,9 +117,6 @@ function PainelPage() {
                 <Link to="/perfil/editar" className={styles.editProfileButton}>
                   Editar Perfil
                 </Link>
-                <button onClick={handleSignOut} className={styles.signOutButton}>
-                  Sair
-                </button>
               </div>
             </div>
           </section>
@@ -172,6 +169,7 @@ function PainelPage() {
                 </button>
               </div>
             )}
+            <button onClick={handleSignOut} className={styles.signOutButton}>Sair</button>
           </section>
         </div>
       </div>

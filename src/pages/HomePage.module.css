@@ -1,19 +1,19 @@
-/* src/pages/HomePage.module.css */
+/* src/pages/HomePage/HomePage.module.css */
 
-/* O container principal da página */
+/* --- Container Principal --- */
 .homeContainer {
   position: relative;
-  width: 100vw; /* MUDANÇA AQUI: de 100% para 100vw (largura da tela) */
-  height: 100vh;
+  width: 100%;
+  height: 100vh; /* Ocupa a altura total da tela */
+  overflow: hidden; /* Esconde qualquer parte do vídeo que vaze */
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 }
 
-/* O elemento de vídeo que serve como fundo */
+/* --- Fundo de Vídeo e Overlay --- */
 .videoFundo {
-  position: absolute;
+  position: fixed; /* Fica fixo no fundo, não rola com a página */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -21,72 +21,79 @@
   min-height: 100%;
   width: auto;
   height: auto;
-  z-index: 1; /* Fica na primeira camada */
+  z-index: 1; /* Camada mais baixa */
 }
 
-/* Um overlay escuro que fica entre o vídeo e o texto */
 .videoOverlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(13, 12, 29, 0.6); /* Cor de fundo principal com 60% de opacidade */
+  /* Overlay escuro para garantir que o texto branco seja legível */
+  background-color: rgba(13, 12, 29, 0.75);
   z-index: 2; /* Fica acima do vídeo */
 }
 
-/* O container para o nosso texto e formulário */
+/* --- Conteúdo Centralizado --- */
 .conteudoCentralizado {
-  position: relative;
-  z-index: 3; /* Fica acima do overlay */
-  color: #E0E0E0;
-  text-align: center;
-  padding: 2rem;
-  max-width: 700px;
+  position: relative; /* Para ficar acima do overlay */
+  z-index: 3; /* Camada mais alta */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem; /* Espaçamento entre título, subtítulo e formulário */
+  text-align: center;
+  padding: 2rem;
+  color: #fff;
+  width: 100%;
+  max-width: 800px; /* Limita a largura do conteúdo em telas grandes */
 }
 
-.mainTitle {
+/* --- Título e Subtítulo --- */
+.mainTitleLogo {
   font-family: 'Cinzel', serif;
-  font-size: 3.5rem;
+  font-size: 4rem;
   font-weight: 700;
-  color: #E1B382; /* Dourado */
-  text-shadow: 0 0 15px rgba(225, 179, 130, 0.5), 0 0 5px rgba(0, 0, 0, 0.8);
-  animation: fadeIn 2s ease-in-out;
+  color: #E1B382;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(225, 179, 130, 0.5);
+  margin: 0;
+  margin-bottom: 1rem;
 }
 
 .subtitle {
-  font-size: 1.3rem;
+  font-family: 'Lato', sans-serif;
+  font-size: 1.2rem;
+  color: #c7c7c7;
+  max-width: 650px; /* Evita que o texto fique muito longo */
   line-height: 1.6;
-  max-width: 600px;
-  color: #E0E0E0;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-  animation: fadeIn 2s ease-in-out 0.5s;
-  animation-fill-mode: backwards; /* Garante que o estado inicial (invisível) seja aplicado */
+  margin-bottom: 2.5rem;
 }
 
-/* Animação de fade-in para o texto */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-/* Media query para ajustar em telas menores */
+/* --- Responsividade --- */
 @media (max-width: 768px) {
-  .mainTitle {
-    font-size: 2.5rem;
+  .mainTitleLogo {
+    font-size: 3rem;
+    letter-spacing: 2px;
   }
+
   .subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .conteudoCentralizado {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainTitleLogo {
+    font-size: 2.2rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
   }
 }

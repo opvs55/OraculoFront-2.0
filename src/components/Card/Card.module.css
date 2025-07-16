@@ -1,20 +1,107 @@
-/* src/components/Card/Card.module.css */
-/* ... suas regras existentes ... */
-.card {
-  width: 120px; /* Tamanho padrão para desktop */
-  /* ... */
+/* src/components/Card/Card.module.css - VERSÃO MELHORADA */
+
+/* --- Animação de Entrada --- */
+/* Esta animação fará as cartas aparecerem suavemente na tela */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* EM TELAS MENORES QUE 768PX */
+/* --- Container Principal da Carta --- */
+.cardContainer {
+  /* Usamos Flexbox para centralizar tudo (imagem e texto) de forma fácil e eficiente */
+  display: flex;
+  flex-direction: column; /* Organiza os itens em uma coluna (um abaixo do outro) */
+  align-items: center;   /* Alinha tudo no centro horizontalmente */
+  
+  /* Aplica a animação de entrada que definimos acima */
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* --- A Imagem da Carta --- */
+.card {
+  width: 130px; /* Um pouco maior para ter mais impacto */
+  height: auto;   /* Mantém a proporção da imagem */
+  border-radius: 8px; /* Bordas levemente arredondadas */
+  
+  /* Sombra sutil para dar profundidade e destacar do fundo */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  
+  /* Efeito de transição suave para todas as animações (hover, rotação) */
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Efeito ao passar o mouse por cima da carta */
+.cardContainer:hover .card {
+  /* A carta "levita" e aumenta um pouco */
+  transform: translateY(-10px) scale(1.05);
+
+  /* O EFEITO DE BRILHO MÁGICO ACONTECE AQUI */
+  /* A sombra fica mais forte e adicionamos um brilho com a cor dourada do tema */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+              0 0 20px rgba(225, 179, 130, 0.4); 
+}
+
+/* Estilo para a carta quando está invertida */
+.inverted {
+  transform: rotate(180deg);
+}
+.cardContainer:hover .inverted {
+   /* Garante que o efeito de hover funcione bem na carta invertida */
+  transform: translateY(-10px) scale(1.05) rotate(180deg);
+}
+
+
+/* --- Textos Abaixo da Carta --- */
+
+/* Nome da Posição (Ex: "1. A Situação Atual") */
+.positionName {
+  /* A fonte 'Cinzel' para títulos, como no resto do app */
+  font-family: 'Cinzel', serif; 
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #E1B382; /* Cor dourada do tema */
+  margin-top: 1rem; /* Espaçamento acima do texto */
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+/* Nome da Carta (Ex: "Rainha de Paus (Invertida)") */
+.cardName {
+  /* A fonte 'Lato' para textos descritivos */
+  font-family: 'Lato', sans-serif;
+  font-size: 0.8rem;
+  color: #c7c7c7; /* Cinza claro para boa legibilidade */
+  margin: 0;
+  text-align: center;
+  font-style: italic; /* Um toque de estilo */
+}
+
+
+/* --- RESPONSIVIDADE para telas menores --- */
 @media (max-width: 768px) {
   .card {
-    width: 80px; /* As cartas ficam menores */
+    width: 90px; /* As cartas ficam menores */
   }
 
   .positionName {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    margin-top: 0.75rem;
   }
+
   .cardName {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 75px;
   }
 }
