@@ -1,4 +1,4 @@
-/* src/pages/reading/CardDetailPage.module.css */
+/* src/pages/reading/CardDetailPage.module.css - VERSÃO ATUALIZADA */
 
 /* O container agora só precisa organizar os itens internos */
 .container {
@@ -27,6 +27,8 @@
   max-width: 60vw;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  cursor: pointer; /* NOVO: Indica que o elemento é clicável */
+  object-fit: cover; /* Garante que o vídeo preencha o espaço sem distorcer */
 }
 
 .inverted {
