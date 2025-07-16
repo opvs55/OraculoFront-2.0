@@ -1,44 +1,123 @@
 /* src/components/ReadingDisplay/ReadingDisplay.module.css */
 
 .container {
-  background-color: #1A1A2E;
-  padding: 1.5rem 2rem;
-  border-radius: 8px;
+  background-color: #1a1a2e;
+  border: 1px solid #2c2c54;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
   width: 100%;
-  text-align: left;
-  border-top: 3px solid #E1B382;
+  max-width: 800px; /* Limita a largura para melhor leitura */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .title {
-  text-align: center;
-  margin-bottom: 1.5rem;
   font-family: 'Cinzel', serif;
-  font-size: 1.8rem;
+  color: #E1B382;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #2c2c54;
+  padding-bottom: 1rem;
 }
 
 .content p {
+  font-family: 'Lato', sans-serif;
+  color: #e0e0e0;
+  font-size: 1.1rem;
   line-height: 1.8;
+  margin-bottom: 1.5em;
+}
+
+/* NOVO: Estilo do parágrafo sendo digitado */
+.typingParagraph {
+  display: inline; /* Faz o cursor ficar logo após o texto */
+}
+
+/* NOVO: Animação do cursor de digitação */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.1rem;
+  background-color: #E1B382;
+  margin-left: 5px;
+  animation: blink 1s step-start infinite;
+}
+
+/* NOVO: Estilo para o prompt "Deseja continuar?" */
+.prompt {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px dashed #2c2c54;
+}
+
+.prompt p {
+  font-style: italic;
+  color: #a0a0a0;
   margin-bottom: 1rem;
-  font-size: 1.2rem; /* Tamanho padrão para desktop */
-  color: #E0E0E0;
 }
 
-.content p:last-child {
-  margin-bottom: 0;
+.promptButton {
+  font-family: 'Cinzel', serif;
+  background-color: transparent;
+  border: 1px solid #E1B382;
+  color: #E1B382;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem 1.2rem;
-  }
+.promptButton:hover {
+  background-color: #E1B382;
+  color: #0D0C1D;
+  transform: scale(1.05);
+}
 
-  .title {
-    font-size: 1.5rem;
-  }
+/* NOVO: Estilo para a mensagem final */
+@keyframes fadeInGlow {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
-  .content p {
-    /* MUDANÇA AQUI: Diminuímos ainda mais a fonte para melhor conforto de leitura no celular */
-    font-size: 0.95rem;
-    line-height: 1.7;
+.finalMessage {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 2rem;
+  border: 1px solid #E1B382;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(225, 179, 130, 0.3);
+  animation: fadeInGlow 1.5s ease-out forwards;
+}
+
+.finalMessage p {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  color: #E1B382;
+  margin: 0;
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(225, 179, 130, 0.4);
   }
+  50% {
+    text-shadow: 0 0 10px rgba(225, 179, 130, 0.8);
+  }
+}
+
+/* Classe aplicada ao nome da carta no texto */
+.cardNameHighlight {
+  color: #FAD02E; /* Um dourado mais vibrante para se destacar */
+  font-family: 'Cinzel', serif;
+  font-weight: bold;
+  animation: glow 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+  padding: 0 2px;
 }
