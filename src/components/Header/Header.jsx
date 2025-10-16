@@ -1,51 +1,59 @@
-// src/components/Header/Header.jsx - VERSÃO ATUALIZADA
-
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom'; // Adicionamos 'Link' para o logo do cabeçalho
 import styles from './Header.module.css';
 
 function Header() {
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth(); // Recuperamos a função signOut
   
-  // REMOVIDO: O logo foi movido para a HomePage.
-  // REMOVIDO: A função handleSignOut e o botão "Sair".
-
   return (
     <header className={styles.header}>
-      {/* A navegação agora é o elemento principal do header */}
+      {/* NOVO: Logo clicável no canto esquerdo do cabeçalho */}
+      <Link to="/" className={styles.headerLogo}>
+        Oráculo IA
+      </Link>
+      
       <nav className={styles.nav}>
-        {/* Não mostra nada enquanto a autenticação carrega para evitar "piscar" de conteúdo */}
         {!loading && (
-          user ? (
-            <>
-              <NavLink to="/" className={styles.newReadingLink}>
-                Fazer Leitura
-              </NavLink>
-              {/* Este NavLink já funciona como solicitado para o "Meu Perfil" */}
-              <NavLink 
-                to="/painel" 
-                className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
-              >
-                Meu Perfil
-              </NavLink>
-            </>
-          ) : (
-            <>
-              <NavLink 
-                to="/login" 
-                className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
-              >
-                Entrar
-              </NavLink>
-              <NavLink 
-                to="/cadastro" 
-                className={styles.signUpButton}
-              >
-                Cadastrar
-              </NavLink>
-            </>
-          )
+          <>
+            {/* NOVO: Link da Biblioteca, visível para todos */}
+            <NavLink 
+              to="/biblioteca" 
+              className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+            >
+              Biblioteca
+            </NavLink>
+
+            {user ? (
+              <>
+                <NavLink 
+                  to="/painel" 
+                  className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+                >
+                  Meu Painel
+                </NavLink>
+                {/* NOVO: Botão de Sair para usuários logados */}
+                <button onClick={signOut} className={styles.logoutButton}>
+                  Sair
+                </button>
+              </>
+            ) : (
+              <>
+                <NavLink 
+                  to="/login" 
+                  className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+                >
+                  Entrar
+                </NavLink>
+                <NavLink 
+                  to="/cadastro" 
+                  className={styles.signUpButton}
+                >
+                  Cadastrar
+                </NavLink>
+              </>
+            )}
+          </>
         )}
       </nav>
     </header>

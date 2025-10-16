@@ -1,45 +1,56 @@
-// src/pages/reading/PastReadingPage/PastReadingPage.jsx - VERSÃO COMPLETA E ATUALIZADA
-
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSingleReading } from '../../../hooks/useReadings';
 import styles from './PastReadingPage.module.css';
 import Loader from '../../../components/common/Loader/Loader';
-import CelticCrossLayout from '../../../components/CelticCrossLayout/CelticCrossLayout';
 import ReadingDisplay from '../../../components/ReadingDisplay/ReadingDisplay';
+import { useAuth } from '../../../context/AuthContext';
+import GuestPrompt from '../../../components/GuestPrompt/GuestPrompt';
+
+import CelticCrossLayout from '../../../components/CelticCrossLayout/CelticCrossLayout';
+import ThreeCardLayout from '../../../components/ThreeCardLayout/ThreeCardLayout';
+import TempleOfAphroditeLayout from '../../../components/TempleOfAphroditeLayout/TempleOfAphroditeLayout';
+// NOVO: Importamos o nosso novo layout
+import PathChoiceLayout from '../../../components/PathChoiceLayout/PathChoiceLayout';
 
 function PastReadingPage() {
   const { readingId } = useParams();
-  
-  // O hook gerencia o loading, erro e os dados para nós.
+  const { user } = useAuth();
   const { data: currentReading, isLoading, isError, error } = useSingleReading(readingId);
 
-  // A renderização fica muito mais declarativa e limpa.
   if (isLoading) return <Loader customText="Carregando sua jornada..." />;
-  
   if (isError) return <main className="content_wrapper"><p>Erro: {error.message}</p></main>;
-  
   if (!currentReading) return <main className="content_wrapper"><p>Leitura não encontrada.</p></main>;
+
+  const renderCardLayout = () => {
+    const basePath = `/leitura/${currentReading.id}`;
+    const cards = currentReading.cards_data;
+
+    switch (currentReading.spread_type) {
+      case 'threeCards':
+        return <ThreeCardLayout cards={cards} basePath={basePath} />;
+      case 'templeOfAphrodite':
+        return <TempleOfAphroditeLayout cards={cards} basePath={basePath} />;
+      // NOVO: Adicionamos o caso para renderizar a Escolha de Caminho
+      case 'pathChoice':
+        return <PathChoiceLayout cards={cards} basePath={basePath} />;
+      case 'celticCross':
+      default:
+        return <CelticCrossLayout cards={cards} basePath={basePath} />;
+    }
+  };
 
   return (
     <div className="content_wrapper">
       <div className={styles.container}>
-        <h2 className={styles.question}>Revisitando sua pergunta: "{currentReading.question}"</h2>
+        {!user && <GuestPrompt />}
+        <h2 className={styles.question}>Revisitando sua pergunta: "{currentReading.question.path1 ? `Escolha entre '${currentReading.question.path1}' e '${currentReading.question.path2}'` : currentReading.question}"</h2>
         <div className={styles.resultsContainer}>
           <div className={styles.cardsSection}>
-            <CelticCrossLayout 
-              cards={currentReading.cards_data} 
-              basePath={`/leitura/${currentReading.id}`} 
-            />
+            {renderCardLayout()}
           </div>
           <div className={styles.readingSection}>
-            {/* A alteração está aqui: adicionamos a prop 'readingId'.
-              Isso permite que o componente ReadingDisplay salve o progresso da "conversa".
-            */}
-            <ReadingDisplay 
-              text={currentReading.main_interpretation} 
-              readingId={currentReading.id} 
-            />
+            <ReadingDisplay readingData={currentReading} />
           </div>
         </div>
       </div>

@@ -1,5 +1,3 @@
-// src/pages/dashboard/EditarPerfilPage.jsx - VERSÃO COMPLETA E FINAL
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -8,15 +6,15 @@ import { supabase } from '../../supabaseClient';
 import styles from './PainelPage.module.css'; 
 import { baralho } from '../../tarotDeck';
 import Loader from '../../components/common/Loader/Loader';
+// AQUI ESTÁ A CORREÇÃO: O caminho foi ajustado de ../../ para ../../../
+import ChangePasswordForm from '../auth/ChangePasswordForm/ChangePasswordForm';
 
 function EditarPerfilPage() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   
-  // USA O HOOK DE PERFIL: Ele nos dá os dados do perfil, a função para atualizar e os estados de loading.
   const { profile, updateProfile, isLoading: isProfileLoading, isUpdating, error: profileError } = useUserProfile(user?.id);
   
-  // Estados locais apenas para controlar os campos do formulário
   const [username, setUsername] = useState('');
   const [fullName, setFullName] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
@@ -24,10 +22,8 @@ function EditarPerfilPage() {
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
   
-  // Estado para o loading da exclusão da conta
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Popula o formulário com os dados do perfil quando eles terminam de carregar
   useEffect(() => {
     if (profile) {
       setUsername(profile.username || '');
@@ -35,9 +31,8 @@ function EditarPerfilPage() {
       setAvatarUrl(profile.avatar_url || '');
       setBio(profile.bio || '');
     }
-  }, [profile]); // Este efeito agora depende do 'profile' vindo do nosso hook.
+  }, [profile]);
 
-  // --- FUNÇÃO DE ATUALIZAÇÃO DO PERFIL ---
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     setMessage('');
@@ -49,7 +44,6 @@ function EditarPerfilPage() {
       bio,
     };
 
-    // CHAMA A FUNÇÃO DE ATUALIZAÇÃO DO HOOK
     updateProfile(updates, {
       onSuccess: () => {
         setMessage('Perfil atualizado com sucesso! Redirecionando...');
@@ -62,7 +56,6 @@ function EditarPerfilPage() {
     });
   };
 
-  // Função para escolher uma carta aleatória para o avatar
   const handleRandomCardSelect = () => {
     const randomIndex = Math.floor(Math.random() * baralho.length);
     const randomCard = baralho[randomIndex];
@@ -70,7 +63,6 @@ function EditarPerfilPage() {
     setShowModal(false);
   };
   
-  // --- FUNÇÃO DE EXCLUSÃO DE CONTA ---
   const handleDeleteAccount = async () => {
     const confirmation = prompt('Esta ação é irreversível e apagará TODOS os seus dados, incluindo leituras e chats. Para confirmar, digite "DELETAR" nesta caixa:');
     if (confirmation !== 'DELETAR') {
@@ -94,7 +86,6 @@ function EditarPerfilPage() {
     }
   };
 
-  // MOSTRA UM LOADER ENQUANTO O PERFIL INICIAL ESTÁ SENDO BUSCADO
   if (isProfileLoading) {
     return <Loader customText="Carregando seu perfil..." />;
   }
@@ -158,6 +149,11 @@ function EditarPerfilPage() {
           </section>
         </div>
         
+        <section className={styles.securitySection}>
+          <h2>Segurança da Conta</h2>
+          <ChangePasswordForm />
+        </section>
+
         <div className={styles.dangerZone}>
           <h3>Área de Perigo</h3>
           <p>A exclusão da conta é permanente e removerá todas as suas leituras e chats. Esta ação não pode ser desfeita.</p>

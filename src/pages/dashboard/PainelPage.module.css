@@ -1,208 +1,87 @@
-/* src/pages/dashboard/PainelPage.module.css */
-
-/* --- NOVAS CLASSES PARA O FUNDO DE VÍDEO --- */
 .painelContainer {
   position: relative;
   width: 100%;
-  min-height: 100vh; /* Garante que o fundo cubra a tela inteira, no mínimo */
-  overflow: hidden;   /* Esconde qualquer parte do vídeo que vaze */
-  display: flex;      /* Usado para ajudar a centralizar o conteúdo */
+  min-height: 100vh;
+  overflow-y: auto;
+  display: flex;
   justify-content: center;
 }
-
 .videoFundo {
-  position: fixed; /* O vídeo fica fixo e não rola com a página */
-  top: 50%;
-  left: 50%;
+  position: fixed;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: 1; 
+  min-width: 100%; min-height: 100%;
+  width: auto; height: auto;
+  z-index: 1;
 }
-
 .videoOverlay {
-  position: fixed; /* O overlay também fica fixo, cobrindo o vídeo */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(13, 12, 29, 0.8); /* Overlay escuro para garantir legibilidade */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(13, 12, 29, 0.85);
   z-index: 2;
 }
-
 .conteudoSobreposto {
   position: relative;
-  z-index: 3; /* Conteúdo principal fica acima de tudo */
+  z-index: 3;
   width: 100%;
-  padding-top: 4rem; 
-  padding-bottom: 4rem;
+  padding: 4rem 2rem;
 }
 
-
-/* --- O RESTANTE DO SEU CSS CONTINUA ABAIXO, SEM ALTERAÇÕES --- */
-
-/* --- Container e Layouts --- */
-.dashboardContainer, .editPageContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.editPageLayout {
+/* NOVO: Layout principal do Dashboard 2.0 */
+.dashboardGrid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
-  width: 100%;
-  margin-top: 2rem;
 }
-
-.avatarSection {
-  text-align: center;
-}
-
-.formSection {
-  width: 100%;
-}
-
-@media (min-width: 992px) {
-  .editPageLayout {
-    grid-template-columns: 300px 1fr;
-    gap: 3rem;
-  }
-  .avatarSection {
-    text-align: left;
-  }
-}
-
-/* --- Seção de Perfil (Usada em PainelPage) --- */
-.profileSection {
+.leftColumn, .rightColumn {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 2rem;
-  text-align: left;
-  width: 100%;
-  background-color: #1A1A2E;
+}
+
+/* NOVO: Card de Ação para Nova Leitura */
+.newReadingCard {
+  background-color: rgba(26, 26, 46, 0.7);
   padding: 2rem;
   border-radius: 12px;
   border: 1px solid #2c2c54;
+  text-align: center;
+  backdrop-filter: blur(5px);
 }
-
-.avatarContainer {
-  flex-shrink: 0;
+.newReadingCard h2 {
+  font-family: 'Cinzel', serif;
+  margin: 0 0 1rem 0;
+  color: #E1B382;
+  font-size: 1.8rem;
 }
-
-.avatar {
-  width: 200px;
-  height: 350px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 3px solid #C36E97;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
+.newReadingCard p {
+  color: #c7c7c7;
+  line-height: 1.6;
+  margin-bottom: 2rem;
 }
-
-.avatar:hover {
-  transform: scale(1.03) rotate(-1deg);
-}
-
-.profileInfo h2 { font-family: 'Cinzel', serif; font-size: 2rem; margin: 0; }
-.profileInfo .username { font-size: 1.1rem; color: #a0a0a0; margin-top: 0.25rem; }
-.profileInfo .bio { margin-top: 1rem; color: #E0E0E0; }
-.editProfileButton { display: inline-block; margin-top: 1.5rem; background-color: transparent; border: 1px solid #E1B382; color: #E1B382; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-weight: bold; transition: background-color 0.2s, color 0.2s; }
-.editProfileButton:hover { background-color: #E1B382; color: #0D0C1D; }
-.stats { margin-top: 1rem; display: flex; gap: 1.5rem; }
-.stats span { color: #c7c7c7; }
-.stats strong { color: #E0E0E0; font-size: 1.1em; }
-.divider { border: none; height: 1px; background-color: #2c2c54; margin: 3rem 0; width: 100%; }
-
-/* --- Card de pré-visualização do Avatar (EditarPerfilPage) --- */
-.avatarPicker {
-  background-color: #1A1A2E;
-  padding: 1.5rem;
-  border-radius: 12px;
-  border: 1px solid #2c2c54;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
-.avatarPicker p { font-weight: bold; font-family: 'Cinzel', serif; color: #E0E0E0; font-size: 1.2rem; }
-.avatarPreview { width: 200px; height: 307px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); border: 1px solid #3a3a50; }
-
-.profileActions {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.signOutButton { 
-  /* Aumentamos a margem superior para distanciar do botão "Apagar Histórico" */
-  margin-top: 2rem; 
-  background: none; 
-  border: 1px solid #555; 
-  color: #c7c7c7; 
-  padding: 0.8rem 1.5rem; 
-  cursor: pointer; 
-  border-radius: 6px;
-  font-weight: bold;
-  transition: all 0.2s;
-}
-
-.signOutButton:hover {
-  border-color: #c7c7c7;
-  background-color: #c7c7c7;
+.newReadingButton {
+  display: inline-block;
+  background: #E1B382;
   color: #0D0C1D;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+.newReadingButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(225, 179, 130, 0.5);
 }
 
 
-
-
-/* --- Histórico de Leituras e outros estilos --- */
-.historySection { width: 100%; text-align: center; }
-.historySection h1, .historySection h2 { text-align: center; font-size: 2.5rem; margin-bottom: 0.5rem; }
-.historySection > .content_wrapper > p, .historySection > p { text-align: center; color: #c7c7c7; margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
-.readingsList { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; }
-.readingCardLink { text-decoration: none; color: inherit; }
-.readingCard { background-color: #1A1A2E; padding: 1.5rem; border-radius: 8px; text-align: left; border-left: 3px solid #C36E97; transition: transform 0.2s, box-shadow 0.2s; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-.readingCard:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-.readingCard h3 { color: #E0E0E0; font-family: 'Lato', sans-serif; margin-bottom: 0.5rem; font-size: 1.1rem; }
-.readingCard p { font-size: 0.9rem; color: #a0a0a0; margin: 0; }
-.deleteReadingButton { background: transparent; border: none; font-size: 1.5rem; cursor: pointer; padding: 0.5rem; border-radius: 50%; line-height: 1; transition: background-color 0.2s, transform 0.2s; }
-.deleteReadingButton:hover { background-color: rgba(255, 138, 128, 0.2); transform: scale(1.1); }
-.noReadings { padding: 2rem; border: 2px dashed #2c2c54; border-radius: 8px; text-align: center; }
-.newReadingButton { display: inline-block; margin-top: 1rem; background: #E1B382; color: #0D0C1D; padding: 0.7rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: bold; }
-.deleteAllContainer { margin-top: 3rem; padding-top: 2rem; width: 100%; border-top: 1px solid #2c2c54; text-align: center; }
-.deleteAllButton { background-color: transparent; border: 1px solid #b71c1c; color: #ff8a80; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
-.deleteAllButton:hover { background-color: #b71c1c; color: white; }
-.profileForm { width: 100%; display: flex; flex-direction: column; gap: 1.5rem; text-align: left; }
-.formGroup { display: flex; flex-direction: column; }
-.formGroup label { margin-bottom: 0.5rem; color: #c7c7c7; font-weight: bold; }
-.formGroup input, .formGroup textarea { background: #0D0C1D; border: 1px solid #2c2c54; color: #E0E0E0; padding: 0.8rem; border-radius: 8px; font-size: 1rem; font-family: 'Lato', sans-serif; }
-.formGroup input:disabled { background-color: #2c2c54; color: #888; }
-.formGroup textarea { min-height: 100px; resize: vertical; }
-.formActions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem; }
-.saveButton, .cancelButton { padding: 0.8rem 1.5rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-decoration: none; }
-.saveButton { background-color: #E1B382; color: #0D0C1D; }
-.saveButton:disabled { background-color: #555; }
-.cancelButton { background-color: transparent; border: 1px solid #555; color: #c7c7c7; }
-.formMessage { margin-top: 1rem; font-weight: bold; text-align: center; }
-.modalOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.85); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 1rem; backdrop-filter: blur(5px); }
-.modalContent { background-color: #1A1A2E; padding: 1.5rem 2rem; border-radius: 12px; max-width: 90vw; width: 100%; max-height: 90vh; display: flex; flex-direction: column; border: 1px solid #C36E97; box-shadow: 0 0 30px rgba(195, 110, 151, 0.3); }
-.modalHeader { text-align: center; margin-bottom: 1.5rem; }
-.modalHeader h3 { font-size: 1.8rem; }
-.randomCardButton { background: none; border: 1px solid #C36E97; color: #C36E97; padding: 0.6rem 1rem; border-radius: 6px; cursor: pointer; margin-top: 1rem; font-weight: bold; transition: all 0.2s; }
-.randomCardButton:hover { background-color: #C36E97; color: #fff; transform: scale(1.05); }
-.cardGrid { overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 1rem; padding: 1rem; background-color: rgba(13, 12, 29, 0.5); border-radius: 8px; }
-.cardOption { width: 100%; border-radius: 4px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-.cardOption:hover { transform: scale(1.15); box-shadow: 0 0 20px #E1B382; }
-.modalCloseButton { margin-top: 1.5rem; background-color: #555; color: #fff; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: bold; }
-.dangerZone { margin-top: 3rem; padding: 1.5rem; border: 2px solid #b71c1c; border-radius: 8px; text-align: center; }
-.dangerZone h3 { color: #ff8a80; }
-.dangerZone p { color: #c7c7c7; margin-top: 0.5rem; margin-bottom: 1.5rem; }
-.deleteButton { background-color: #b71c1c; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
-.deleteButton:hover { background-color: #d32f2f; }
-@media (max-width: 768px) { .profileSection { flex-direction: column; padding: 1.5rem; } .avatar { width: 120px; height: 210px; } .profileInfo h2 { font-size: 1.8rem; } }
+/* Layout para telas maiores */
+@media (min-width: 1024px) {
+  .dashboardGrid {
+    grid-template-columns: 400px 1fr; /* Coluna lateral + coluna principal */
+    gap: 3rem;
+    align-items: flex-start;
+  }
+}

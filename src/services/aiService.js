@@ -1,25 +1,13 @@
-// src/services/aiService.js
+// src/services/aiService.js - VERSÃO COMPLETA E ATUALIZADA
 
-// Lemos a URL do nosso backend a partir da variável de ambiente.
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-// Verificação para ajudar a evitar erros durante o desenvolvimento
 if (!BACKEND_URL) {
   console.error("ERRO: A variável de ambiente VITE_BACKEND_URL não está definida.");
-  // Em um app real, você poderia lançar um erro ou ter um valor padrão
-  // throw new Error("A variável de ambiente VITE_BACKEND_URL não está definida.");
 }
 
-/**
- * Envia a pergunta e as cartas para o nosso backend dedicado para obter a interpretação da IA.
- * @param {string} question A pergunta do usuário.
- * @param {Array<Object>} cards O array de cartas sorteadas.
- * @returns {Promise<Object>} Um objeto contendo { mainInterpretation, cardInterpretations }.
- */
-export async function getInterpretation(question, cards) {
-  // O endpoint agora é a URL completa do seu servidor + a nossa rota de tarot.
+export async function getInterpretation(question, cards, spreadType) { // ALTERAÇÃO: Adicionamos spreadType aqui
   const API_ENDPOINT = `${BACKEND_URL}/api/tarot`;
-
   console.log('aiService: Chamando o endpoint externo:', API_ENDPOINT);
 
   try {
@@ -28,23 +16,21 @@ export async function getInterpretation(question, cards) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ question, cards }),
+      // ALTERAÇÃO: E enviamos o spreadType no corpo da requisição
+      body: JSON.stringify({ question, cards, spreadType }),
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: `Erro no servidor: ${response.statusText}` }));
-      throw new Error(errorData.error);
+      // A linha abaixo precisa ser ajustada para pegar a mensagem de erro correta
+      throw new Error(errorData.message || errorData.error || `Erro no servidor: ${response.status}`);
     }
 
     const data = await response.json();
-
-    // Retornamos o objeto de dados completo, que o nosso Context espera.
-    // Ele contém tanto a 'mainInterpretation' quanto o array 'cardInterpretations'.
     return data;
 
   } catch (error) {
     console.error('Erro no aiService ao chamar o backend:', error);
-    // Propaga o erro para que o hook possa capturá-lo e mostrar ao usuário
     throw error;
   }
 }
@@ -75,7 +61,6 @@ export async function getChatResponse(userMessage, chatContext) {
     throw error;
   }
 }
-
 
 export async function getDidacticMeaning(cardName, cardOrientation, positionName) {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;

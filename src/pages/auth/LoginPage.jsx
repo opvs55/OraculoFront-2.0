@@ -1,5 +1,3 @@
-// src/pages/auth/LoginPage.jsx - VERSÃO FINAL E SEGURA COM RPC
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
@@ -26,7 +24,6 @@ function LoginPage() {
     setLoading(true);
 
     try {
-      // 1. CHAMA A NOSSA FUNÇÃO SEGURA 'get_email_by_username'
       const { data: userEmail, error: rpcError } = await supabase.rpc(
         'get_email_by_username', 
         { p_username: username }
@@ -36,7 +33,6 @@ function LoginPage() {
         throw new Error('Nome de usuário ou senha inválidos.');
       }
       
-      // 2. Com o email retornado pela função, tenta o login.
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: userEmail,
         password: password,
@@ -75,7 +71,11 @@ function LoginPage() {
           </button>
         </form>
         {error && <p className={styles.error}>{error}</p>}
-        <p className={styles.link}>Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link></p>
+        <div className={styles.linksContainer}>
+          <p className={styles.link}>Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link></p>
+          {/* NOVO LINK ADICIONADO AQUI */}
+          <p className={styles.link}><Link to="/recuperar-senha">Esqueci minha senha</Link></p>
+        </div>
       </div>
     </div>
   );

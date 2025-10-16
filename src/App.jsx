@@ -1,5 +1,3 @@
-// src/App.jsx
-
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
@@ -15,10 +13,15 @@ import PainelPage from './pages/dashboard/PainelPage';
 import EditarPerfilPage from './pages/dashboard/EditarPerfilPage';
 import PastReadingPage from './pages/reading/PastReadingPage/PastReadingPage';
 import CardDetailPage from './pages/reading/CardDetailPage/CardDetailPage';
+import CardLibraryPage from './pages/learning/CardLibraryPage';
+import LearningCardDetailPage from './pages/learning/LearningCardDetailPage';
+import RequestPasswordResetPage from './pages/auth/RequestPasswordResetPage';
+// NOVO: Importamos a página final de redefinição
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
+
 
 function App() {
   return (
-    // ReadingProvider foi REMOVIDO. Sua lógica foi substituída pela TanStack Query.
     <AuthProvider>
       <BrowserRouter>
         <Header />
@@ -28,12 +31,19 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/cadastro" element={<CadastroPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/recuperar-senha" element={<RequestPasswordResetPage />} />
+            {/* NOVO: Rota para a página de redefinição de senha */}
+            <Route path="/resetar-senha" element={<ResetPasswordPage />} />
+            
+            <Route path="/leitura/:readingId" element={<PastReadingPage />} />
+            <Route path="/leitura/:readingId/carta/:position" element={<CardDetailPage />} />
+
+            <Route path="/biblioteca" element={<CardLibraryPage />} />
+            <Route path="/biblioteca/:cardSlug" element={<LearningCardDetailPage />} />
             
             {/* Rotas Protegidas */}
             <Route path="/painel" element={<ProtectedRoute><PainelPage /></ProtectedRoute>} />
             <Route path="/perfil/editar" element={<ProtectedRoute><EditarPerfilPage /></ProtectedRoute>} />
-            <Route path="/leitura/:readingId" element={<ProtectedRoute><PastReadingPage /></ProtectedRoute>} />
-            <Route path="/leitura/:readingId/carta/:position" element={<ProtectedRoute><CardDetailPage /></ProtectedRoute>} />
           </Routes>
         </main>
       </BrowserRouter>

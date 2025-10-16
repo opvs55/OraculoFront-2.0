@@ -1,42 +1,50 @@
-/* src/pages/reading/CardDetailPage.module.css - VERSÃO ATUALIZADA */
-
-/* O container agora só precisa organizar os itens internos */
-.container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem; /* Espaçamento entre as seções */
+.pageContainer {
+  padding: 2rem;
+  max-width: 1200px;
 }
 
 .backLink {
-  align-self: flex-start; /* Alinha o link de voltar à esquerda */
-  margin-bottom: 1rem;
+  display: inline-block;
+  margin-bottom: 2rem;
+  color: #E1B382;
+  text-decoration: none;
   font-weight: bold;
+  transition: color 0.2s;
 }
 
-.cardDisplay {
+.backLink:hover {
+  color: #fff;
+}
+
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+  align-items: start;
+  margin-bottom: 3rem;
+}
+
+.leftColumn {
+  position: sticky;
+  top: 120px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  justify-content: center;
 }
 
 .cardImage {
-  width: 220px;
-  max-width: 60vw;
+  width: 100%;
+  max-width: 350px;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  cursor: pointer; /* NOVO: Indica que o elemento é clicável */
-  object-fit: cover; /* Garante que o vídeo preencha o espaço sem distorcer */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
 }
 
 .inverted {
   transform: rotate(180deg);
 }
 
-.cardInfo {
-  text-align: center;
+.rightColumn {
+  display: flex;
+  flex-direction: column;
 }
 
 .positionName {
@@ -45,46 +53,124 @@
   font-family: 'Lato', sans-serif;
   font-weight: 400;
   text-transform: uppercase;
+  margin: 0;
 }
 
 .cardName {
-  font-size: 2.8rem;
+  font-family: 'Cinzel', serif;
+  font-size: 3.5rem;
+  color: #E1B382;
+  margin: 0.5rem 0;
 }
 
-.didacticBox, .interpretationBox {
-  background-color: #1A1A2E;
-  padding: 2rem;
-  border-radius: 8px;
+.cardType {
+  font-size: 1rem;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #2c2c54;
   width: 100%;
-  text-align: left;
-}
-
-.didacticBox {
-  border-left: 3px solid #C36E97;
 }
 
 .interpretationBox {
+  background-color: rgba(225, 179, 130, 0.05);
   border-left: 3px solid #E1B382;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
 }
 
-.didacticBox h4, .interpretationBox h4 {
-  font-size: 1.1rem;
+.interpretationBox h4 {
   font-family: 'Cinzel', serif;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 0;
   color: #E1B382;
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
-.loadingText, .context, .interpretationText, .didacticBox p {
+.interpretationBox p {
+  margin: 0;
+  font-style: italic;
   line-height: 1.7;
-  font-size: 1.1rem;
+  color: #e0e0e0;
 }
 
-.context {
-  font-size: 1rem;
-  color: #a0a0a0;
+.keywordsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.keywordTitle {
+  font-family: 'Cinzel', serif;
+  color: #c7a37e;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #2c2c54;
+  padding-bottom: 0.5rem;
+  margin: 0 0 1rem 0;
+}
+
+.keywordsGrid ul {
+  list-style: '✧ ';
+  padding-left: 1.2rem;
+  margin: 0;
+}
+
+.keywordsGrid li {
+  color: #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.meaningsSection {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #2c2c54;
+}
+
+.meaning {
+  margin-bottom: 2.5rem;
+}
+
+.meaningTitle {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  color: #E1B382;
   margin-bottom: 1rem;
-  border-left: 2px solid #555;
-  padding-left: 1rem;
+}
+
+.meaning p {
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: #e0e0e0;
+  text-align: justify;
+}
+
+.notFound {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+  .layoutGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .leftColumn {
+    position: static;
+    margin-bottom: 2rem;
+  }
+
+  .cardImage {
+    max-width: 250px;
+  }
+  
+  .rightColumn {
+    align-items: center;
+    text-align: center;
+  }
+  
+  .interpretationBox, .keywordsGrid {
+    text-align: left;
+  }
 }

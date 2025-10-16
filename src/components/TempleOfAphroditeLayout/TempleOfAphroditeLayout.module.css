@@ -1,0 +1,39 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Três colunas principais */
+  grid-template-rows: repeat(3, auto); /* Três linhas */
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 700px;
+  margin: 2rem auto;
+  justify-items: center;
+  align-items: center;
+  
+  /* Definindo as áreas do grid para posicionar cada carta */
+  grid-template-areas:
+    "you3 . other6"
+    "you2 final7 other5"
+    "you1 . other4";
+}
+
+/* Associando cada carta à sua área no grid */
+.position1 { grid-area: you1; }
+.position2 { grid-area: you2; }
+.position3 { grid-area: you3; }
+.position4 { grid-area: other4; }
+.position5 { grid-area: other5; }
+.position6 { grid-area: other6; }
+.position7 { grid-area: final7; }
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 150px; /* Limita o tamanho máximo da carta */
+}
+
+.cardLink:hover {
+  transform: scale(1.08);
+  z-index: 10;
+}

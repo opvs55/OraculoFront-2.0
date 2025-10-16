@@ -1,0 +1,39 @@
+.cardLink {
+  text-decoration: none;
+  color: #e0e0e0;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cardLink:hover {
+  transform: scale(1.05);
+}
+
+.mediaContainer {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden; /* Garante que o vídeo não vaze das bordas arredondadas */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease;
+  aspect-ratio: 600 / 1023; /* Proporção da carta para evitar pulos de layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0D0C1D; /* Cor de fundo enquanto o vídeo carrega */
+}
+
+.cardLink:hover .mediaContainer {
+  box-shadow: 0 8px 25px rgba(225, 179, 130, 0.4);
+}
+
+.cardMedia {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a imagem/vídeo cubra todo o espaço */
+}
+
+.cardName {
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
