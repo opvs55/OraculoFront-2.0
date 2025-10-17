@@ -3,11 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useUserProfile } from '../../hooks/useUserProfile';
 import { supabase } from '../../supabaseClient';
-import styles from './PainelPage.module.css'; 
+import styles from './EditarPerfilPage.module.css'; 
 import { baralho } from '../../tarotDeck';
 import Loader from '../../components/common/Loader/Loader';
-// AQUI ESTÁ A CORREÇÃO: O caminho foi ajustado de ../../ para ../../../
-import ChangePasswordForm from '../auth/ChangePasswordForm/ChangePasswordForm';
+import ChangePasswordForm from '../../pages/auth/ChangePasswordForm/ChangePasswordForm';
 
 function EditarPerfilPage() {
   const { user, signOut } = useAuth();
@@ -19,9 +18,11 @@ function EditarPerfilPage() {
   const [fullName, setFullName] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [bio, setBio] = useState('');
+  const [minhaHistoria, setMinhaHistoria] = useState(''); 
+  const [entidadeCultuada, setEntidadeCultuada] = useState(''); 
+
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
-  
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
@@ -30,6 +31,8 @@ function EditarPerfilPage() {
       setFullName(profile.full_name || '');
       setAvatarUrl(profile.avatar_url || '');
       setBio(profile.bio || '');
+      setMinhaHistoria(profile.minha_historia || ''); 
+      setEntidadeCultuada(profile.entidade_cultuada || ''); 
     }
   }, [profile]);
 
@@ -42,16 +45,18 @@ function EditarPerfilPage() {
       full_name: fullName,
       avatar_url: avatarUrl,
       bio,
+      minha_historia: minhaHistoria, 
+      entidade_cultuada: entidadeCultuada, 
     };
 
     updateProfile(updates, {
       onSuccess: () => {
         setMessage('Perfil atualizado com sucesso! Redirecionando...');
-        setTimeout(() => navigate('/painel'), 2000);
+        setTimeout(() => navigate('/meu-grimorio'), 2000); 
       },
       onError: (error) => {
         console.error("Erro ao atualizar perfil:", error);
-        setMessage(`Erro: ${error.message}`);
+        setMessage(`Erro ao atualizar: ${error.message}`);
       }
     });
   };
@@ -71,8 +76,9 @@ function EditarPerfilPage() {
     }
 
     setIsDeleting(true);
+    setMessage('');
     try {
-      const { error } = await supabase.rpc('delete_user_account');
+      const { error } = await supabase.rpc('delete_user_account'); 
       if (error) {
         throw error;
       }
@@ -80,26 +86,23 @@ function EditarPerfilPage() {
       await signOut(); 
       navigate('/');
     } catch (error) {
+      console.error("Erro ao deletar conta:", error)
       setMessage(`Erro ao deletar conta: ${error.message}`);
     } finally {
       setIsDeleting(false);
     }
   };
 
-  if (isProfileLoading) {
-    return <Loader customText="Carregando seu perfil..." />;
-  }
-  
-  if (profileError) {
-      return <div className="content_wrapper"><p>Ocorreu um erro ao carregar seu perfil: {profileError.message}</p></div>
-  }
+  if (isProfileLoading) return <Loader customText="Carregando seu perfil..." />;
+  if (profileError) return <div className="content_wrapper"><p>Ocorreu um erro ao carregar seu perfil: {profileError.message}</p></div>
 
   return (
-    <div className="content_wrapper">
+    <div className="content_wrapper"> 
       <div className={styles.editPageContainer}>
-        <h1 style={{textAlign: 'center', width: '100%'}}>Editar Perfil</h1>
+        <h1 style={{textAlign: 'center', width: '100%', marginBottom: '2rem'}}>Editar Perfil</h1>
 
         <div className={styles.editPageLayout}>
+          {/* Coluna da Esquerda: Avatar */}
           <section className={styles.avatarSection}>
             <div className={styles.avatarPicker}>
               <p>Seu Arcano de Perfil</p>
@@ -119,7 +122,9 @@ function EditarPerfilPage() {
             </div>
           </section>
 
-          <section className={styles.formSection}>
+          {/* Coluna da Direita: Agrupa Formulário, Segurança e Danger Zone */}
+          <section className={styles.formSection}> 
+            {/* Formulário de Perfil */}
             <form onSubmit={handleUpdateProfile} className={styles.profileForm}>
               <div className={styles.formGroup}>
                 <label htmlFor="email">Email</label>
@@ -137,34 +142,55 @@ function EditarPerfilPage() {
                 <label htmlFor="bio">Bio</label>
                 <textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Uma frase que te define..."/>
               </div>
-              
+              <div className={styles.formGroup}>
+                <label htmlFor="minhaHistoria">Minha História</label>
+                <textarea 
+                  id="minhaHistoria" 
+                  value={minhaHistoria} 
+                  onChange={(e) => setMinhaHistoria(e.target.value)} 
+                  placeholder="Conte um pouco sobre sua jornada espiritual ou quem você é..."
+                  rows="5" 
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="entidadeCultuada">Entidade(s) que Cultuo/Admiro</label>
+                <input 
+                  id="entidadeCultuada" 
+                  type="text" 
+                  value={entidadeCultuada} 
+                  onChange={(e) => setEntidadeCultuada(e.target.value)} 
+                  placeholder="Ex: Hécate, Odin, Orixás, Arquétipos..."
+                />
+              </div>
               <div className={styles.formActions}>
-                <Link to="/painel" className={styles.cancelButton}>Cancelar</Link>
+                <Link to="/meu-grimorio" className={styles.cancelButton}>Cancelar</Link> 
                 <button type="submit" className={styles.saveButton} disabled={isUpdating || isDeleting}>
                   {isUpdating ? 'Salvando...' : 'Salvar Alterações'}
                 </button>
               </div>
             </form>
             {message && <p className={styles.formMessage} style={{color: message.startsWith('Erro') ? '#ff8a80' : 'lightgreen'}}>{message}</p>}
-          </section>
-        </div>
-        
-        <section className={styles.securitySection}>
-          <h2>Segurança da Conta</h2>
-          <ChangePasswordForm />
-        </section>
 
-        <div className={styles.dangerZone}>
-          <h3>Área de Perigo</h3>
-          <p>A exclusão da conta é permanente e removerá todas as suas leituras e chats. Esta ação não pode ser desfeita.</p>
-          <button onClick={handleDeleteAccount} className={styles.deleteButton} disabled={isUpdating || isDeleting}>
-            {isDeleting ? 'Processando...' : 'Deletar Minha Conta Permanentemente'}
-          </button>
-        </div>
-      </div>
+            {/* Seção de Segurança (DENTRO da coluna direita) */}
+            <section className={styles.securitySection}>
+              <h2>Segurança da Conta</h2>
+              <ChangePasswordForm />
+            </section>
 
+            {/* Área de Perigo (DENTRO da coluna direita) */}
+            <div className={styles.dangerZone}>
+              <h3>Área de Perigo</h3>
+              <p>A exclusão da conta é permanente e removerá todas as suas leituras e chats. Esta ação não pode ser desfeita.</p>
+              <button onClick={handleDeleteAccount} className={styles.deleteButton} disabled={isUpdating || isDeleting}>
+                {isDeleting ? 'Processando...' : 'Deletar Minha Conta Permanentemente'}
+              </button>
+            </div>
+          </section> {/* Fechamento CORRETO da formSection */}
+        </div> {/* Fechamento do editPageLayout */}
+
+      {/* Modal (fora do grid principal) - CÓDIGO COMPLETO AGORA */}
       {showModal && (
-        <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
+         <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <h3>Escolha seu Arcano</h3>
@@ -183,14 +209,15 @@ function EditarPerfilPage() {
                     setAvatarUrl(carta.img);
                     setShowModal(false);
                   }}
-                />
+                /> // Certifique-se de que a tag img está auto-fechada corretamente
               ))}
-            </div>
+            </div> {/* Fechamento do cardGrid */}
             <button onClick={() => setShowModal(false)} className={styles.modalCloseButton}>Fechar</button>
-          </div>
-        </div>
-      )}
-    </div>
+          </div> {/* Fechamento do modalContent */}
+        </div> // Fechamento do modalOverlay
+      )} 
+     </div> {/* Fechamento do editPageContainer - Linha 220 */}
+    </div> // Fechamento do content_wrapper
   );
 }
 

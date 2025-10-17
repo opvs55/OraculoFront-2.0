@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { supabase } from '../../../supabaseClient';
+import { useAuth } from '../../../context/AuthContext'; // Precisamos do e-mail do usuário atual
 import styles from './ChangePasswordForm.module.css';
 
 function ChangePasswordForm() {
-  const [password, setPassword] = useState('');
+  const { user } = useAuth(); // Pega os dados do usuário logado
+  const [currentPassword, setCurrentPassword] = useState(''); // NOVO campo
+  const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -14,31 +17,54 @@ function ChangePasswordForm() {
     setError('');
     setMessage('');
 
-    if (password !== confirmPassword) {
-      setError('As senhas não coincidem.');
+    if (newPassword !== confirmPassword) {
+      setError('As novas senhas não coincidem.');
       return;
     }
-    if (password.length < 6) {
+    if (newPassword.length < 6) {
       setError('A nova senha deve ter no mínimo 6 caracteres.');
+      return;
+    }
+    if (!currentPassword) {
+      setError('Por favor, digite sua senha atual.');
+      return;
+    }
+    if (!user?.email) {
+      setError('Erro: Não foi possível identificar o usuário.'); // Segurança extra
       return;
     }
 
     setLoading(true);
     try {
+      // 1. Tenta reautenticar com a senha atual para verificar
+      const { error: reauthError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+
+      if (reauthError) {
+        // Se a senha atual estiver incorreta, signInWithPassword retorna um erro
+        throw new Error('Senha atual incorreta.');
+      }
+      
+      // 2. Se a senha atual estiver correta, atualiza para a nova senha
       const { error: updateError } = await supabase.auth.updateUser({
-        password: password,
+        password: newPassword,
       });
 
       if (updateError) {
-        throw updateError;
+        throw updateError; // Lança outros erros do Supabase
       }
 
       setMessage('Senha alterada com sucesso!');
-      setPassword('');
+      setCurrentPassword(''); // Limpa todos os campos
+      setNewPassword('');
       setConfirmPassword('');
+
     } catch (err) {
-      setError('Não foi possível alterar a senha. Tente novamente.');
-      console.error(err);
+      console.error("Erro ao alterar senha:", err);
+      // Aqui podemos usar nosso tradutor se quisermos, ou mensagens específicas
+      setError(err.message === 'Senha atual incorreta.' ? err.message : 'Não foi possível alterar a senha. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -46,13 +72,25 @@ function ChangePasswordForm() {
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
+      {/* NOVO CAMPO */}
+      <div className={styles.inputGroup}>
+        <label htmlFor="current-password">Senha Atual</label>
+        <input 
+          id="current-password" 
+          type="password" 
+          value={currentPassword} 
+          onChange={(e) => setCurrentPassword(e.target.value)} 
+          required 
+        />
+      </div>
+
       <div className={styles.inputGroup}>
         <label htmlFor="new-password">Nova Senha</label>
         <input 
           id="new-password" 
           type="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
+          value={newPassword} 
+          onChange={(e) => setNewPassword(e.target.value)} 
           required 
           placeholder="Mínimo de 6 caracteres"
         />

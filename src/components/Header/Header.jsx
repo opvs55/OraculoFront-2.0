@@ -27,7 +27,7 @@ function Header() {
             {user ? (
               <>
                 <NavLink 
-                  to="/painel" 
+                  to="/meu-grimorio" 
                   className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
                 >
                   Meu Painel

@@ -1,0 +1,75 @@
+.cardContainer {
+  background-color: rgba(26, 26, 46, 0.7);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #2c2c54;
+  text-align: center;
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cardContainer h2 {
+  font-family: 'Cinzel', serif;
+  margin: 0 0 1.5rem 0;
+  color: #E1B382;
+  font-size: 1.8rem;
+}
+
+.cardImageBack, .cardImageFront {
+  width: 150px; /* Tamanho da imagem */
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+.revealButton {
+  background: #E1B382;
+  color: #0D0C1D;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  border: none;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.revealButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(225, 179, 130, 0.5);
+}
+
+.waitMessage {
+  color: #a0a0a0;
+  font-style: italic;
+}
+
+.cardContainer h3 {
+  font-family: 'Cinzel', serif;
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+.cardMeaning {
+  color: #c7c7c7;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  max-width: 90%;
+}
+
+.detailsLink {
+  color: #E1B382;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.detailsLink:hover {
+  text-decoration: underline;
+}

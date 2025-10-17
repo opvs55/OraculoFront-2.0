@@ -9,7 +9,7 @@ import './styles/globals.css';
 import HomePage from './pages/HomePage';
 import CadastroPage from './pages/auth/CadastroPage';
 import LoginPage from './pages/auth/LoginPage';
-import PainelPage from './pages/dashboard/PainelPage';
+import PainelPage from './pages/dashboard/MeuGrimorioPage.jsx';
 import EditarPerfilPage from './pages/dashboard/EditarPerfilPage';
 import PastReadingPage from './pages/reading/PastReadingPage/PastReadingPage';
 import CardDetailPage from './pages/reading/CardDetailPage/CardDetailPage';
@@ -42,7 +42,7 @@ function App() {
             <Route path="/biblioteca/:cardSlug" element={<LearningCardDetailPage />} />
             
             {/* Rotas Protegidas */}
-            <Route path="/painel" element={<ProtectedRoute><PainelPage /></ProtectedRoute>} />
+            <Route path="/meu-grimorio" element={<ProtectedRoute><PainelPage /></ProtectedRoute>} />
             <Route path="/perfil/editar" element={<ProtectedRoute><EditarPerfilPage /></ProtectedRoute>} />
           </Routes>
         </main>

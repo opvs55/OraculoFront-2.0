@@ -1,0 +1,12 @@
+.dividerContainer {
+  width: 100%;
+  text-align: center;
+  margin: 3rem 0 1rem 0; /* Espaçamento acima e abaixo do divisor */
+}
+
+.dividerSvg {
+  stroke: #E1B382; /* Cor da linha e do contorno do losango */
+  stroke-width: 1;
+  fill: #E1B382; /* Cor do preenchimento do losango */
+  opacity: 0.6;
+}
