@@ -1,39 +1,133 @@
 .profileSection {
   display: flex;
-  align-items: center;
-  gap: 2rem;
+  align-items: center; /* Centraliza verticalmente */
+  gap: 1.5rem; /* Reduzido o gap */
   text-align: left;
   width: 100%;
   background-color: rgba(26, 26, 46, 0.7);
-  padding: 2rem;
+  padding: 1.5rem; /* Padding reduzido */
   border-radius: 12px;
   border: 1px solid #2c2c54;
   backdrop-filter: blur(5px);
 }
 
-.avatarContainer { flex-shrink: 0; }
+.avatarContainer { 
+  flex-shrink: 0; 
+  text-align: center;
+}
 .avatar {
-  width: 150px;
-  height: 250px;
+  width: 100px; /* Avatar menor */
+  aspect-ratio: 600 / 1023; 
   border-radius: 8px;
   object-fit: cover;
-  border: 3px solid #C36E97;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 2px solid #C36E97; /* Borda mais fina */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra mais sutil */
   transition: transform 0.3s ease;
+  margin: 0 auto;
 }
-.avatar:hover { transform: scale(1.03) rotate(-1deg); }
-.profileInfo h2 { font-family: 'Cinzel', serif; font-size: 2rem; margin: 0; color: #fff; }
-.profileInfo .username { font-size: 1.1rem; color: #a0a0a0; margin-top: 0.25rem; }
-.profileInfo .bio { margin-top: 1rem; color: #E0E0E0; font-style: italic; }
-.profileActions { margin-top: 1.5rem; }
-.editProfileButton { display: inline-block; background-color: transparent; border: 1px solid #E1B382; color: #E1B382; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-weight: bold; transition: all 0.2s; }
+.avatar:hover { transform: scale(1.05) rotate(-1deg); }
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; 
+  gap: 0.3rem; /* Espaçamento menor entre os itens */
+  overflow: hidden; /* Evita que textos longos quebrem o layout */
+}
+
+/* Link para o perfil no nome */
+.profileNameLink {
+  text-decoration: none;
+}
+.profileNameLink h2 { 
+  font-family: 'Cinzel', serif; 
+  font-size: 1.6rem; /* Nome menor */
+  margin: 0; 
+  color: #fff; 
+  transition: color 0.2s;
+  white-space: nowrap; /* Evita quebra de linha no nome */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Adiciona "..." se for muito longo */
+}
+.profileNameLink:hover h2 {
+  color: #E1B382;
+}
+
+.profileInfo .username { 
+  font-size: 0.9rem; /* Username menor */
+  color: #a0a0a0; 
+  margin: 0;
+}
+.profileInfo .username a { /* Link no username */
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.profileInfo .username a:hover {
+  color: #E1B382;
+}
+
+.stats { 
+  margin-top: 0.5rem; 
+  display: flex; 
+  gap: 1rem; 
+}
+.stats span { color: #c7c7c7; font-size: 0.85rem;} /* Stats menores */
+.stats strong { color: #E0E0E0; font-size: 1em; }
+
+.profileInfo .bio { 
+  margin-top: 0.5rem; 
+  color: #E0E0E0; 
+  font-style: italic; 
+  line-height: 1.4; /* Mais compacto */
+  font-size: 0.9rem; /* Bio menor */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Removido borda e padding */
+}
+
+/* REMOVIDO: Estilos .extraInfo, .storySection */
+
+.profileActions { 
+  margin-top: 1rem; /* Aproxima os botões */
+  display: flex;
+  flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
+  gap: 0.8rem;
+  align-items: center;
+}
+.editProfileButton { 
+  display: inline-block; background-color: transparent; 
+  border: 1px solid #E1B382; color: #E1B382; 
+  padding: 0.5rem 1rem; 
+  border-radius: 6px; 
+  text-decoration: none; font-weight: bold; 
+  transition: all 0.2s; 
+  font-size: 0.85rem; /* Botão menor */
+}
 .editProfileButton:hover { background-color: #E1B382; color: #0D0C1D; }
-.stats { margin-top: 1rem; display: flex; gap: 1.5rem; }
-.stats span { color: #c7c7c7; }
-.stats strong { color: #E0E0E0; font-size: 1.1em; }
+
+/* Link sutil para Ver Perfil Completo */
+.viewProfileLink {
+  font-size: 0.85rem;
+  color: #a0a0a0;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.viewProfileLink:hover {
+  color: #E1B382;
+  text-decoration: underline;
+}
 
 @media (max-width: 768px) {
-  .profileSection { flex-direction: column; padding: 1.5rem; text-align: center; }
-  .avatar { width: 120px; height: 210px; }
-  .profileInfo h2 { font-size: 1.8rem; }
+  .profileSection { 
+    flex-direction: column; padding: 1.5rem; 
+    text-align: center; align-items: center;
+  }
+  .avatar { width: 100px; } 
+  .profileInfo { align-items: center; } 
+  .profileNameLink h2 { font-size: 1.5rem; }
+  .profileActions { justify-content: center; } /* Centraliza botões */
 }

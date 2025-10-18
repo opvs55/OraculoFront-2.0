@@ -1,0 +1,117 @@
+/* src/components/ReadingCard/ReadingCard.module.css (VERSÃO REFATORADA) */
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border-subtle);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  display: inline-block;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background-color: #1a1a2e; /* Cor de fundo para o placeholder */
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Você pode adicionar um ícone ou padrão aqui */
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(16, 16, 28, 0.95) 15%, rgba(16, 16, 28, 0) 70%);
+}
+
+/* --- NOVO: Selo do Tipo de Tiragem --- */
+.spreadTypeBadge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background-color: rgba(16, 16, 28, 0.7);
+  backdrop-filter: blur(5px);
+  color: #E1B382; /* Cor dourada do tema */
+  padding: 0.3rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(225, 179, 130, 0.3);
+}
+
+.content {
+  padding: 1rem 1.25rem;
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.authorAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.25rem; /* Título mais proeminente */
+  margin: 0 0 1rem 0;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+  min-height: 50px;
+}
+
+.stats {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.statItem {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}

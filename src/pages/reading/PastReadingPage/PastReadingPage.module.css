@@ -1,10 +1,19 @@
 /* src/pages/reading/PastReadingPage/PastReadingPage.module.css */
 
+/* --- Container Principal --- */
+/* A MUDANÇA MAIS IMPORTANTE:
+   Definimos uma largura máxima generosa para o container da página.
+   Ele ocupará 90% da largura da janela (90vw) ATÉ um máximo de 1200px.
+   O 'margin: 0 auto' garante que ele fique sempre centrado.
+   Adicionamos um padding para que o conteúdo não toque nas bordas. */
 .container {
-  width: 100%;
+  width: 90vw; /* Ocupa 90% da largura da janela */
+  max-width: 1200px; /* Mas não passa de 1200px */
+  margin: 0 auto; /* Centra o container na página */
+  padding: 2rem 0; /* Espaçamento vertical */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* Mantém o alinhamento central dos itens */
 }
 
 .backLink {
@@ -25,13 +34,16 @@
   color: #E1B382;
 }
 
+/* --- Título da Pergunta --- */
+/* Agora o título pode ocupar a largura total do container,
+   respeitando o padding do pai. Removemos o max-width fixo. */
 .question {
   font-family: 'Cinzel', serif;
   font-size: 2rem;
   margin: 0 auto 3rem auto;
   font-style: italic;
   color: #E1B382;
-  max-width: 800px;
+  width: 100%; /* Ocupa a largura disponível */
   text-align: center;
   text-shadow: 0 0 10px rgba(225, 179, 130, 0.3);
 }
@@ -44,24 +56,129 @@
   gap: 4rem;
 }
 
+/* --- Secção das Cartas --- */
 .cardsSection {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
+/* A secção de interpretação (Situação, Obstáculo, Conselho)
+   agora ocupa 100% da largura do .resultsContainer.
+   O espaçamento lateral é controlado pelo padding do .container. */
 .readingSection {
   width: 100%;
-  max-width: 80%;
   display: flex;
   justify-content: center;
 }
 
+/* --- Secção de Partilha e Comentários --- */
+/* Estas secções agora ocupam 100% da largura, alinhando-se
+   com o resto do conteúdo de forma consistente. */
+.shareContainer {
+  width: 100%; /* Ocupa toda a largura */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Alinha à direita */
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #2c2c54;
+}
+
+.shareButton {
+  background-color: transparent;
+  border: 1px solid #c7a37e;
+  color: #c7a37e;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.shareButton:hover:not(:disabled) {
+  background-color: #c7a37e;
+  color: #1a1a2e;
+}
+
+.shareButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.shareStatus {
+  font-size: 0.9rem;
+  color: #a0a0a0;
+  font-style: italic;
+}
+
+.communitySection,
+.privateSection {
+  margin-top: 2rem;
+  width: 100%; /* Garante que ocupem a largura total */
+}
+
+.privateSection {
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+}
+
+.privateTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+.privateNotice {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+
+/* --- Media Query para Dispositivos Móveis --- */
+/* As regras para mobile agora servem para ajustar o que for preciso
+   em telas menores. */
 @media (max-width: 768px) {
+  .container {
+    width: 95vw; /* Aumenta um pouco a largura em mobile */
+    padding: 1rem 0; /* Reduz o padding vertical */
+  }
+
   .question {
     font-size: 1.5rem;
   }
-  .readingSection {
-    max-width: 100%;
+}
+
+/* Por defeito (mobile), os itens empilham-se normalmente */
+.publicContentGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Espaço entre reflexão e comentários no mobile */
+}
+
+/* Para telas maiores (ex: tablets em paisagem e desktops) */
+@media (min-width: 1024px) {
+  .publicContentGrid {
+    flex-direction: row; /* Lado a lado */
+    justify-content: space-between;
+    align-items: flex-start; /* Alinha os topos das colunas */
+    gap: 3rem; /* Espaço maior entre as colunas */
+  }
+
+  .reflectionColumn {
+    flex-basis: 35%; /* Coluna da esquerda ocupa ~35% */
+    /* EFEITO EXTRA: A reflexão fica "colada" no topo ao rolar a página! */
+    position: sticky;
+    top: 2rem; /* Distância do topo ao "colar" */
+  }
+
+  .commentsColumn {
+    flex-basis: 60%; /* Coluna da direita ocupa o resto */
   }
 }

@@ -1,38 +1,54 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { NavLink, Link } from 'react-router-dom'; // Adicionamos 'Link' para o logo do cabeçalho
+import { NavLink, Link } from 'react-router-dom';
 import styles from './Header.module.css';
 
 function Header() {
-  const { user, loading, signOut } = useAuth(); // Recuperamos a função signOut
+  const { user, loading, signOut } = useAuth(); 
   
   return (
     <header className={styles.header}>
-      {/* NOVO: Logo clicável no canto esquerdo do cabeçalho */}
-      <Link to="/" className={styles.headerLogo}>
-        Oráculo IA
-      </Link>
-      
-      <nav className={styles.nav}>
-        {!loading && (
-          <>
-            {/* NOVO: Link da Biblioteca, visível para todos */}
+      {/* Navegação Esquerda (Vazia para visitantes, com links para logados) */}
+      <nav className={`${styles.nav} ${styles.navLeft}`}>
+        {!loading && user && ( // MOVIDO: Só mostra Biblioteca e Comunidade se user existir
+          <> 
             <NavLink 
               to="/biblioteca" 
               className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
             >
               Biblioteca
             </NavLink>
+            <NavLink 
+              to="/comunidade" 
+              className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+            >
+              Comunidade
+            </NavLink>
+          </>
+        )}
+        {/* Adiciona um placeholder vazio se não estiver logado para manter o layout do grid */}
+        {!loading && !user && <div style={{ minWidth: '100px' }}></div>} 
+      </nav>
 
+      {/* Título Central */}
+      <div className={styles.headerCenter}>
+        <Link to="/" className={styles.headerLogo}>
+          EXOTERICON
+        </Link>
+      </div>
+
+      {/* Navegação Direita (Autenticação / Grimório) */}
+      <nav className={`${styles.nav} ${styles.navRight}`}>
+        {!loading && (
+          <>
             {user ? (
               <>
                 <NavLink 
                   to="/meu-grimorio" 
                   className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
                 >
-                  Meu Painel
+                  Meu Grimório 
                 </NavLink>
-                {/* NOVO: Botão de Sair para usuários logados */}
                 <button onClick={signOut} className={styles.logoutButton}>
                   Sair
                 </button>

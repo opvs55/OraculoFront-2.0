@@ -5,12 +5,12 @@ import { useUserProfile } from '../../hooks/useUserProfile';
 import { useReadingsHistory } from '../../hooks/useReadings';
 import { useCardOfTheWeek } from '../../hooks/useCardOfTheWeek'; 
 import styles from './MeuGrimorioPage.module.css'; 
-import Loader from '../../components/common/Loader/Loader';
+import Loader from '../../components/common/Loader/Loader'; // Este caminho parece correto
 
-// CAMINHOS CORRIGIDOS USANDO EXATAMENTE O QUE VOCÊ FORNECEU
-import ProfileSummary from './ProfileSummary/ProfileSummary'; // Assumindo que estão na mesma pasta 'dashboard'
-import ReadingHistory from './ReadingHistory/ReadingHistory'; // Assumindo que estão na mesma pasta 'dashboard'
-import CardOfTheWeek from './CardOfTheWeek/CardOfTheWeek';   // Assumindo que estão na mesma pasta 'dashboard'
+// CAMINHOS CORRIGIDOS PARA REFLETIR A ESTRUTURA REAL
+import ProfileSummary from './ProfileSummary/ProfileSummary'; 
+import ReadingHistory from './ReadingHistory/ReadingHistory'; 
+import CardOfTheWeek from './CardOfTheWeek/CardOfTheWeek';   
 
 function MeuGrimorioPage() { 
   const [videoAtualIndex, setVideoAtualIndex] = useState(() => Math.floor(Math.random() * 2));
@@ -55,7 +55,7 @@ function MeuGrimorioPage() {
               onReveal={revealCard} 
               revealAllowed={revealAllowed} 
             />
-             <Link to="/" className={styles.newReadingButtonLarge}>
+             <Link to="/tarot" className={styles.newReadingButtonLarge}>
                 Fazer Nova Leitura
              </Link>
           </div>

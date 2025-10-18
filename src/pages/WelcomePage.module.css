@@ -1,0 +1,79 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px); /* Subtrai a altura aproximada do header */
+  padding: 2rem;
+  text-align: center;
+  /* Exemplo de fundo com textura de pergaminho (adicione a imagem se tiver) */
+  /* background-image: url('/assets/textures/parchment.jpg'); */
+  background-color: #1a1a2e; /* Cor de fundo fallback */
+  background-size: cover;
+  color: #e0e0e0;
+}
+
+.content {
+  max-width: 800px;
+  background-color: rgba(13, 12, 29, 0.7); /* Fundo semi-transparente para o texto */
+  padding: 3rem;
+  border-radius: 15px;
+  border: 1px solid #2c2c54;
+  backdrop-filter: blur(5px);
+}
+
+.mainTitle {
+  font-family: 'Cinzel', serif; /* Fonte temática */
+  font-size: 4.5rem;
+  color: #E1B382;
+  text-shadow: 0 0 15px rgba(225, 179, 130, 0.5);
+  margin: 0 0 1rem 0;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  color: #c7c7c7;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+}
+
+.ctaButton {
+  display: inline-block;
+  background: #E1B382;
+  color: #0D0C1D;
+  padding: 1rem 2.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2rem;
+  font-family: 'Cinzel', serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(225, 179, 130, 0.3);
+  margin-bottom: 1.5rem; /* Espaço antes do link secundário */
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(225, 179, 130, 0.5);
+}
+
+.secondaryLink {
+  display: block; /* Fica abaixo do botão principal */
+  color: #a0a0a0;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.secondaryLink:hover {
+  color: #E1B382;
+  text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .mainTitle { font-size: 3rem; }
+  .subtitle { font-size: 1.1rem; }
+  .ctaButton { font-size: 1rem; padding: 0.8rem 2rem; }
+  .content { padding: 2rem; }
+}

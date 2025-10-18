@@ -1,0 +1,206 @@
+/* src/components/CommentsSection/CommentsSection.module.css */
+
+.commentsWrapper {
+  width: 100%;
+  padding: 1.5rem 2rem;
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--color-border-subtle);
+}
+
+.mainHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+  flex-wrap: wrap; /* Para telas pequenas */
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.sortControls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.sortButton {
+  background: none;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+}
+.sortButton.active {
+  color: var(--color-primary-main);
+  font-weight: 700;
+}
+.sortButton:hover:not(.active) {
+  background-color: var(--color-background-hover);
+}
+
+/* --- Formulário de Novo Comentário ("Postbox") --- */
+.commentFormContainer {
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.commentForm {
+  display: flex;
+  gap: 1rem;
+}
+
+.commentTextarea {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-primary);
+  background-color: var(--color-background-default);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical; /* SÓ permite redimensionar verticalmente */
+  transition: all 0.2s ease-in-out;
+  min-height: 48px;
+}
+
+.commentTextarea:focus {
+  border-color: var(--color-primary-main);
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+.commentFormActions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 0.75rem;
+  gap: 1rem;
+}
+
+.submitButton, .cancelButton {
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submitButton {
+  background-color: var(--color-primary-main);
+  color: var(--color-text-on-primary);
+}
+.submitButton:disabled {
+  background-color: var(--color-background-disabled);
+  cursor: not-allowed;
+}
+.submitButton:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+}
+
+.cancelButton {
+  background-color: var(--color-background-hover);
+  color: var(--color-text-secondary);
+}
+.cancelButton:hover {
+  background-color: var(--color-border-subtle);
+}
+
+.loginPrompt {
+  padding: 1rem;
+  text-align: center;
+  background-color: var(--color-background-default);
+  border-radius: 8px;
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+}
+.loginPrompt a {
+  color: var(--color-primary-main);
+  font-weight: 600;
+}
+
+/* --- Lista de Comentários e Itens --- */
+.commentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.noComments {
+  font-style: italic;
+  color: var(--color-text-secondary);
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.commentItem { display: flex; gap: 1rem; }
+.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; margin-top: 0.25rem; }
+.commentContent { flex: 1; }
+.commentHeader { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem; }
+.username { font-weight: 600; color: var(--color-text-primary); text-decoration: none; font-size: 0.9rem; }
+.username:hover { text-decoration: underline; }
+.date { font-size: 0.8rem; color: var(--color-text-secondary); }
+.commentBody { font-size: 1rem; color: var(--color-text-primary); white-space: pre-wrap; line-height: 1.6; }
+.commentActions { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+.replyButton { background: none; border: none; color: var(--color-primary-main); font-size: 0.85rem; font-weight: 600; cursor: pointer; padding: 0.25rem 0; }
+.replyButton:hover { text-decoration: underline; }
+.deleteButton { background: none; border: none; color: #ff6b6b; font-size: 0.85rem; font-weight: 600; cursor: pointer; padding: 0.25rem 0; }
+.deleteButton:hover { text-decoration: underline; }
+.deleteButton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.repliesContainer {
+  margin-top: 1.5rem;
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--color-border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* --- Botão "Carregar Mais" --- */
+.loadMoreContainer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.loadMoreButton {
+  background-color: transparent;
+  border: 1px solid var(--color-primary-main);
+  color: var(--color-primary-main);
+  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.loadMoreButton:hover:not(:disabled) {
+  background-color: var(--color-primary-main);
+  color: var(--color-text-on-primary);
+}
+.loadMoreButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .commentsWrapper {
+    padding: 1rem 1.25rem;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+}

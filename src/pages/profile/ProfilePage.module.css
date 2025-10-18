@@ -1,0 +1,165 @@
+/* Wrapper para o layout de 3 colunas em telas grandes */
+.profileGridWrapper {
+  width: 100%;
+  padding: 2rem 1rem; /* Padding horizontal menor no wrapper */
+}
+
+/* Container principal do conteúdo do perfil */
+.profileContainer {
+  padding: 2rem; /* Padding interno */
+  color: #e0e0e0;
+  max-width: 900px; /* LARGURA MÁXIMA DO CONTEÚDO CENTRAL */
+  margin: 0 auto; /* Centraliza por padrão (importante para telas menores) */
+  width: 100%; /* Ocupa a coluna do grid ou a largura disponível */
+}
+
+/* APLICA O GRID DE 3 COLUNAS APENAS EM TELAS GRANDES */
+@media (min-width: 1200px) { /* Ponto de quebra para telas largas */
+  .profileGridWrapper {
+    display: grid;
+    /* Colunas: Esquerda flexível | Centro (máx 900px) | Direita flexível */
+    grid-template-columns: 1fr minmax(auto, 900px) 1fr; 
+    gap: 2rem; /* Espaço entre as colunas (se houver conteúdo nelas no futuro) */
+    padding: 2rem 3rem; /* Mais padding horizontal no wrapper em telas grandes */
+  }
+  .profileContainer {
+     grid-column: 2; /* Coloca o container na coluna central */
+     margin: 0; /* Remove a margem automática, o grid cuida do posicionamento */
+     padding: 0; /* Padding agora está no wrapper */
+  }
+}
+
+
+/* --- BOTÃO VOLTAR --- */
+.backButton {
+  background: none;
+  border: 1px solid #555;
+  color: #a0a0a0;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  margin-bottom: 2rem; /* Espaço abaixo do botão no topo */
+}
+.backButton:hover {
+  border-color: #E1B382;
+  color: #E1B382;
+}
+
+
+/* --- RESTANTE DOS ESTILOS --- */
+.profileHeader {
+  display: flex;
+  flex-direction: column; /* Padrão para mobile */
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #2c2c54;
+}
+
+.profileAvatar {
+  width: 150px;
+  height: auto;
+  aspect-ratio: 600 / 1023; /* Proporção da carta */
+  object-fit: cover;
+  border-radius: 12px;
+  border: 3px solid #C36E97;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.profileTitles {
+  text-align: center; /* Padrão para mobile */
+}
+
+.profileTitles h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 2.8rem;
+  color: #E1B382;
+  margin: 0;
+}
+
+.profileUsername {
+  font-size: 1.1rem;
+  color: #a0a0a0;
+  margin-top: 0.25rem;
+}
+
+.profileSection {
+  margin-bottom: 2.5rem;
+  background-color: rgba(26, 26, 46, 0.5);
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  border: 1px solid #2c2c54;
+  backdrop-filter: blur(3px);
+}
+
+.profileSection h2 {
+  font-family: 'Cinzel', serif;
+  color: #c7a37e;
+  font-size: 1.5rem;
+  margin: 0 0 1rem 0;
+  border-bottom: 1px solid #2c2c54;
+  padding-bottom: 0.5rem;
+}
+
+/* Estilo padrão para parágrafos dentro das seções */
+.profileSection p {
+  line-height: 1.8;
+  font-size: 1.1rem; /* Tamanho padrão do texto */
+  margin-bottom: 1em; 
+}
+.profileSection p:last-child {
+  margin-bottom: 0;
+}
+
+
+.bioText {
+  font-style: italic;
+  font-size: 1.1rem; /* Mantém o tamanho da Bio */
+  line-height: 1.7;
+  margin: 0;
+}
+
+.storyText p {
+  text-align: justify; /* Justifica o texto da história */
+  font-size: 1rem; /* Texto da história um pouco menor */
+}
+
+
+.notFound { 
+  text-align: center;
+}
+.notFound .backButton { /* Estilo específico para botão voltar na página de erro */
+    margin-top: 2rem;
+}
+
+/* --- RESPONSIVIDADE --- */
+
+/* Tablet e telas médias */
+@media (min-width: 768px) and (max-width: 1199px) { 
+   .profileGridWrapper {
+     padding: 2rem; /* Ajusta padding */
+   }
+   /* Header lado a lado */
+   .profileHeader { 
+     flex-direction: row; 
+     text-align: left; 
+   }
+   .profileTitles { 
+      text-align: left; 
+   }
+}
+
+/* Telas pequenas */
+@media (max-width: 767px) { 
+    .profileGridWrapper { padding: 1rem; }
+    .profileContainer { padding: 1rem; } /* Menos padding interno */
+    .profileHeader { gap: 1rem; }
+    .profileAvatar { width: 120px; }
+    .profileTitles h1 { font-size: 2.2rem; }
+    .profileSection { padding: 1rem 1.5rem; }
+    .profileSection p, .bioText, .storyText p { font-size: 1rem; }
+}

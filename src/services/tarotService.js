@@ -1,92 +1,84 @@
-// src/services/tarotService.js
+// src/services/tarotService.js (VERSÃO REFATORADA)
 
-import { baralho } from '../tarotDeck.js';
+import { baralhoDetalhado as baralho } from '../tarotDeck.js';
 
 // Função para embaralhar um array usando o algoritmo Fisher-Yates
 function embaralhar(array) {
-  for (let i = array.length - 1; i > 0; i--) {
+  const shuffled = [...array]; // Cria uma cópia para não modificar o original
+  for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return array;
+  return shuffled;
 }
 
-/**
- * Sorteia 10 cartas do baralho para uma leitura da Cruz Celta.
- * @returns {Array<Object>} Um array com 10 objetos de carta, cada um com sua orientação.
- */
-export function sortearCruzCelta() {
-  console.log("Serviço de tarot: Sorteando 10 cartas para a Cruz Celta...");
-  const baralhoEmbaralhado = embaralhar([...baralho]);
-  const cartasSelecionadas = baralhoEmbaralhado.slice(0, 10);
-
-  const resultadoFinal = cartasSelecionadas.map(carta => ({
-    ...carta,
-    invertida: Math.random() < 0.5,
-  }));
-
-  return resultadoFinal;
+// Função auxiliar para pegar cartas
+function getShuffledCards(count) {
+  const baralhoEmbaralhado = embaralhar(baralho);
+  return baralhoEmbaralhado.slice(0, count);
 }
 
-// NOVO: Função para o sorteio de 3 cartas
-/**
- * Sorteia 3 cartas do baralho para uma leitura de Passado, Presente e Futuro.
- * @returns {Array<Object>} Um array com 3 objetos de carta, cada um com sua orientação.
- */
-export function sortearTresCartas() {
-  console.log("Serviço de tarot: Sorteando 3 cartas...");
-  const baralhoEmbaralhado = embaralhar([...baralho]);
-  const cartasSelecionadas = baralhoEmbaralhado.slice(0, 3); // A única mudança é aqui
-
-  const resultadoFinal = cartasSelecionadas.map(carta => ({
-    ...carta,
-    invertida: Math.random() < 0.5,
-  }));
-
-  return resultadoFinal;
+// Função auxiliar para atribuir inversão (para não repetir código)
+function assignInversion(card) {
+  return { ...card, invertida: Math.random() < 0.5 };
 }
 
-// NOVO: Função para o sorteio de 1 carta (Bônus, para o futuro)
-/**
- * Sorteia 1 carta do baralho para leituras simples (Amor, Conselho do Dia, etc.).
- * @returns {Array<Object>} Um array com 1 objeto de carta, com sua orientação.
- */
+// --- Funções de Sorteio com a Posição Adicionada ---
+
 export function sortearUmaCarta() {
   console.log("Serviço de tarot: Sorteando 1 carta...");
-  const baralhoEmbaralhado = embaralhar([...baralho]);
-  const cartasSelecionadas = baralhoEmbaralhado.slice(0, 1); // E aqui
+  const [carta] = getShuffledCards(1);
+  return [{ ...assignInversion(carta), posicao: 'A Carta' }];
+}
 
-  const resultadoFinal = cartasSelecionadas.map(carta => ({
-    ...carta,
-    invertida: Math.random() < 0.5,
+export function sortearTresCartas() {
+  console.log("Serviço de tarot: Sorteando 3 cartas...");
+  const [passado, presente, futuro] = getShuffledCards(3);
+  return [
+    { ...assignInversion(passado), posicao: 'Passado' },
+    { ...assignInversion(presente), posicao: 'Presente' },
+    { ...assignInversion(futuro), posicao: 'Futuro' },
+  ];
+}
+
+export function sortearCruzCelta() {
+  console.log("Serviço de tarot: Sorteando 10 cartas para a Cruz Celta...");
+  const sorteadas = getShuffledCards(10);
+  const posicoes = [
+    'Situação Atual', 'Obstáculo', 'Base da Questão', 'Passado Recente',
+    'Coroamento (Possível Futuro)', 'Futuro Próximo', 'O Consulente',
+    'O Ambiente', 'Esperanças e Medos', 'Resultado Final'
+  ];
+  return sorteadas.map((carta, index) => ({
+    ...assignInversion(carta),
+    posicao: posicoes[index],
   }));
-
-  return resultadoFinal;
 }
 
 export function sortearTemploDeAfrodite() {
   console.log("Serviço de tarot: Sorteando 7 cartas para o Templo de Afrodite...");
-  const baralhoEmbaralhado = embaralhar([...baralho]);
-  const cartasSelecionadas = baralhoEmbaralhado.slice(0, 7); // Sorteia 7 cartas
-
-  const resultadoFinal = cartasSelecionadas.map(carta => ({
-    ...carta,
-    invertida: Math.random() < 0.5,
+  const sorteadas = getShuffledCards(7);
+  const posicoes = [
+    'Pilar 1: O Eu Interior', 'Pilar 2: O Outro', 'Viga 1: A Relação no Passado',
+    'Viga 2: A Relação no Presente', 'O Altar: O Desafio Central',
+    'A Oferenda: O que deve ser Cultivado', 'A Bênção de Afrodite: O Conselho Final'
+  ];
+  return sorteadas.map((carta, index) => ({
+      ...assignInversion(carta),
+      posicao: posicoes[index],
   }));
-
-  return resultadoFinal;
 }
 
-// NOVO: Função para a Escolha de Caminho
 export function sortearEscolhaDeCaminho() {
   console.log("Serviço de tarot: Sorteando 8 cartas para a Escolha de Caminho...");
-  const baralhoEmbaralhado = embaralhar([...baralho]);
-  const cartasSelecionadas = baralhoEmbaralhado.slice(0, 8); // Sorteia 8 cartas
-
-  const resultadoFinal = cartasSelecionadas.map(carta => ({
-    ...carta,
-    invertida: Math.random() < 0.5,
+  const sorteadas = getShuffledCards(8);
+  const posicoes = [
+    'O Consulente', 'A Situação da Escolha', 'O Caminho da Luz: Opção 1',
+    'O Caminho da Luz: Desfecho 1', 'O Caminho das Sombras: Opção 2',
+    'O Caminho das Sombras: Desfecho 2', 'O Conselho do Oráculo', 'O Resultado Mais Provável'
+  ];
+  return sorteadas.map((carta, index) => ({
+      ...assignInversion(carta),
+      posicao: posicoes[index],
   }));
-
-  return resultadoFinal;
 }

@@ -1,0 +1,178 @@
+/* src/components/community/CommentSection/CommentSection.module.css */
+
+.commentSection {
+  background-color: rgba(13, 12, 29, 0.6); /* Fundo sutil, mais escuro */
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid #2c2c54;
+  margin-top: 2rem; /* Espaço acima da seção */
+  backdrop-filter: blur(5px);
+}
+
+.sectionTitle {
+  font-family: 'Cinzel', serif;
+  color: #c7a37e;
+  font-size: 1.8rem;
+  margin: 0 0 2rem 0;
+  text-align: center;
+  border-bottom: 1px solid #4a415a; /* Linha sutil abaixo */
+  padding-bottom: 1rem;
+}
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espaço entre comentários */
+  margin-bottom: 2rem;
+  max-height: 400px; /* Limita altura e adiciona scroll */
+  overflow-y: auto;
+  padding-right: 1rem; /* Espaço para a barra de scroll */
+}
+
+/* Estilização da barra de scroll (opcional) */
+.commentList::-webkit-scrollbar { width: 6px; }
+.commentList::-webkit-scrollbar-thumb { background-color: #4a5568; border-radius: 3px; }
+.commentList::-webkit-scrollbar-track { background-color: rgba(13, 12, 29, 0.4); }
+
+.comment {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start; /* Alinha avatar e texto no topo */
+  border-bottom: 1px solid #2c2c54; /* Linha separadora */
+  padding-bottom: 1.5rem;
+}
+.comment:last-child {
+  border-bottom: none; /* Remove linha do último */
+  padding-bottom: 0;
+}
+
+.commentAvatar {
+  width: 40px; /* Avatar menor */
+  height: auto;
+  aspect-ratio: 600 / 1023; /* Proporção da carta */
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #4a415a;
+  flex-shrink: 0; /* Impede que o avatar encolha */
+}
+
+.commentContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem; /* Espaço entre autor, data e texto */
+  width: 100%;
+}
+
+.commentAuthor {
+  font-weight: bold;
+  color: #E1B382;
+  font-size: 0.9rem;
+}
+
+.commentDate {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+  font-style: italic;
+}
+
+.commentText {
+  color: #e0e0e0;
+  line-height: 1.7;
+  font-size: 1rem;
+  margin: 0;
+  word-wrap: break-word; /* Garante que palavras longas quebrem */
+}
+
+.noComments {
+  text-align: center;
+  font-style: italic;
+  color: #a0a0a0;
+}
+
+.error {
+  color: #ff8a80;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* --- Formulário de Comentário --- */
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #4a415a;
+}
+
+.commentForm textarea {
+  background: #0D0C1D;
+  border: 1px solid #2c2c54;
+  color: #E0E0E0;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Lato', sans-serif;
+  resize: vertical;
+  min-height: 80px;
+}
+.commentForm textarea:focus {
+    outline: none;
+    border-color: #c7a37e;
+}
+
+.commentForm button {
+  background: #c7a37e; /* Cor mais suave */
+  color: #1a1a2e;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-end; /* Alinha botão à direita */
+}
+
+.commentForm button:hover:not(:disabled) {
+  background-color: #E1B382;
+  transform: scale(1.03);
+}
+
+.commentForm button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.loginPrompt {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #4a415a;
+  color: #a0a0a0;
+}
+.loginPrompt a {
+  color: #E1B382;
+  text-decoration: none;
+  font-weight: bold;
+}
+.loginPrompt a:hover {
+  text-decoration: underline;
+}
+
+/* Loading state para mensagens */
+.message.loading span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background-color: #a0a0a0;
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+.message.loading span:nth-child(1) { animation-delay: -0.32s; }
+.message.loading span:nth-child(2) { animation-delay: -0.16s; }
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1.0); }
+}
