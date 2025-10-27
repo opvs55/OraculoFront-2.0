@@ -1,13 +1,13 @@
-// src/pages/profile/ProfilePage.jsx (RECONSTRUÍDO COM MAIS DADOS)
+// src/pages/profile/ProfilePage.jsx (VERSÃO FINAL COMPLETA)
 
 import React from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom'; 
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../supabaseClient';
 import Loader from '../../components/common/Loader/Loader';
-import styles from './ProfilePage.module.css'; 
+import styles from './ProfilePage.module.css';
 
-// --- 1. FUNÇÕES AUXILIARES (Reutilizadas da tua página de Numerologia) ---
+// --- 1. FUNÇÕES AUXILIARES ---
 
 /**
  * Renderiza texto formatado com quebras de linha e **negrito**.
@@ -15,13 +15,13 @@ import styles from './ProfilePage.module.css';
 const renderFormattedText = (text, customClassName = '') => {
   if (!text) return null;
   const regex = /\*\*(.*?)\*\*/g;
-  
+
   return (
     <div className={`${styles.meaningText} ${customClassName}`}>
       {text.split('\n').map((paragraph, pIndex) => {
         const trimmedParagraph = paragraph.trim();
         if (!trimmedParagraph) return null;
-        
+
         const parts = trimmedParagraph.split(regex);
         return (
           <p key={pIndex}>
@@ -49,7 +49,7 @@ const parseLifePathMeaning = (lifePathMeaning) => {
   if (parts.light.startsWith('Luz:**')) parts.light = parts.light.substring(6).trim();
   if (parts.shadow.startsWith('Sombra:**')) parts.shadow = parts.shadow.substring(9).trim();
   if (parts.mission.startsWith('Missão:**')) parts.mission = parts.mission.substring(9).trim();
-  
+
   return parts.essence ? parts : null;
 };
 
@@ -60,13 +60,19 @@ const parseArchetype = (birthdaySecretMeaning) => {
   if (!birthdaySecretMeaning) return null;
   try {
     const data = JSON.parse(birthdaySecretMeaning);
-    if (data.error) return null; 
+    if (data.error) return null;
     return data;
   } catch (e) {
     // Fallback para texto antigo (se não for JSON)
     return {
       archetype_title: "O Arquétipo do Dia",
       archetype_description: birthdaySecretMeaning,
+      // Define os outros campos como nulos para o renderArchetypeCard usar o modo simples
+      numerology_details: null,
+      tarot_card: null,
+      advice: null,
+      strengths: [],
+      weaknesses: []
     };
   }
 };
@@ -79,7 +85,7 @@ const parseArchetype = (birthdaySecretMeaning) => {
  */
 function usePublicProfile(username) {
   return useQuery({
-    queryKey: ['publicProfile', username], 
+    queryKey: ['publicProfile', username],
     queryFn: async () => {
       if (!username) return null;
       const { data, error } = await supabase
@@ -87,59 +93,59 @@ function usePublicProfile(username) {
         .select(`
           id, username, full_name, avatar_url, bio,
           minha_historia, entidade_cultuada,
-          life_path_number, birthday_number 
-        `) 
+          life_path_number, birthday_number
+        `)
         .eq('username', username)
-        .single(); 
+        .single();
 
       if (error && error.code === 'PGRST116') throw new Error('Perfil não encontrado.');
       else if (error) throw new Error(error.message);
       return data;
     },
-    enabled: !!username, 
-    staleTime: 1000 * 60 * 5, 
+    enabled: !!username,
+    staleTime: 1000 * 60 * 5, // Cache de 5 min
   });
 }
 
 /**
- * NOVO Hook: Busca contagem de leituras.
+ * Hook: Busca contagem de leituras.
  */
 function usePublicReadingCount(userId) {
   return useQuery({
     queryKey: ['publicReadingCount', userId],
     queryFn: async () => {
       if (!userId) return null;
-      // 'head: true' otimiza para pedir SÓ a contagem
       const { count, error } = await supabase
         .from('readings')
-        .select('*', { count: 'exact', head: true }) 
+        .select('*', { count: 'exact', head: true })
         .eq('user_id', userId);
       if (error) throw error;
       return count;
     },
-    enabled: !!userId, 
-    staleTime: 1000 * 60 * 15,
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 15, // Cache de 15 min
   });
 }
 
 /**
- * NOVO Hook: Busca os significados da numerologia.
+ * Hook de Numerologia: Chama a função RPC segura.
  */
 function usePublicNumerology(userId) {
   return useQuery({
     queryKey: ['publicNumerology', userId],
     queryFn: async () => {
       if (!userId) return null;
+
+      // Chama a função SQL criada no Supabase
       const { data, error } = await supabase
-        .from('numerology_readings')
-        .select('life_path_meaning, birthday_secret_meaning')
-        .eq('user_id', userId)
-        .maybeSingle(); // Pode ser nulo
+        .rpc('get_public_numerology_by_user_id', { profile_id: userId })
+        .maybeSingle();
+
       if (error) throw error;
-      return data;
+      return data; // Retorna { life_path_meaning, birthday_secret_meaning } ou null
     },
-    enabled: !!userId, 
-    staleTime: 1000 * 60 * 60, // 1 hora de cache
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 60, // Cache de 1 hora
   });
 }
 
@@ -147,13 +153,13 @@ function usePublicNumerology(userId) {
 // --- 3. COMPONENTE PRINCIPAL ---
 
 function ProfilePage() {
-  const { username } = useParams(); 
-  const navigate = useNavigate(); 
-  const location = useLocation(); 
+  const { username } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Busca o perfil base
   const { data: profile, isLoading: isLoadingProfile, isError, error } = usePublicProfile(username);
-  
+
   // Obtém o ID do perfil (se existir)
   const profileId = profile?.id;
 
@@ -163,8 +169,8 @@ function ProfilePage() {
 
   // Função "Voltar"
   const handleBackClick = () => {
-    if (location.key !== "default") navigate(-1); 
-    else navigate('/'); 
+    if (location.key !== "default") navigate(-1);
+    else navigate('/');
   };
 
   /**
@@ -179,7 +185,7 @@ function ProfilePage() {
         </div>
       );
     }
-    // Se for o layout JSON completo (o formato novo, como na image_e57d85.png)
+    // Se for o layout JSON completo
     return (
       <div className={styles.archetypeGridContainer}>
         {/* Coluna Principal (Texto) */}
@@ -233,9 +239,7 @@ function ProfilePage() {
    * Renderização principal
    */
   const renderContent = () => {
-    // Graças ao "aquecimento" da cache, este 'isLoadingProfile'
-    // raramente será 'true' ao vir do Grimório.
-    // Combinamos todos os loaders.
+    // Combina todos os loaders. Graças ao aquecimento da cache, isto será rápido.
     if (isLoadingProfile || isLoadingCount || isLoadingNumerology) {
       return <Loader customText={`Carregando perfil de @${username}...`} />;
     }
@@ -256,22 +260,22 @@ function ProfilePage() {
 
       return (
         <div className={styles.profileLayoutGrid}>
-          
+
           {/* --- Coluna da Esquerda (Avatar e Bio) --- */}
           <aside className={styles.profileLeftColumn}>
-            <img 
-              src={profile.avatar_url || 'https://i.imgur.com/6VBx3io.png'} 
+            <img
+              src={profile.avatar_url || 'https://i.imgur.com/6VBx3io.png'}
               alt={`Avatar de ${profile.username}`}
               className={styles.profileAvatar}
             />
             <h1 className={styles.profileFullName}>{profile.full_name || profile.username}</h1>
             <p className={styles.profileUsername}>@{profile.username}</p>
-            
+
             {profile.bio && (
               <p className={styles.profileBio}>"{profile.bio}"</p>
             )}
 
-            {/* --- NOVO CARTÃO DE ESTATÍSTICAS --- */}
+            {/* --- CARTÃO DE ESTATÍSTICAS --- */}
             <div className={styles.statsCard}>
               <div className={styles.statItem}>
                 <span className={styles.statValue}>{profile.life_path_number || '-'}</span>
@@ -287,15 +291,15 @@ function ProfilePage() {
               </div>
             </div>
             {/* --- FIM DO CARTÃO --- */}
-            
+
             <button onClick={handleBackClick} className={styles.backButton}>← Voltar</button>
           </aside>
 
           {/* --- Coluna da Direita (Números e História) --- */}
           <main className={styles.profileRightColumn}>
-            
-            {/* --- NOVO CARTÃO CAMINHO DE VIDA --- */}
-            {lifePathParts && (
+
+            {/* --- CARTÃO CAMINHO DE VIDA --- */}
+            {lifePathParts ? (
               <section className={`${styles.profileSection} ${styles.numerologyCard}`}>
                 <h2>Caminho de Vida: {profile.life_path_number}</h2>
                 <div className={styles.cardSubSection}>
@@ -306,15 +310,22 @@ function ProfilePage() {
                 {lifePathParts.shadow && (<div className={styles.cardSubSection}> <h4 className={styles.shadowTitle}>Sombra:</h4> {renderFormattedText(lifePathParts.shadow)} </div>)}
                 {lifePathParts.mission && (<div className={styles.cardSubSection}> <h4 className={styles.missionTitle}>Missão:</h4> {renderFormattedText(lifePathParts.mission)} </div>)}
               </section>
+            ) : (
+                // Mensagem se o user não tiver calculado numerologia
+                 profileId && !isLoadingNumerology && <section className={styles.profileSection}><p className={styles.noDataMessage}>Dados de numerologia ainda não calculados por este usuário.</p></section>
             )}
-            
-            {/* --- NOVO CARTÃO ARQUÉTIPO --- */}
-            {archetypeData && (
+
+            {/* --- CARTÃO ARQUÉTIPO --- */}
+            {archetypeData ? (
               <section className={`${styles.profileSection} ${styles.archetypeCard}`}>
                 <h2>{archetypeData.archetype_title || "Arquétipo do Aniversário"}</h2>
                 {renderArchetypeCard(archetypeData)}
               </section>
+            ) : (
+                // Mensagem se o user não tiver calculado OU se deu erro na IA
+                 profileId && !isLoadingNumerology && <section className={styles.profileSection}><p className={styles.noDataMessage}>Arquétipo do aniversário não disponível.</p></section>
             )}
+
 
             {/* --- Cartões Originais --- */}
             {profile.entidade_cultuada && (
@@ -329,22 +340,27 @@ function ProfilePage() {
                 <h2>Minha História</h2>
                 <div className={styles.storyText}>
                   {profile.minha_historia.split('\n').map((paragraph, index) => (
-                    <p key={index}>{paragraph || '\u00A0'}</p> 
+                    <p key={index}>{paragraph || '\u00A0'}</p>
                   ))}
                 </div>
               </section>
             )}
 
+             {/* Mensagem se não houver NADA na coluna direita */}
+             {!lifePathParts && !archetypeData && !profile.entidade_cultuada && !profile.minha_historia && (
+                 <p className={styles.noDataMessage}>Este perfil ainda não adicionou informações adicionais.</p>
+             )}
+
           </main>
         </div>
       );
     }
-    return null;
+    return null; // Se não houver perfil (caso raro, erro já tratado)
   };
 
   return (
     // O wrapper renderiza instantaneamente
-    <div className={`content_wrapper ${styles.profileGridWrapper}`}> 
+    <div className={`content_wrapper ${styles.profileGridWrapper}`}>
       <div className={styles.profileContainer}>
         {renderContent()}
       </div>
