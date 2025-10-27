@@ -1,8 +1,9 @@
 import React from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom'; // Adicionado useNavigate
+// 1. Importar useLocation
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'; 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../supabaseClient';
-import Loader from '../../components/common/Loader/Loader'; // <<< CORREÇÃO: Usar ../../
+import Loader from '../../components/common/Loader/Loader';
 
 import styles from './ProfilePage.module.css';
 
@@ -46,7 +47,20 @@ function usePublicProfile(username) {
 function ProfilePage() {
   const { username } = useParams(); // Pega o username da URL
   const navigate = useNavigate(); // Hook para navegação programática
+  // 2. Inicializar o useLocation
+  const location = useLocation(); 
   const { data: profile, isLoading, isError, error } = usePublicProfile(username);
+
+  // 3. Criar a função de "Voltar" com fallback
+  const handleBackClick = () => {
+    // O 'location.key' ajuda a saber se esta é a primeira página na pilha de navegação.
+    // Se for "default", significa que não há "onde" voltar (entrada direta na URL).
+    if (location.key !== "default") {
+      navigate(-1); // Comportamento normal: Volta para a página anterior (ex: /comunidade)
+    } else {
+      navigate('/'); // Fallback: vai para a Home
+    }
+  };
 
   if (isLoading) return <Loader customText={`Carregando perfil de @${username}...`} />;
   
@@ -58,8 +72,8 @@ function ProfilePage() {
         <div className={`${styles.profileContainer} ${styles.notFound}`}>
           <h1>Erro</h1>
           <p>{error.message === 'Perfil não encontrado.' ? `O perfil @${username} não existe.` : 'Ocorreu um erro ao carregar o perfil.'}</p>
-          {/* Botão para voltar para a página anterior ou início */}
-          <button onClick={() => navigate(-1)} className={styles.backButton}>Voltar</button> 
+          {/* 4. Usar a nova função no onClick */}
+          <button onClick={handleBackClick} className={styles.backButton}>Voltar</button> 
         </div>
       </div>
     );
@@ -71,7 +85,8 @@ function ProfilePage() {
     <div className={`content_wrapper ${styles.profileGridWrapper}`}> 
       {/* Este container agora fica na coluna central do grid em telas grandes */}
       <div className={styles.profileContainer}> 
-        <button onClick={() => navigate(-1)} className={styles.backButton}>← Voltar</button> 
+        {/* 4. Usar a nova função no onClick */}
+        <button onClick={handleBackClick} className={styles.backButton}>← Voltar</button> 
 
         {/* Seção do Header do Perfil */}
         <header className={styles.profileHeader}>
@@ -105,7 +120,7 @@ function ProfilePage() {
         {profile.minha_historia && (
           <section className={styles.profileSection}>
             <h2>Minha História</h2>
-            {/* Dividimos a história em parágrafos para melhor leitura */}
+            {/* Dividimos a história em parágulos para melhor leitura */}
             <div className={styles.storyText}>
               {profile.minha_historia.split('\n').map((paragraph, index) => (
                 // Renderiza parágrafo ou um espaço não quebrável se for linha vazia, para manter espaçamento
@@ -118,7 +133,8 @@ function ProfilePage() {
         {/* Adicionar mais seções aqui no futuro (Signo, etc.) */}
 
         {/* Botão Voltar no final também (opcional, mas bom para páginas longas) */}
-        <button onClick={() => navigate(-1)} className={styles.backButton} style={{ marginTop: '2rem' }}>← Voltar</button> 
+        {/* 4. Usar a nova função no onClick */}
+        <button onClick={handleBackClick} className={styles.backButton} style={{ marginTop: '2rem' }}>← Voltar</button> 
 
       </div> {/* Fim do profileContainer */}
     </div> // Fim do profileGridWrapper

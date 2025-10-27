@@ -1,4 +1,4 @@
-/* src/pages/numerology/NumerologyPage.module.css (LAYOUT MAIS LARGO E COMPLETO) */
+/* src/pages/numerology/NumerologyPage.module.css (LAYOUT COMPLETO) */
 
 .pageContainer {
   position: relative;
@@ -215,9 +215,6 @@
 .shadowTitle { color: #ffab91; }
 .missionTitle { color: #ab91ff; }
 
-
-
-
 /* Estilo texto significado */
 .meaningText p {
   margin-bottom: 1rem;
@@ -231,8 +228,7 @@
   opacity: 1;
 }
 
-
-/* <<< NOVO: Estilo específico para o texto dentro do card do Arquétipo >>> */
+/* <<< NOVO: Estilo específico para o texto dentro do card do Arquétipo (modo antigo/texto) >>> */
 .secretMeaningCard .meaningText p {
   font-style: italic; /* Texto em itálico */
   line-height: 1.8; /* Ligeiramente mais espaçado */
@@ -243,6 +239,110 @@
     color: #f0e8ff; /* Negrito fica mais claro */
     font-style: normal; /* Mantém negrito sem itálico (opcional) */
 }
+
+
+/* =================================================
+  NOVOS ESTILOS - GRELHA DO ARQUÉTIPO (Layout JSON)
+=================================================
+*/
+
+/* O container da grelha (2 colunas) */
+.archetypeGridContainer {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Coluna da esquerda 2x mais larga que a da direita */
+  gap: 2.5rem; /* Espaço entre as colunas */
+}
+
+/* Coluna principal (esquerda) */
+.archetypeMain {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem; /* Espaço entre as secções (descrição, tarot, etc) */
+}
+
+/* Coluna lateral (direita) */
+.archetypeSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espaço entre os cards (conselho, fortes, fracos) */
+}
+
+/* Secção individual na coluna principal */
+.archetypeSection {
+  text-align: left;
+}
+
+/* Título das secções (Tarot, Numerologia) na coluna principal */
+.archetypeSection h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ab91ff; /* Tom lilás/roxo */
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom: 1px solid rgba(171, 145, 255, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+/* O texto dentro das secções do arquétipo (para sobrescrever o .secretMeaningCard .meaningText p) */
+.archetypeSection .meaningText p {
+   font-style: normal; /* Remove o itálico do card principal */
+   opacity: 0.95;
+   color: #e0d8ff;
+   line-height: 1.7;
+}
+
+/* Cards da coluna lateral (Conselho, Pontos Fortes/Fracos) */
+.archetypeListCard {
+  background-color: rgba(13, 12, 29, 0.6); /* Fundo mais escuro, sub-card */
+  border: 1px solid rgba(171, 145, 255, 0.2);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+/* Título dos cards laterais */
+.archetypeListCard h5 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #d1b3ff;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+/* Card de Conselho específico */
+.adviceCard .meaningText p {
+  font-style: italic;
+  opacity: 0.9;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+/* Listas (Pontos Fortes/Fracos) */
+.archetypeList {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+  text-align: center;
+}
+.archetypeList li {
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+.strengthsCard .archetypeList li {
+  color: #b8e994; /* Verde (Luz) */
+}
+.weaknessesCard .archetypeList li {
+  color: #ffab91; /* Vermelho/Laranja (Sombra) */
+}
+
+
 /* --- Mensagens e Botões Finais --- */
 .errorMessage {
   color: #ff9b9b;
@@ -335,6 +435,21 @@
   .cardSubSection h4 { font-size: 1rem; }
   .meaningText p { font-size: 1rem; } /* Mantém tamanho bom para leitura */
   .resultActions { padding-top: 1.5rem; }
+
+  /* Faz a grelha do arquétipo voltar a ser 1 coluna */
+  .archetypeGridContainer {
+    grid-template-columns: 1fr; /* Coluna única */
+    gap: 2rem; /* Espaço entre a parte principal e a lateral */
+  }
+  
+  .archetypeSidebar {
+     /* Inverte a ordem no mobile: Conselho, Fortes, Fracos aparecem PRIMEIRO */
+     /* Se preferir que apareçam DEPOIS, mude para '2' */
+     order: 1; 
+  }
+  .archetypeMain {
+     order: 2;
+  }
 }
 
 @media (max-width: 480px) { /* Ajustes finos para mobile pequeno */
@@ -346,4 +461,3 @@
     .cardTitle { font-size: 1.3rem; }
     .resultActions { flex-direction: column; align-items: center; } /* Botões um abaixo do outro */
 }
-

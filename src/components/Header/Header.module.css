@@ -127,21 +127,21 @@
     grid-row: 3; 
   }
   .navLeft {
-     grid-row: 2; 
-     border-top: 1px solid #4a415a; 
-     padding-top: 1rem;
-     justify-content: center; 
+    grid-row: 2; 
+    border-top: 1px solid #4a415a; 
+    padding-top: 1rem;
+    justify-content: center; 
   }
   .headerLogo {
     font-size: 1.8rem;
   }
   /* Garante que a nav esquerda não colapse totalmente */
   .navLeft:empty { 
-      min-height: 0;
-      padding-top: 0;
-      border-top: none;
-      margin-top: -1rem; /* Compensa o gap do grid */
-   }
+    min-height: 0;
+    padding-top: 0;
+    border-top: none;
+    margin-top: -1rem; /* Compensa o gap do grid */
+  }
 }
 
 .ctaButton {
@@ -161,6 +161,38 @@
   transform: translateY(-2px); /* Efeito subtil de elevação */
   color: #0D0C1D;
 }
+
+/* --- NOVO ESTILO PARA O BOTÃO NUMEROLOGIA --- */
+.numerologyButton {
+  background: none;
+  border: 1px solid #E1B382; /* Contorno com a cor primária */
+  color: #E1B382;
+  padding: 0.5rem 1rem; /* Alinhado com outros botões (signup/logout) */
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #E1B382; /* Garante que o border-bottom do .navLink não afete */
+}
+
+.numerologyButton:hover {
+  background-color: rgba(225, 179, 130, 0.1); /* Hover subtil */
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Estilo ATIVO para o botão Numerologia */
+.numerologyActive {
+  background-color: #E1B382; /* Preenchimento quando ativo */
+  color: #0D0C1D !important; /* Texto escuro (importante para sobrescrever) */
+  border-bottom-color: #E1B382;
+}
+/* --- FIM DA ADIÇÃO --- */
+
 
 /* Ajuste opcional para garantir alinhamento vertical com outros links/botões */
 .navRight a, .navRight button {

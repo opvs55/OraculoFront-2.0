@@ -17,6 +17,16 @@ function WelcomePage() {
         <Link to="/tarot" className={styles.ctaButton}>
           Consultar o Oráculo de Tarot
         </Link>
+
+        {/* --- NOVO LINK ADICIONADO --- */}
+        <Link 
+          to="/numerologia" 
+          className={`${styles.secondaryLink} ${styles.numerologyLink}`}
+        >
+          Analisar Meus Números
+        </Link>
+        {/* --- FIM DA ADIÇÃO --- */}
+        
         <Link to="/biblioteca" className={styles.secondaryLink}>
           Explorar a Biblioteca de Cartas
         </Link>

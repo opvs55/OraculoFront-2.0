@@ -77,3 +77,9 @@
   .ctaButton { font-size: 1rem; padding: 0.8rem 2rem; }
   .content { padding: 2rem; }
 }
+
+/* --- NOVO ESTILO ADICIONADO --- */
+.numerologyLink {
+  margin-bottom: 0.75rem; /* Adiciona espaço para o link da biblioteca abaixo */
+}
+/* --- FIM DA ADIÇÃO --- */
