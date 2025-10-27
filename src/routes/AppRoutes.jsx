@@ -2,20 +2,24 @@ import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from '../components/common/ProtectedRoute/ProtectedRoute.jsx';
 
-// 1. O PageLoader continua definido aqui, como no teu original.
-// Não há importação nova.
+// 1. O PageLoader continua definido aqui
 const PageLoader = () => (
   <div style={{ textAlign: 'center', padding: '50px' }}>
     A carregar...
   </div>
 );
 
+// --- 1. MUDANÇA: ProfilePage importado normalmente ---
+import ProfilePage from '../pages/profile/ProfilePage';
+// --- FIM DA MUDANÇA ---
+
+
 // --- Páginas Carregadas de forma "Lazy" ---
 
 // Páginas Públicas
 const WelcomePage = lazy(() => import('../pages/WelcomePage'));
 const TarotPage = lazy(() => import('../pages/TarotPage'));
-const NumerologyPage = lazy(() => import('../pages/NumerologyPage.jsx')); // Movido para junto das públicas
+const NumerologyPage = lazy(() => import('../pages/NumerologyPage.jsx'));
 
 // Autenticação
 const CadastroPage = lazy(() => import('../pages/auth/CadastroPage'));
@@ -28,7 +32,7 @@ const PastReadingPage = lazy(() => import('../pages/reading/PastReadingPage/Past
 const CardDetailPage = lazy(() => import('../pages/reading/CardDetailPage/CardDetailPage'));
 
 // Perfil Público
-const ProfilePage = lazy(() => import('../pages/profile/ProfilePage'));
+// const ProfilePage = lazy(() => import('../pages/profile/ProfilePage')); // <-- 2. MUDANÇA: REMOVIDO DAQUI
 
 // Páginas Protegidas (Dashboard, Aprendizagem, Comunidade)
 const CardLibraryPage = lazy(() => import('../pages/learning/CardLibraryPage'));
@@ -39,13 +43,13 @@ const CommunityFeedPage = lazy(() => import('../pages/community/CommunityFeedPag
 
 function AppRoutes() {
   return (
-    // O Suspense usa o PageLoader definido localmente
+    // O Suspense continua para as outras páginas lazy
     <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* --- Rotas Públicas --- */}
         <Route path="/" element={<WelcomePage />} />
         <Route path="/tarot" element={<TarotPage />} />
-        <Route path="/numerologia" element={<NumerologyPage />} /> {/* Movida para cá */}
+        <Route path="/numerologia" element={<NumerologyPage />} />
         
         {/* Rotas de Autenticação */}
         <Route path="/cadastro" element={<CadastroPage />} />
@@ -57,11 +61,10 @@ function AppRoutes() {
         <Route path="/leitura/:readingId" element={<PastReadingPage />} />
         <Route path="/leitura/:readingId/carta/:position" element={<CardDetailPage />} />
         
-        {/* Rota do Perfil Público */}
+        {/* Rota do Perfil Público (Agora sem lazy load) */}
         <Route path="/perfil/:username" element={<ProfilePage />} />
 
         {/* --- Rotas Protegidas (Agrupadas) --- */}
-        {/* Aqui usamos a nova estrutura de Rota de Layout */}
         <Route element={<ProtectedRoute />}>
           <Route path="/meu-grimorio" element={<MeuGrimorioPage />} />
           <Route path="/perfil/editar" element={<EditarPerfilPage />} />
