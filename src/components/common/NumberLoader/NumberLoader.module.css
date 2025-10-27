@@ -1,0 +1,30 @@
+/* src/components/common/NumberLoader/NumberLoader.module.css */
+.loaderContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #E1B382; /* Cor ocre/dourada */
+}
+
+.numberDisplay {
+  font-size: 6rem; /* Tamanho grande para o número */
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 1rem;
+  /* Animação subtil (opcional) */
+  /* animation: pulse 1s infinite ease-in-out alternate; */
+}
+
+.loadingText {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+/* Animação de pulsação (opcional) */
+/* @keyframes pulse {
+  from { transform: scale(1); opacity: 0.8; }
+  to { transform: scale(1.1); opacity: 1; }
+} */

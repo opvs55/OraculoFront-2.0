@@ -143,3 +143,27 @@
       margin-top: -1rem; /* Compensa o gap do grid */
    }
 }
+
+.ctaButton {
+  background-color: #E1B382; /* Cor dourada/ocre do botão do Grimório */
+  color: #0D0C1D; /* Cor de texto escura para contraste */
+  padding: 0.6rem 1.2rem; /* Espaçamento interno */
+  border-radius: 6px; /* Bordas arredondadas */
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 1rem; /* Espaço à esquerda */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-block; /* Para aplicar padding corretamente */
+}
+
+.ctaButton:hover {
+  background-color: #c99a6b; /* Um tom ligeiramente mais escuro no hover */
+  transform: translateY(-2px); /* Efeito subtil de elevação */
+  color: #0D0C1D;
+}
+
+/* Ajuste opcional para garantir alinhamento vertical com outros links/botões */
+.navRight a, .navRight button {
+  display: flex;
+  align-items: center;
+}

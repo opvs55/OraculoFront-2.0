@@ -1,133 +1,179 @@
-.profileSection {
-  display: flex;
-  align-items: center; /* Centraliza verticalmente */
-  gap: 1.5rem; /* Reduzido o gap */
-  text-align: left;
-  width: 100%;
-  background-color: rgba(26, 26, 46, 0.7);
-  padding: 1.5rem; /* Padding reduzido */
-  border-radius: 12px;
-  border: 1px solid #2c2c54;
-  backdrop-filter: blur(5px);
-}
+/* src/pages/dashboard/ProfileSummary/ProfileSummary.module.css */
 
-.avatarContainer { 
-  flex-shrink: 0; 
-  text-align: center;
-}
-.avatar {
-  width: 100px; /* Avatar menor */
-  aspect-ratio: 600 / 1023; 
-  border-radius: 8px;
-  object-fit: cover;
-  border: 2px solid #C36E97; /* Borda mais fina */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra mais sutil */
-  transition: transform 0.3s ease;
-  margin: 0 auto;
-}
-.avatar:hover { transform: scale(1.05) rotate(-1deg); }
-
-.profileInfo {
+.summaryContainer {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; 
-  gap: 0.3rem; /* Espaçamento menor entre os itens */
-  overflow: hidden; /* Evita que textos longos quebrem o layout */
+  align-items: center; /* Centraliza itens horizontalmente */
+  text-align: center; /* Centraliza texto */
+  padding: 1.5rem; /* Padding interno base */
+  padding-top: 3rem; /* Mais padding no topo para dar espaço ao badge */
+  position: relative; /* Necessário para posicionar o badge absoluto */
+  overflow: hidden; /* Evita que o badge 'vaze' se for muito grande */
 }
 
-/* Link para o perfil no nome */
-.profileNameLink {
-  text-decoration: none;
-}
-.profileNameLink h2 { 
-  font-family: 'Cinzel', serif; 
-  font-size: 1.6rem; /* Nome menor */
-  margin: 0; 
-  color: #fff; 
-  transition: color 0.2s;
-  white-space: nowrap; /* Evita quebra de linha no nome */
-  overflow: hidden;
-  text-overflow: ellipsis; /* Adiciona "..." se for muito longo */
-}
-.profileNameLink:hover h2 {
-  color: #E1B382;
-}
-
-.profileInfo .username { 
-  font-size: 0.9rem; /* Username menor */
-  color: #a0a0a0; 
-  margin: 0;
-}
-.profileInfo .username a { /* Link no username */
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.profileInfo .username a:hover {
-  color: #E1B382;
-}
-
-.stats { 
-  margin-top: 0.5rem; 
-  display: flex; 
-  gap: 1rem; 
-}
-.stats span { color: #c7c7c7; font-size: 0.85rem;} /* Stats menores */
-.stats strong { color: #E0E0E0; font-size: 1em; }
-
-.profileInfo .bio { 
-  margin-top: 0.5rem; 
-  color: #E0E0E0; 
-  font-style: italic; 
-  line-height: 1.4; /* Mais compacto */
-  font-size: 0.9rem; /* Bio menor */
-  display: -webkit-box;
-  -webkit-line-clamp: 2; 
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  /* Removido borda e padding */
-}
-
-/* REMOVIDO: Estilos .extraInfo, .storySection */
-
-.profileActions { 
-  margin-top: 1rem; /* Aproxima os botões */
+/* --- Badge do Caminho de Vida --- */
+.lifePathBadge {
+  position: absolute; /* Posiciona sobre os outros elementos */
+  top: 10px; /* Distância do topo do card */
+  left: 10px; /* Distância da esquerda do card */
+  /* Alternativa: Canto superior direito */
+  /* right: 10px; */
+  /* left: auto; */
+  
+  background-color: #E1B382; /* Fundo dourado */
+  color: #0D0C1D; /* Texto escuro */
+  border-radius: 50%; /* Círculo */
+  width: 55px; /* Tamanho do círculo */
+  height: 55px; /* Tamanho do círculo */
   display: flex;
-  flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
-  gap: 0.8rem;
   align-items: center;
-}
-.editProfileButton { 
-  display: inline-block; background-color: transparent; 
-  border: 1px solid #E1B382; color: #E1B382; 
-  padding: 0.5rem 1rem; 
-  border-radius: 6px; 
-  text-decoration: none; font-weight: bold; 
-  transition: all 0.2s; 
-  font-size: 0.85rem; /* Botão menor */
-}
-.editProfileButton:hover { background-color: #E1B382; color: #0D0C1D; }
+  justify-content: center;
+  font-size: 2rem; /* Tamanho do número */
+  font-weight: bold;
+  box-shadow: 0 5px 12px rgba(225, 179, 130, 0.45); /* Sombra para profundidade */
+  z-index: 10; /* Garante que fica por cima */
+  border: 2px solid #0D0C1D; /* Borda escura para definir melhor */
 
-/* Link sutil para Ver Perfil Completo */
-.viewProfileLink {
-  font-size: 0.85rem;
-  color: #a0a0a0;
+  /* --- Efeitos Visuais (Experimente!) --- */
+  /* 1. Animação de entrada suave */
+  /* animation: fadeInBadge 0.8s ease-out forwards; */
+
+  /* 2. Efeito de Brilho Pulsante */
+  /* animation: pulseGlow 2.5s infinite ease-in-out alternate; */
+
+  /* 3. Perspectiva / Rotação Leve */
+  /* transform: perspective(150px) rotateY(15deg); */
+  /* transition: transform 0.4s ease, box-shadow 0.4s ease; */
+}
+/* .lifePathBadge:hover {
+  transform: perspective(150px) rotateY(0deg) scale(1.1);
+  box-shadow: 0 8px 20px rgba(255, 200, 150, 0.6);
+} */
+
+.lifePathBadge span {
+  transform: translateY(1px); /* Ajuste fino vertical */
+}
+
+
+/* --- Estilos do Perfil --- */
+.avatar {
+  width: 100px; /* Tamanho do avatar */
+  height: 100px;
+  border-radius: 50%; /* Avatar redondo */
+  border: 3px solid #E1B382; /* Borda dourada */
+  margin-bottom: 1rem;
+  object-fit: cover; /* Garante que a imagem cubra o espaço sem distorcer */
+}
+
+.username {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #f0f0f0; /* Cor clara */
+  margin-bottom: 0.5rem;
+}
+
+.bio {
+  font-size: 0.95rem;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+  max-width: 90%; /* Evita que a bio fique muito larga */
+}
+
+.readingCount {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-bottom: 1.5rem;
+}
+
+/* Botões de Ação */
+.profileActions {
+  display: flex;
+  gap: 1rem; /* Espaço entre os botões */
+  margin-top: 1rem;
+  flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
+  justify-content: center; /* Centraliza botões */
+}
+
+.editButton,
+.viewProfileButton {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
   text-decoration: none;
-  transition: color 0.2s;
-}
-.viewProfileLink:hover {
-  color: #E1B382;
-  text-decoration: underline;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  text-align: center;
 }
 
-@media (max-width: 768px) {
-  .profileSection { 
-    flex-direction: column; padding: 1.5rem; 
-    text-align: center; align-items: center;
+.editButton {
+  background-color: #E1B382;
+  color: #0D0C1D;
+}
+.editButton:hover {
+  background-color: #c99a6b;
+  transform: translateY(-2px);
+}
+
+.viewProfileButton {
+  border: 1px solid #E1B382;
+  color: #E1B382;
+}
+.viewProfileButton:hover {
+  background-color: rgba(225, 179, 130, 0.1);
+  border-color: #c99a6b;
+  color: #c99a6b;
+}
+
+
+/* --- Placeholders de Loading --- */
+.loadingPlaceholder {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.5rem 0; /* Adiciona padding vertical */
+}
+
+@keyframes placeholderShimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
+
+.avatarPlaceholder,
+.textPlaceholder {
+  background: #333; /* Cor base do placeholder */
+  background-image: linear-gradient(to right, #333 0%, #444 20%, #333 40%, #333 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 104px; /* Largura grande para a animação */
+  animation: placeholderShimmer 1.5s linear infinite;
+  border-radius: 4px; /* Bordas arredondadas suaves */
+}
+
+.avatarPlaceholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* Redondo */
+  margin-bottom: 1rem;
+}
+
+.textPlaceholder {
+  height: 1rem; /* Altura da linha de texto */
+}
+
+
+ @keyframes fadeInBadge {
+  from { opacity: 0; transform: scale(0.5) translate(-50%, -50%); } /* Ajustar transform se mudar posição */
+ to { opacity: 1; transform: scale(1) translate(0, 0); }
+}
+
+ @keyframes pulseGlow {
+  from {
+    box-shadow: 0 5px 12px rgba(225, 179, 130, 0.45);
+    transform: scale(1);
   }
-  .avatar { width: 100px; } 
-  .profileInfo { align-items: center; } 
-  .profileNameLink h2 { font-size: 1.5rem; }
-  .profileActions { justify-content: center; } /* Centraliza botões */
+  to {
+    box-shadow: 0 7px 22px rgba(255, 200, 150, 0.65); /* Sombra mais intensa e clara */
+transform: scale(1.05); /* Leve aumento */
+ }
 }

@@ -1,0 +1,349 @@
+/* src/pages/numerology/NumerologyPage.module.css (LAYOUT MAIS LARGO E COMPLETO) */
+
+.pageContainer {
+  position: relative;
+  min-height: calc(100vh - 80px); /* Ajuste 80px conforme a altura real do seu header */
+  display: flex;
+  align-items: center; /* Centraliza verticalmente o .content */
+  justify-content: center; /* Centraliza horizontalmente o .content */
+  padding: 4rem 1rem 3rem 1rem;
+  background-color: #0D0C1D; /* Fundo escuro base */
+  color: #f0f0f0;
+  overflow-y: auto; /* Permite scroll vertical se necessário */
+}
+
+/* Container para o conteúdo central (formulário OU resultados) */
+.content {
+  position: relative;
+  z-index: 3;
+  /* <<< LARGURA AUMENTADA >>> */
+  max-width: 900px; /* Aumentado de 700/800px para ocupar mais espaço */
+  width: 100%; /* Garante responsividade */
+  background-color: rgba(13, 12, 29, 0.8); /* Fundo um pouco mais opaco */
+  padding: 3rem; /* Padding interno generoso */
+  border-radius: 12px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5); /* Sombra mais pronunciada */
+  text-align: center; /* Centraliza Título e Subtítulo */
+  margin: 2rem 0; /* Adiciona margem vertical para espaçamento */
+}
+
+.mainTitle {
+  font-size: 3rem; /* Maior */
+  color: #E1B382;
+  margin-bottom: 0.8rem; /* Mais espaço abaixo */
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 1.3rem; /* Maior */
+  opacity: 0.8;
+  margin-bottom: 3rem; /* Mais espaço abaixo */
+  max-width: 600px; /* Evita que subtítulo fique muito largo */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Formulário --- */
+.numerologyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Mais espaço entre elementos */
+  align-items: center;
+  margin-top: 1rem; /* Espaço acima do formulário */
+}
+.dateLabel {
+  font-weight: bold;
+  font-size: 1.2rem; /* Maior */
+  margin-bottom: 0.3rem;
+}
+.dateInput {
+  padding: 0.9rem 1.1rem;
+  border: 1px solid rgba(225, 179, 130, 0.5);
+  background-color: rgba(23, 22, 43, 0.8);
+  color: #f0f0f0;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 320px;
+  box-sizing: border-box;
+}
+.dateInput::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+  cursor: pointer;
+}
+.submitButton,
+.secondaryButton {
+  padding: 1rem 2.5rem; /* Botões maiores */
+  border-radius: 8px; /* Mais arredondado */
+  border: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.8px; /* Mais espaçamento */
+}
+.submitButton {
+  background-color: #E1B382;
+  color: #0D0C1D;
+  box-shadow: 0 4px 15px rgba(225, 179, 130, 0.3);
+}
+.submitButton:hover {
+  background-color: #c99a6b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(225, 179, 130, 0.5);
+}
+.submitButton:disabled {
+  background-color: #a88d70;
+  color: #3e3c5a;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.secondaryButton {
+  background-color: transparent;
+  color: #E1B382;
+  border: 1px solid #E1B382;
+  margin-top: 1rem;
+}
+.secondaryButton:hover {
+  background-color: rgba(225, 179, 130, 0.1);
+  border-color: #c99a6b;
+  color: #c99a6b;
+}
+
+
+/* --- Resultados --- */
+.resultsContainer {
+  margin-top: 3rem;
+  padding: 0; /* Container não tem padding */
+  text-align: left; /* Texto dentro dos cards alinhado à esquerda */
+  position: relative;
+}
+
+/* Número Prominente no fundo */
+.lifePathNumberDisplay {
+  position: absolute;
+  top: -2.5rem; /* Ajuste fino da posição vertical */
+  left: -2rem;  /* Ajuste fino da posição horizontal */
+  font-size: 12rem; /* Ainda maior */
+  font-weight: bold;
+  color: rgba(225, 179, 130, 0.08); /* Ainda mais transparente */
+  line-height: 1;
+  z-index: 1;
+  pointer-events: none;
+  font-family: serif;
+  opacity: 0.8; /* Leve opacidade */
+}
+
+/* Container do conteúdo (acima do número) */
+.resultContent {
+  position: relative;
+  z-index: 2;
+}
+
+.resultTitle {
+  color: #E1B382;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.resultDate {
+  text-align: center;
+  opacity: 0.7;
+  font-size: 0.9rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(225, 179, 130, 0.2);
+  padding-bottom: 1.5rem;
+}
+
+/* --- Estilos dos CARDS --- */
+.resultCard {
+  background-color: rgba(23, 22, 43, 0.75);
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  border-radius: 10px;
+  padding: 2rem; /* Aumentado um pouco */
+  margin-bottom: 2.5rem;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.lifePathCard { /* Destaque opcional */
+   border-width: 2px;
+   border-color: rgba(225, 179, 130, 0.4);
+}
+
+.secretMeaningCard {
+  background-color: rgba(40, 38, 70, 0.8); /* Fundo ligeiramente diferente (mais roxo?) */
+  border-color: rgba(171, 145, 255, 0.3); /* Borda lilás sutil */
+}
+
+.secretMeaningCard .cardTitle {
+  color: #d1b3ff; /* Cor lilás/violeta para o título */
+  font-size: 1.9rem; /* Ligeiramente maior */
+  border-bottom-color: rgba(171, 145, 255, 0.4);
+}
+
+.cardTitle {
+  color: #E1B382;
+  font-size: 1.8rem; /* Maior */
+  margin-top: 0;
+  margin-bottom: 1.8rem; /* Mais espaço abaixo */
+  padding-bottom: 1rem; /* Mais padding abaixo */
+  border-bottom: 1px solid rgba(225, 179, 130, 0.3); /* Linha mais visível */
+  text-align: center;
+  font-weight: 500; /* Peso médio */
+}
+
+.cardSubSection {
+  margin-bottom: 1.8rem; /* Mais espaço */
+}
+.cardSubSection:last-child {
+  margin-bottom: 0;
+}
+
+.cardSubSection h4 {
+  font-size: 1.2rem; /* Maior */
+  font-weight: 600;
+  color: #c99a6b;
+  margin-top: 0;
+  margin-bottom: 0.8rem; /* Mais espaço abaixo */
+  text-transform: uppercase;
+  letter-spacing: 0.8px; /* Mais espaçamento */
+}
+.lightTitle { color: #b8e994; }
+.shadowTitle { color: #ffab91; }
+.missionTitle { color: #ab91ff; }
+
+
+
+
+/* Estilo texto significado */
+.meaningText p {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+  opacity: 0.95;
+  font-size: 1.05rem;
+}
+.meaningText strong {
+  color: #E1B382;
+  font-weight: 700;
+  opacity: 1;
+}
+
+
+/* <<< NOVO: Estilo específico para o texto dentro do card do Arquétipo >>> */
+.secretMeaningCard .meaningText p {
+  font-style: italic; /* Texto em itálico */
+  line-height: 1.8; /* Ligeiramente mais espaçado */
+  opacity: 0.9; /* Um pouco mais suave */
+  color: #e0d8ff; /* Cor de texto levemente azulada/lilás */
+}
+.secretMeaningCard .meaningText strong {
+    color: #f0e8ff; /* Negrito fica mais claro */
+    font-style: normal; /* Mantém negrito sem itálico (opcional) */
+}
+/* --- Mensagens e Botões Finais --- */
+.errorMessage {
+  color: #ff9b9b;
+  margin-top: 0.8rem;
+  font-weight: bold;
+}
+.errorContainer {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: rgba(255, 100, 100, 0.1);
+  border: 1px solid rgba(255, 100, 100, 0.3);
+  border-radius: 8px;
+}
+.errorContainer .errorMessage { margin: 0; }
+.errorContainer .secondaryButton { margin-top: 1rem; }
+
+.warningMessage {
+  background-color: rgba(255, 217, 0, 0.1);
+  border: 1px solid rgba(255, 217, 0, 0.4);
+  color: #ffd900;
+  padding: 1rem; /* Mais padding */
+  border-radius: 6px;
+  margin: -1rem auto 2rem auto; /* Puxa para cima, centraliza */
+  max-width: 80%; /* Limita largura */
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.resultActions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.5rem; /* Mais espaço acima */
+  border-top: 1px solid rgba(225, 179, 130, 0.2);
+  padding-top: 2rem; /* Mais espaço abaixo da linha */
+}
+.resetButton {
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  border: 1px solid #a74040;
+  background-color: transparent;
+  color: #ff8c8c;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.resetButton:hover {
+  background-color: rgba(167, 64, 64, 0.15);
+  color: #ffacac;
+  border-color: #c85050;
+  transform: translateY(-2px);
+}
+.resetButton:disabled {
+  border-color: rgba(167, 64, 64, 0.4);
+  color: rgba(255, 140, 140, 0.4);
+  cursor: not-allowed;
+  transform: none;
+  background-color: transparent;
+  opacity: 0.7;
+}
+.resetError {
+  text-align: center;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+/* --- Media query --- */
+@media (max-width: 768px) { /* Aumentado breakpoint para tablet */
+  .content {
+    padding: 2rem; /* Ajuste padding */
+    max-width: 95%; /* Ocupa quase toda largura */
+  }
+  .mainTitle {
+    font-size: 2.4rem;
+  }
+  .subtitle {
+    font-size: 1.1rem;
+  }
+  .lifePathNumberDisplay {
+    font-size: 8rem; /* Reduz um pouco */
+    top: -1.5rem;
+    left: -1rem;
+  }
+  .resultsContainer { padding: 0; }
+  .resultCard { padding: 1.5rem; } /* Padding razoável nos cards */
+  .cardTitle { font-size: 1.5rem; }
+  .cardSubSection h4 { font-size: 1rem; }
+  .meaningText p { font-size: 1rem; } /* Mantém tamanho bom para leitura */
+  .resultActions { padding-top: 1.5rem; }
+}
+
+@media (max-width: 480px) { /* Ajustes finos para mobile pequeno */
+    .content { padding: 1.5rem; }
+    .mainTitle { font-size: 2rem; }
+    .subtitle { font-size: 1rem; }
+    .lifePathNumberDisplay { font-size: 6rem; top: -1rem; left: -0.5rem; }
+    .resultCard { padding: 1rem; }
+    .cardTitle { font-size: 1.3rem; }
+    .resultActions { flex-direction: column; align-items: center; } /* Botões um abaixo do outro */
+}
+

@@ -21,6 +21,16 @@
   max-width: 1400px; margin: 0 auto;
 }
 
+.profileCard,
+.cardOfTheWeekCard,
+.historyCard {
+  background-color: rgba(23, 22, 43, 0.6); /* Um roxo/azul escuro semitransparente - ajuste a cor! */
+  border-radius: 12px; /* Bordas mais arredondadas */
+  padding: 1.5rem; /* Espaçamento interno */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
+  /* backdrop-filter: blur(5px); /* Efeito de vidro fosco (opcional, pode pesar na performance) */
+}
+
 /* Layout principal do Dashboard */
 .dashboardGrid {
   display: grid; grid-template-columns: 1fr; gap: 2rem;
@@ -53,6 +63,8 @@
     padding: 2rem 1rem;
   }
 }
+
+
 
 /* OBS: Os estilos .editPageContainer, .editPageLayout, .avatarSection, .formSection, etc.
    foram MOVIDOS para EditarPerfilPage.module.css */

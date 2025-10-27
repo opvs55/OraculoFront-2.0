@@ -2,7 +2,8 @@ import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom'; // Adicionado useNavigate
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../supabaseClient';
-import Loader from '../../components/common/Loader/Loader';
+import Loader from '../../components/common/Loader/Loader'; // <<< CORREÇÃO: Usar ../../
+
 import styles from './ProfilePage.module.css';
 
 // Hook para buscar perfil PÚBLICO pelo username

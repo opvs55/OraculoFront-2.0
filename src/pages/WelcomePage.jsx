@@ -7,7 +7,7 @@ function WelcomePage() {
     <div className={styles.pageContainer}>
       {/* Podemos adicionar uma imagem de fundo ou textura aqui */}
       <div className={styles.content}>
-        <h1 className={styles.mainTitle}>EXOTERICON</h1>
+        <h1 className={styles.mainTitle}>ESOTERICON</h1>
         <p className={styles.subtitle}>
           Um portal para desvendar os mistérios do oculto. Explore oráculos, grimórios e sabedorias ancestrais.
         </p>
