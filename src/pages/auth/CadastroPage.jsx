@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import styles from './AuthPage.module.css';
-// NOVO: Importamos nosso tradutor
 import { translateSupabaseError } from '../../utils/authErrorUtils';
 
 function CadastroPage() {
@@ -17,20 +16,24 @@ function CadastroPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  // Se o AuthContext detectar um usuário, redireciona.
+  // Isso serve tanto para quem já estava logado quanto para quando o 
+  // signUp for concluído com sucesso e o estado atualizar.
   useEffect(() => {
-    // CORREÇÃO: Redirecionar para /meu-grimorio
-    if (user) navigate('/meu-grimorio'); 
+    if (user) {
+      navigate('/meu-grimorio');
+    }
   }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
+    // Validações básicas de frontend
     if (password !== confirmPassword) {
       setError('As senhas não correspondem.');
       return;
     }
-    // Adicionando validação de comprimento da senha no frontend
     if (password.length < 6) {
         setError('A senha deve ter no mínimo 6 caracteres.');
         return;
@@ -39,54 +42,58 @@ function CadastroPage() {
     setLoading(true);
 
     try {
-      // 1. Verifica se o username já existe (lógica mantida)
+      // 1. Verifica se o username já existe
+      // OBS: Isso requer que a tabela 'profiles' tenha permissão de leitura pública (RLS)
       const { data: existingUser, error: usernameError } = await supabase
         .from('profiles')
         .select('username')
         .eq('username', username)
         .single();
 
+      // Se encontrou um usuário com esse nome, bloqueia
       if (existingUser) {
         throw new Error('Este nome de usuário já está em uso.');
       }
-      // Ignora o erro 'PGRST116' (nenhuma linha encontrada), que é o esperado se o user não existe
+      
+      // Se deu erro na busca, verificamos se é apenas "não encontrado" (o que é bom)
       if (usernameError && usernameError.code !== 'PGRST116') {
-        throw usernameError; // Lança outros erros do Supabase
+        throw usernameError; // Outros erros de conexão ou permissão
       }
 
-      // 2. Tenta criar o usuário
-      const { error: signUpError } = await supabase.auth.signUp({
+      // 2. Tenta criar o usuário e logar automaticamente
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: { 
             username: username 
-          },
-          // CORREÇÃO: Usar a URL base dinâmica e o caminho correto
-          emailRedirectTo: `${window.location.origin}/meu-grimorio`, 
+          }
+          // REMOVIDO: emailRedirectTo (pois não há mais link de confirmação)
         }
       });
 
       if (signUpError) {
-        throw signUpError; // Lança o erro do Supabase para ser traduzido
-      } else {
-        alert('Cadastro realizado! ✨ Enviamos um link de confirmação para o seu e-mail. Clique nele para validar sua conta.');
-        // Limpa o formulário após sucesso
-        setUsername('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
+        throw signUpError;
+      } 
+
+      // SUCESSO:
+      // Como a confirmação de email está desligada, data.session já vem preenchido.
+      // Não precisamos de alert. O useEffect lá em cima vai detectar o usuário e redirecionar.
+      // Mas para garantir uma resposta imediata na UI, podemos forçar aqui também:
+      if (data.session) {
+          navigate('/meu-grimorio');
       }
 
     } catch (err) {
-      // ALTERAÇÃO: Usamos o tradutor para definir a mensagem de erro
-      setError(translateSupabaseError(err)); 
-      console.error("Erro no cadastro:", err); // Mantém o log detalhado no console
+      // Traduz o erro (ex: senha fraca, email inválido, etc)
+      setError(translateSupabaseError(err));
+      console.error("Erro no cadastro:", err);
     } finally {
       setLoading(false);
     }
   };
 
+  // Se já estiver logado (e o useEffect ainda não tiver redirecionado por latência), não mostra o form
   if (user) return null;
 
   return (
@@ -97,26 +104,54 @@ function CadastroPage() {
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.inputGroup}>
               <label htmlFor="username">Nome de Usuário</label>
-              <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              <input 
+                id="username" 
+                type="text" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
+                required 
+              />
             </div>
             <div className={styles.inputGroup}>
               <label htmlFor="email">Email</label>
-              <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <input 
+                id="email" 
+                type="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+              />
             </div>
             <div className={styles.inputGroup}>
               <label htmlFor="password">Senha (mínimo 6 caracteres)</label>
-              <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <input 
+                id="password" 
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+              />
             </div>
             <div className={styles.inputGroup}>
               <label htmlFor="confirmPassword">Confirmar Senha</label>
-              <input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+              <input 
+                id="confirmPassword" 
+                type="password" 
+                value={confirmPassword} 
+                onChange={(e) => setConfirmPassword(e.target.value)} 
+                required 
+              />
             </div>
             <button type="submit" className={styles.button} disabled={loading}>
               {loading ? 'Criando...' : 'Cadastrar'}
             </button>
           </form>
+          
           {error && <p className={styles.error}>{error}</p>}
-          <p className={styles.link}>Já tem uma conta? <Link to="/login">Faça Login</Link></p>
+          
+          <p className={styles.link}>
+            Já tem uma conta? <Link to="/login">Faça Login</Link>
+          </p>
         </div>
       </div>
     </main>
