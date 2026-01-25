@@ -10,15 +10,14 @@ function CadastroPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
   
+  const [error, setError] = useState('');
+  const [msgSucesso, setMsgSucesso] = useState(''); // NOVO: Estado para mensagem de sucesso
+  const [loading, setLoading] = useState(false);
+   
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Se o AuthContext detectar um usuário, redireciona.
-  // Isso serve tanto para quem já estava logado quanto para quando o 
-  // signUp for concluído com sucesso e o estado atualizar.
   useEffect(() => {
     if (user) {
       navigate('/meu-grimorio');
@@ -28,8 +27,8 @@ function CadastroPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setMsgSucesso('');
 
-    // Validações básicas de frontend
     if (password !== confirmPassword) {
       setError('As senhas não correspondem.');
       return;
@@ -43,32 +42,30 @@ function CadastroPage() {
 
     try {
       // 1. Verifica se o username já existe
-      // OBS: Isso requer que a tabela 'profiles' tenha permissão de leitura pública (RLS)
       const { data: existingUser, error: usernameError } = await supabase
         .from('profiles')
         .select('username')
         .eq('username', username)
         .single();
 
-      // Se encontrou um usuário com esse nome, bloqueia
       if (existingUser) {
         throw new Error('Este nome de usuário já está em uso.');
       }
       
-      // Se deu erro na busca, verificamos se é apenas "não encontrado" (o que é bom)
       if (usernameError && usernameError.code !== 'PGRST116') {
-        throw usernameError; // Outros erros de conexão ou permissão
+        throw usernameError;
       }
 
-      // 2. Tenta criar o usuário e logar automaticamente
+      // 2. Cria o usuário
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: { 
             username: username 
-          }
-          // REMOVIDO: emailRedirectTo (pois não há mais link de confirmação)
+          },
+          // IMPORTANTE: Define para onde o usuário volta após clicar no link do email
+          emailRedirectTo: `${window.location.origin}/meu-grimorio`, 
         }
       });
 
@@ -76,16 +73,24 @@ function CadastroPage() {
         throw signUpError;
       } 
 
-      // SUCESSO:
-      // Como a confirmação de email está desligada, data.session já vem preenchido.
-      // Não precisamos de alert. O useEffect lá em cima vai detectar o usuário e redirecionar.
-      // Mas para garantir uma resposta imediata na UI, podemos forçar aqui também:
-      if (data.session) {
-          navigate('/meu-grimorio');
+      // LÓGICA DE SUCESSO CORRIGIDA:
+      
+      // Cenário A: Confirmação de email ATIVADA (O que você quer)
+      // O usuário é criado, mas data.session é null.
+      if (data.user && !data.session) {
+         setMsgSucesso(`Cadastro realizado! Enviamos um link de confirmação para ${email}. Verifique sua caixa de entrada (e spam).`);
+         // Limpa o formulário
+         setUsername('');
+         setEmail('');
+         setPassword('');
+         setConfirmPassword('');
+      } 
+      // Cenário B: Caso a confirmação esteja desligada (fallback)
+      else if (data.session) {
+         navigate('/meu-grimorio');
       }
 
     } catch (err) {
-      // Traduz o erro (ex: senha fraca, email inválido, etc)
       setError(translateSupabaseError(err));
       console.error("Erro no cadastro:", err);
     } finally {
@@ -93,7 +98,6 @@ function CadastroPage() {
     }
   };
 
-  // Se já estiver logado (e o useEffect ainda não tiver redirecionado por latência), não mostra o form
   if (user) return null;
 
   return (
@@ -147,7 +151,22 @@ function CadastroPage() {
             </button>
           </form>
           
+          {/* Exibe erro se houver */}
           {error && <p className={styles.error}>{error}</p>}
+          
+          {/* EXIBE MENSAGEM DE SUCESSO (Verde) */}
+          {msgSucesso && (
+            <div style={{
+              marginTop: '1rem', 
+              padding: '10px', 
+              background: '#d4edda', 
+              color: '#155724', 
+              borderRadius: '4px',
+              border: '1px solid #c3e6cb'
+            }}>
+              {msgSucesso}
+            </div>
+          )}
           
           <p className={styles.link}>
             Já tem uma conta? <Link to="/login">Faça Login</Link>
