@@ -8,7 +8,6 @@ import { AuthProvider } from './context/AuthContext';
 
 // Importamos os componentes visuais
 import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer'; // Sugestão: Cria este componente
 import AppRoutes from './routes/AppRoutes';
 
 // Importamos o estilo global
@@ -35,8 +34,6 @@ function App() {
           <AppRoutes />
         </main>
 
-        {/* O Footer também aparece em todas as páginas */}
-        <Footer />
 
       </BrowserRouter>
     </AuthProvider>
