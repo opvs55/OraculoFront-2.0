@@ -16,11 +16,22 @@ export default function WeeklyCardRitual({
   revealAllowed,
   onReveal,
   isRevealing,
+  isSessionLoading,
+  errorMessage,
   onFilterByCard,
   onRelateRecent,
 }) {
   const keyword = cardDetails?.palavras_chave?.direito?.[0];
   const imageUrl = getCardImageUrl(cardDetails?.img);
+  const revealLabel = isSessionLoading
+    ? 'Carregando sessão...'
+    : isRevealing
+      ? 'Revelando...'
+      : 'Revelar minha carta da semana';
+  const handleReveal = () => {
+    if (!revealAllowed) return;
+    onReveal?.();
+  };
 
   return (
     <section className={styles.ritualSection}>
@@ -53,7 +64,7 @@ export default function WeeklyCardRitual({
         </div>
 
         <div className={styles.ritualContent}>
-          {revealAllowed && (
+          {!cardDetails && (
             <>
               <p className={styles.ritualCopy}>
                 Respire fundo, alinhe sua intenção e permita que apenas uma carta revele a energia da sua semana.
@@ -61,15 +72,18 @@ export default function WeeklyCardRitual({
               <button
                 type="button"
                 className={styles.ritualRevealButton}
-                onClick={onReveal}
-                disabled={isRevealing}
+                onClick={handleReveal}
+                disabled={!revealAllowed}
               >
-                {isRevealing ? 'Revelando...' : 'Revelar minha carta da semana'}
+                {revealLabel}
               </button>
+              {errorMessage && (
+                <p className={styles.ritualRecommendation}>{errorMessage}</p>
+              )}
             </>
           )}
 
-          {!revealAllowed && cardDetails && (
+          {cardDetails && (
             <>
               <p className={styles.ritualKeyword}>Palavra-chave: {keyword || 'Introspecção'}</p>
               <p className={styles.ritualRecommendation}>{getShortRecommendation(cardDetails)}</p>

@@ -30,7 +30,15 @@ function MeuGrimorioPage() {
   const [cardFilter, setCardFilter] = useState('');
 
   const debouncedSearch = useDebouncedValue(searchTerm, 350);
-  const { weekStart, cardDetails, revealAllowed, revealCard, isRevealing } = useWeeklyCard(user?.id);
+  const {
+    weekStart,
+    cardDetails,
+    revealAllowed,
+    revealCard,
+    isRevealing,
+    isSessionLoading,
+    errorMessage,
+  } = useWeeklyCard(user?.id);
   const { data: insightsReadings, isLoading: isInsightsLoading } = useGrimorioInsights(user?.id);
   const derivedInsights = useDerivedGrimorioInsights(insightsReadings);
 
@@ -119,6 +127,8 @@ function MeuGrimorioPage() {
               revealAllowed={revealAllowed}
               onReveal={revealCard}
               isRevealing={isRevealing}
+              isSessionLoading={isSessionLoading}
+              errorMessage={errorMessage}
               onFilterByCard={(cardName) => {
                 setCardFilter(cardName);
                 setSearchTerm('');
