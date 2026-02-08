@@ -33,6 +33,15 @@ function QuickActionsGrid() {
             Explorar biblioteca
           </Link>
         </article>
+
+        <article className={styles.actionCard}>
+          <div className={styles.actionIcon}>🪐</div>
+          <h3>Mapa Astral</h3>
+          <p>Receba um resumo simbólico do seu mapa com foco semanal.</p>
+          <Link to="/mapa-astral" className={styles.actionButtonSecondary}>
+            Gerar mapa astral
+          </Link>
+        </article>
       </div>
     </section>
   );
