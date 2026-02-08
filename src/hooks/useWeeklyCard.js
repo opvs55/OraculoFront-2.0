@@ -67,9 +67,18 @@ export function useWeeklyCard(userId) {
 
   useEffect(() => {
     if (shouldLog) {
-      console.log('[WeeklyCard] sessionUser', session?.user?.id, 'userId', userId, 'weekStart', weekStart);
+      console.log(
+        '[WeeklyCard] session?',
+        !!session,
+        'sessionUser',
+        session?.user?.id,
+        'userIdParam',
+        userId,
+        'weekStart',
+        weekStart,
+      );
     }
-  }, [session?.user?.id, userId, weekStart, shouldLog]);
+  }, [session, userId, weekStart, shouldLog]);
 
   const logSupabaseError = (error) => {
     if (shouldLog && error) {
@@ -94,7 +103,6 @@ export function useWeeklyCard(userId) {
       .select('id, week_start, card_id, card_name, created_at, metadata')
       .eq('user_id', userId)
       .eq('week_start', weekStart)
-      .order('created_at', { ascending: false })
       .limit(1);
 
     if (error) {
@@ -107,10 +115,10 @@ export function useWeeklyCard(userId) {
   const { data: weeklyRecord, isLoading } = useQuery({
     queryKey,
     queryFn: async () => {
-      if (!userId) return null;
+      if (!userId || !session) return null;
       return fetchWeeklyRecord();
     },
-    enabled: !!userId,
+    enabled: !!userId && !!session && !isSessionLoading,
     onSuccess: () => {
       setErrorMessage(null);
     },
@@ -124,6 +132,20 @@ export function useWeeklyCard(userId) {
     mutationFn: async () => {
       if (!userId) throw new Error('Usuário não autenticado.');
       setErrorMessage(null);
+
+      if (shouldLog) {
+        console.log(
+          '[WeeklyCard] before insert',
+          'session?',
+          !!session,
+          'sessionUser',
+          session?.user?.id,
+          'userIdParam',
+          userId,
+          'weekStart',
+          weekStart,
+        );
+      }
 
       if (!session) {
         const { data } = await supabase.auth.getSession();
@@ -151,7 +173,7 @@ export function useWeeklyCard(userId) {
           },
         })
         .select('id, week_start, card_id, card_name, created_at, metadata')
-        .single();
+        .limit(1);
 
       if (error) {
         if (error.code === '23505') {
@@ -160,7 +182,7 @@ export function useWeeklyCard(userId) {
         logSupabaseError(error);
         throw error;
       }
-      return data;
+      return data?.[0] ?? null;
     },
     onSuccess: (data) => {
       queryClient.setQueryData(queryKey, data ?? null);
@@ -178,7 +200,7 @@ export function useWeeklyCard(userId) {
     weekStart,
     weeklyRecord,
     cardDetails,
-    revealAllowed: !!userId && !isSessionLoading && !weeklyRecord && !isLoading,
+    revealAllowed: !!userId && !!session && !isSessionLoading && !weeklyRecord && !isLoading,
     revealCard: mutation.mutate,
     isRevealing: mutation.isPending,
     isSessionLoading,
