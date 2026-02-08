@@ -127,6 +127,11 @@
   font-size: 1rem;
 }
 
+.helperText {
+  font-size: 0.85rem;
+  color: #b7b7ca;
+}
+
 .button {
   background-color: #e1b382;
   color: #0d0c1d;
@@ -152,6 +157,16 @@
   color: #ff8a80;
   background-color: rgba(255, 138, 128, 0.1);
   border: 1px solid #ff8a80;
+  padding: 0.8rem;
+  border-radius: 8px;
+  text-align: center;
+  width: 100%;
+}
+
+.success {
+  color: #bff0c2;
+  background-color: rgba(111, 207, 151, 0.15);
+  border: 1px solid rgba(111, 207, 151, 0.6);
   padding: 0.8rem;
   border-radius: 8px;
   text-align: center;

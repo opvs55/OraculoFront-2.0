@@ -42,22 +42,40 @@ function RequestPasswordResetPage() {
   };
 
   return (
-    <div className="content_wrapper">
+    <div className={styles.authPage}>
       <div className={styles.authContainer}>
-        <h1 className={styles.title}>Recuperar Senha</h1>
-        <p className={styles.subtitle}>Digite seu e-mail para receber um link de redefinição de senha.</p>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Recuperar Senha</h1>
+          <p className={styles.subtitle}>Digite seu e-mail para receber um link de redefinição de senha.</p>
+        </div>
+
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <label htmlFor="email">E-mail</label>
-            <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="seu@email.com"
+              autoComplete="email"
+              required
+            />
+            <span className={styles.helperText}>
+              Se o e-mail estiver cadastrado, você receberá a mensagem em instantes.
+            </span>
           </div>
           <button type="submit" className={styles.button} disabled={loading}>
             {loading ? 'Enviando...' : 'Enviar Link'}
           </button>
         </form>
+
         {message && <p className={styles.success}>{message}</p>}
         {error && <p className={styles.error}>{error}</p>}
-        <p className={styles.link}><Link to="/login">Voltar para o Login</Link></p>
+
+        <div className={styles.linksContainer}>
+          <p className={styles.link}><Link to="/login">Voltar para o Login</Link></p>
+        </div>
       </div>
     </div>
   );
