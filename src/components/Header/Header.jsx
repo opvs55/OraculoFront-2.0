@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import { useAutoHideHeader } from '../../hooks/useAutoHideHeader';
@@ -13,15 +13,12 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const accountRef = useRef(null);
-  const { isHidden, reveal } = useAutoHideHeader(isInternal);
+  const accountAnimationTimeout = useRef(null);
+  const [isAccountAnimating, setIsAccountAnimating] = useState(false);
+  const { isHidden, reveal } = useAutoHideHeader(false);
 
   const handleToggleMenu = () => setIsMenuOpen((prev) => !prev);
   const handleCloseMenu = () => setIsMenuOpen(false);
-
-  const accountInitial = useMemo(() => {
-    const name = user?.user_metadata?.full_name || user?.email || '';
-    return name ? name.trim().charAt(0).toUpperCase() : 'U';
-  }, [user]);
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -42,6 +39,23 @@ function Header() {
   useEffect(() => {
     if (isMenuOpen || isAccountOpen) reveal();
   }, [isMenuOpen, isAccountOpen, reveal]);
+
+  useEffect(() => () => {
+    if (accountAnimationTimeout.current) {
+      clearTimeout(accountAnimationTimeout.current);
+    }
+  }, []);
+
+  const handleAccountToggle = () => {
+    setIsAccountOpen((prev) => !prev);
+    setIsAccountAnimating(true);
+    if (accountAnimationTimeout.current) {
+      clearTimeout(accountAnimationTimeout.current);
+    }
+    accountAnimationTimeout.current = setTimeout(() => {
+      setIsAccountAnimating(false);
+    }, 220);
+  };
   
   return (
     <header
@@ -120,12 +134,27 @@ function Header() {
               <div className={styles.accountWrapper} ref={accountRef}>
                 <button
                   type="button"
-                  className={styles.accountButton}
-                  onClick={() => setIsAccountOpen((prev) => !prev)}
+                  className={`${styles.accountButton} ${isAccountAnimating ? styles.accountButtonActive : ''}`}
+                  onClick={handleAccountToggle}
                   aria-haspopup="menu"
                   aria-expanded={isAccountOpen}
+                  aria-label="Menu do perfil"
                 >
-                  <span>{accountInitial}</span>
+                  <svg
+                    className={styles.accountIcon}
+                    viewBox="0 0 64 64"
+                    role="presentation"
+                    aria-hidden="true"
+                  >
+                    <polygon
+                      points="32 6 38.5 24 57 24 42 35.5 47.5 54 32 43 16.5 54 22 35.5 7 24 25.5 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinejoin="round"
+                    />
+                    <circle cx="32" cy="32" r="10" fill="none" stroke="currentColor" strokeWidth="2" />
+                  </svg>
                 </button>
                 {isAccountOpen && (
                   <div className={styles.accountMenu} role="menu">
