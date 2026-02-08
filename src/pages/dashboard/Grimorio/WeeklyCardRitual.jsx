@@ -26,7 +26,7 @@ export default function WeeklyCardRitual({
   const revealLabel = isSessionLoading
     ? 'Carregando sessão...'
     : isRevealing
-      ? 'Revelando...'
+      ? 'Sorteando...'
       : 'Revelar minha carta da semana';
   const handleReveal = () => {
     if (!revealAllowed) return;
