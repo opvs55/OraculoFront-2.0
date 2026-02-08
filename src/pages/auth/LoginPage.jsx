@@ -117,9 +117,6 @@ function LoginPage() {
               {isOauthLoading ? 'Aguarde...' : provider.label}
             </button>
           ))}
-          <p className={styles.socialHint}>
-            Instagram exige um provedor customizado no Supabase. Posso orientar se quiser habilitar.
-          </p>
         </div>
 
         <div className={styles.divider}>
