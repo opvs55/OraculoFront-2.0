@@ -6,14 +6,16 @@ import { Navigate, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext'; // Importe o hook useAuth
 import Loader from '../Loader/Loader';
 import { isProfileComplete } from '../../../utils/profileCompletion';
+import { useUserProfile } from '../../../hooks/useUserProfile';
 
 // 2. Remover a prop { children } da função
 function ProtectedRoute() {
-  const { user, profile, loading } = useAuth(); // Pegue o usuário E o estado de loading do contexto
+  const { user, loading } = useAuth(); // Pegue o usuário E o estado de loading do contexto
   const location = useLocation();
+  const { profile, isLoading: isProfileLoading } = useUserProfile(user?.id);
 
   // A tua lógica de "loading" está perfeita e mantém-se.
-  if (loading) {
+  if (loading || isProfileLoading) {
     return <Loader />;
   }
 
