@@ -33,132 +33,180 @@
   margin: 0 auto;
 }
 
-.dashboardContent {
+.grimorioLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 2rem;
+}
+
+.mainColumn {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
-.heroCard {
-  background: rgba(18, 16, 33, 0.85);
-  border: 1px solid rgba(225, 179, 130, 0.35);
-  border-radius: 18px;
-  padding: 2.5rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(6px);
+.ritualSection {
+  background: rgba(18, 16, 33, 0.88);
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  border-radius: 20px;
+  padding: 2.4rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
 }
 
-.heroHeader {
+.ritualHeader {
   display: flex;
   justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
 }
 
-.heroEyebrow {
+.ritualEyebrow {
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
   color: rgba(225, 179, 130, 0.7);
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.6rem 0;
 }
 
-.heroTitle {
+.ritualTitle {
   font-family: 'Cinzel', serif;
-  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-size: clamp(2rem, 3vw, 2.6rem);
   color: #E1B382;
   margin: 0 0 0.5rem 0;
 }
 
-.heroSubtitle {
+.ritualSubtitle {
   margin: 0;
-  font-size: 1.1rem;
   color: #d7d0c9;
+  max-width: 460px;
 }
 
-.heroCtaBlock {
+.ritualBody {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.ritualCardFrame {
+  position: relative;
+  width: 180px;
+  height: 280px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  background: rgba(13, 12, 29, 0.75);
+}
+
+.ritualCardImage,
+.ritualCardPlaceholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ritualCardGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(225, 179, 130, 0.35), transparent 60%);
+  pointer-events: none;
+}
+
+.ritualCardBack {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, rgba(29, 27, 48, 0.9), rgba(12, 10, 24, 0.95));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ritualCardSigil {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid rgba(225, 179, 130, 0.6);
+  box-shadow: 0 0 18px rgba(225, 179, 130, 0.35);
+  position: relative;
+}
+
+.ritualCardSigil::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px dashed rgba(225, 179, 130, 0.6);
+  border-radius: 50%;
+}
+
+.ritualContent {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.6rem;
+  gap: 1rem;
+  color: #e6ded5;
 }
 
-.heroPrimaryButton {
+.ritualCopy {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.ritualRevealButton {
+  align-self: flex-start;
   background: #E1B382;
   color: #0D0C1D;
-  padding: 0.9rem 2.2rem;
-  border-radius: 10px;
+  padding: 0.9rem 2.1rem;
+  border-radius: 12px;
+  border: none;
   font-weight: 700;
-  text-decoration: none;
-  font-size: 1.05rem;
-  box-shadow: 0 8px 24px rgba(225, 179, 130, 0.35);
+  cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 26px rgba(225, 179, 130, 0.35);
 }
 
-.heroPrimaryButton:hover {
+.ritualRevealButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(225, 179, 130, 0.45);
+  box-shadow: 0 14px 30px rgba(225, 179, 130, 0.45);
 }
 
-.heroPrimaryButton:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.9);
-  outline-offset: 3px;
+.ritualRevealButton:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
 }
 
-.heroMicrocopy {
-  color: #f1e3cf;
-  font-size: 0.95rem;
-}
-
-.quickStatus {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin: 2rem 0 1.5rem;
-  color: #cdbfae;
-  font-size: 0.95rem;
-}
-
-.quickStatus span {
-  padding: 0.4rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid rgba(225, 179, 130, 0.2);
-  background: rgba(13, 12, 29, 0.6);
-}
-
-.heroSecondaryActions {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.heroSecondaryButton {
-  padding: 0.6rem 1.6rem;
-  border-radius: 999px;
-  border: 1px solid rgba(225, 179, 130, 0.4);
-  color: #f1ece5;
-  text-decoration: none;
+.ritualKeyword {
+  margin: 0;
+  color: #f4e7d4;
   font-weight: 600;
-  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
-.heroSecondaryButton:hover {
-  border-color: #E1B382;
+.ritualRecommendation {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.ritualLinks {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ritualLinkButton {
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.4);
   color: #E1B382;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-.section {
+.continueSection {
   background: rgba(18, 16, 33, 0.75);
   border: 1px solid rgba(225, 179, 130, 0.2);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 2rem;
-}
-
-.sectionTitle {
-  margin: 0 0 1.5rem 0;
-  font-family: 'Cinzel', serif;
-  color: #E1B382;
-  font-size: 1.5rem;
 }
 
 .sectionHeader {
@@ -169,131 +217,322 @@
   margin-bottom: 1.5rem;
 }
 
-.sectionLink {
-  color: #d5c5b1;
+.sectionTitle {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  color: #E1B382;
+  font-size: 1.4rem;
+}
+
+.sectionNote {
+  color: #cdbfae;
+  font-size: 0.95rem;
+}
+
+.continueCard {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  background: rgba(13, 12, 29, 0.7);
+  border-radius: 14px;
+  padding: 1.6rem;
+  border: 1px solid rgba(225, 179, 130, 0.25);
+}
+
+.continueLabel {
+  margin: 0 0 0.4rem 0;
+  color: rgba(225, 179, 130, 0.8);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.continueTitle {
+  margin: 0 0 0.6rem 0;
+  color: #f1ede8;
+  font-size: 1.2rem;
+}
+
+.continueMeta {
+  margin: 0;
+  color: #bfb7aa;
+}
+
+.continueButton {
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.5);
+  color: #E1B382;
+  padding: 0.7rem 1.6rem;
+  border-radius: 10px;
   text-decoration: none;
   font-weight: 600;
 }
 
-.sectionLink:hover {
+.historySection {
+  background: rgba(18, 16, 33, 0.75);
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  border-radius: 18px;
+  padding: 2rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.toolbarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.toolbarEyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: rgba(225, 179, 130, 0.6);
+  margin: 0 0 0.4rem 0;
+}
+
+.toolbarTitle {
+  margin: 0;
+  font-family: 'Cinzel', serif;
   color: #E1B382;
 }
 
-.readingsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
+.toolbarCount {
+  color: #cdbfae;
+  font-size: 0.95rem;
 }
 
-.readingCard {
+.toolbarRow {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1.2rem;
-  background: rgba(13, 12, 29, 0.7);
-  border-radius: 14px;
-  padding: 1.5rem;
-  border: 1px solid rgba(225, 179, 130, 0.2);
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.readingTitle {
-  margin: 0 0 0.6rem 0;
-  font-size: 1.05rem;
-  color: #f1ede8;
-}
-
-.readingMeta {
+.toolbarField {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  color: #bfb7aa;
+  flex: 1 1 180px;
+  min-width: 180px;
+}
+
+.toolbarLabel {
+  font-size: 0.85rem;
+  color: #cdbfae;
+}
+
+.toolbarInput,
+.toolbarSelect {
+  background: rgba(13, 12, 29, 0.7);
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  color: #f4eee5;
+}
+
+.toolbarToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #cdbfae;
   font-size: 0.9rem;
 }
 
-.readingButton {
-  align-self: flex-start;
+.toolbarToggle input {
+  accent-color: #E1B382;
+}
+
+.activeFilter {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(13, 12, 29, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  padding: 0.8rem 1.2rem;
+  color: #f1ede8;
+}
+
+.activeFilter button {
+  background: transparent;
+  color: #E1B382;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.historyCard {
+  background: rgba(13, 12, 29, 0.7);
+  border-radius: 16px;
+  padding: 1.6rem;
+  border: 1px solid rgba(225, 179, 130, 0.2);
+}
+
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.historyMeta {
+  margin: 0 0 0.4rem 0;
+  color: #cdbfae;
+  font-size: 0.85rem;
+}
+
+.historyTitle {
+  margin: 0;
+  color: #f1ede8;
+  font-size: 1.2rem;
+}
+
+.historyTitleEdit {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.historyTitleInput {
+  min-width: 220px;
+  flex: 1;
+  background: rgba(12, 10, 24, 0.8);
+  border: 1px solid rgba(225, 179, 130, 0.35);
+  border-radius: 10px;
+  padding: 0.5rem 0.7rem;
+  color: #f4eee5;
+}
+
+.historyActions {
+  position: relative;
+}
+
+.historyMenuButton {
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.3);
+  color: #E1B382;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.historyMenu {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: rgba(12, 10, 24, 0.95);
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  border-radius: 12px;
+  padding: 0.5rem;
+  min-width: 180px;
+  z-index: 5;
+}
+
+.historyMenuItem,
+.historyMenuItemDanger {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.8rem;
+  background: transparent;
+  border: none;
+  color: #f1ede8;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.historyMenuItem:hover {
+  background: rgba(225, 179, 130, 0.12);
+}
+
+.historyMenuItemDanger {
+  color: #f09393;
+}
+
+.historyMenuItemDanger:hover {
+  background: rgba(240, 147, 147, 0.1);
+}
+
+.historyContent {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.historyCardsPreview {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.historyCardThumb,
+.historyCardThumbPlaceholder {
+  width: 60px;
+  height: 92px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  background: rgba(12, 10, 24, 0.8);
+}
+
+.historyCardThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.historyIndicators {
+  display: flex;
+  gap: 1rem;
+  color: #cdbfae;
+  font-size: 0.9rem;
+}
+
+.historyLoadMore {
+  align-self: center;
   background: transparent;
   border: 1px solid rgba(225, 179, 130, 0.4);
   color: #E1B382;
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  text-decoration: none;
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  cursor: pointer;
   font-weight: 600;
 }
 
-.readingButton:hover {
-  border-color: #E1B382;
-  color: #fff;
-}
-
-.actionsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-}
-
-.actionCard {
-  background: rgba(13, 12, 29, 0.65);
-  border-radius: 16px;
-  padding: 1.8rem;
-  border: 1px solid rgba(225, 179, 130, 0.15);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.actionPrimary {
-  border-color: rgba(225, 179, 130, 0.4);
-  box-shadow: 0 8px 24px rgba(225, 179, 130, 0.2);
-}
-
-.actionIcon {
-  font-size: 1.6rem;
-}
-
-.actionButtonPrimary,
-.actionButtonSecondary,
-.actionButtonTertiary {
-  margin-top: auto;
-  text-decoration: none;
-  font-weight: 600;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.actionButtonPrimary {
-  background: #E1B382;
-  color: #0D0C1D;
-}
-
-.actionButtonSecondary {
-  border: 1px solid rgba(225, 179, 130, 0.4);
-  color: #E1B382;
-}
-
-.actionButtonTertiary {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #e6ded5;
-}
-
-.stateCard {
-  background: rgba(13, 12, 29, 0.6);
+.historyEmpty {
+  background: rgba(13, 12, 29, 0.7);
   border: 1px dashed rgba(225, 179, 130, 0.35);
-  padding: 1.5rem;
+  padding: 1.6rem;
   border-radius: 12px;
   text-align: center;
   color: #e6ded5;
 }
 
-.stateButton {
-  margin-top: 1rem;
+.historyActionPrimary {
+  margin-top: 0.8rem;
   background: #E1B382;
   color: #0D0C1D;
   padding: 0.6rem 1.4rem;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
   font-weight: 600;
   cursor: pointer;
@@ -301,48 +540,113 @@
   display: inline-block;
 }
 
-.skeletonGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-}
-
-.skeletonCard {
-  background: rgba(13, 12, 29, 0.6);
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid rgba(225, 179, 130, 0.15);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.skeletonLine,
-.skeletonLineShort,
-.skeletonButton {
-  background: linear-gradient(90deg, rgba(225, 179, 130, 0.1), rgba(225, 179, 130, 0.25), rgba(225, 179, 130, 0.1));
+.historyActionGhost {
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.3);
+  color: #E1B382;
+  padding: 0.5rem 1rem;
   border-radius: 8px;
+  cursor: pointer;
+}
+
+.historySkeleton {
+  height: 120px;
+  border-radius: 16px;
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  background: linear-gradient(90deg, rgba(225, 179, 130, 0.1), rgba(225, 179, 130, 0.25), rgba(225, 179, 130, 0.1));
   animation: shimmer 1.6s infinite;
 }
 
-.skeletonLine {
-  height: 16px;
-  width: 100%;
+.insightsColumn {
+  position: sticky;
+  top: 120px;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.skeletonLineShort {
-  height: 12px;
-  width: 70%;
+.insightsPanel {
+  background: rgba(18, 16, 33, 0.82);
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  border-radius: 18px;
+  padding: 1.6rem;
 }
 
-.skeletonButton {
-  height: 36px;
-  width: 45%;
+.insightsTitle {
+  margin: 0 0 1rem 0;
+  font-family: 'Cinzel', serif;
+  color: #E1B382;
+}
+
+.insightsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #f1ede8;
+}
+
+.insightItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.insightLabel {
+  color: #cdbfae;
+  font-size: 0.9rem;
+}
+
+.insightsPlaceholder {
+  color: #cdbfae;
+  font-size: 0.95rem;
+}
+
+.insightsAccordion {
+  background: rgba(18, 16, 33, 0.82);
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  border-radius: 16px;
+  padding: 0.8rem 1.2rem;
+}
+
+.insightsSummary {
+  cursor: pointer;
+  color: #E1B382;
+  font-weight: 600;
+}
+
+.insightsMobile {
+  display: none;
+}
+
+.insightsFootnote {
+  font-size: 0.8rem;
+  color: rgba(205, 191, 174, 0.8);
 }
 
 @keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: 200px 0; }
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+@media (max-width: 1100px) {
+  .grimorioLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .insightsColumn {
+    position: static;
+    display: none;
+  }
+
+  .insightsMobile {
+    display: block;
+  }
 }
 
 @media (max-width: 900px) {
@@ -350,30 +654,28 @@
     padding: 2.5rem 1.5rem 3rem;
   }
 
-  .heroHeader {
-    flex-direction: column;
-    align-items: flex-start;
+  .ritualBody {
+    grid-template-columns: 1fr;
   }
 
-  .heroCtaBlock {
-    align-items: flex-start;
+  .ritualCardFrame {
+    width: 160px;
+    height: 250px;
+    margin: 0 auto;
   }
 
-  .sectionHeader {
+  .continueCard,
+  .historyContent,
+  .historyHeader {
     flex-direction: column;
     align-items: flex-start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .heroPrimaryButton,
-  .heroSecondaryButton,
-  .actionButtonPrimary,
-  .actionButtonSecondary,
-  .actionButtonTertiary,
-  .skeletonLine,
-  .skeletonLineShort,
-  .skeletonButton {
+  .ritualRevealButton,
+  .historyLoadMore,
+  .historySkeleton {
     transition: none;
     animation: none;
   }
