@@ -7,7 +7,6 @@
   font-size: 15px;
   background-color: #0D0C1D;
   color: #E0E0E0;
-  --footer-height: 180px;
 }
 
 * {
@@ -33,7 +32,6 @@ main {
   width: 100%;
   /* Permite que o conteúdo interno role, se necessário */
   overflow-y: auto;
-  padding-bottom: var(--footer-height);
 }
 
 /* CLASSE DE AJUDA GLOBAL: Este é o container que você usará DENTRO das suas páginas
