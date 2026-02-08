@@ -30,19 +30,40 @@ export function useWeeklyCard(userId) {
   const queryClient = useQueryClient();
   const weekStart = useMemo(() => formatWeekStart(getWeekStartUtc()), []);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [session, setSession] = useState(null);
+  const [isSessionLoading, setIsSessionLoading] = useState(true);
   const shouldLog = import.meta.env.DEV;
 
   const queryKey = ['weeklyCard', userId, weekStart];
 
-  const { data: session, isLoading: isSessionLoading } = useQuery({
-    queryKey: ['supabaseSession'],
-    queryFn: async () => {
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadSession = async () => {
       const { data, error } = await supabase.auth.getSession();
-      if (error) throw error;
-      return data.session;
-    },
-    staleTime: 1000 * 60 * 5,
-  });
+      if (!isMounted) return;
+      if (error) {
+        if (shouldLog) {
+          console.error('[WeeklyCard] supabase error', error);
+        }
+      }
+      setSession(data.session ?? null);
+      setIsSessionLoading(false);
+    };
+
+    loadSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      if (!isMounted) return;
+      setSession(nextSession);
+      setIsSessionLoading(false);
+    });
+
+    return () => {
+      isMounted = false;
+      authListener?.subscription?.unsubscribe();
+    };
+  }, [shouldLog]);
 
   useEffect(() => {
     if (shouldLog) {
@@ -59,6 +80,9 @@ export function useWeeklyCard(userId) {
   const getFriendlyErrorMessage = (error) => {
     if (!error) return null;
     if (error.status === 403 || error.code === '42501') {
+      return 'Sua sessão expirou. Faça login novamente.';
+    }
+    if (error.message === 'Sessão não encontrada.') {
       return 'Sua sessão expirou. Faça login novamente.';
     }
     return 'Não foi possível carregar sua carta da semana.';
@@ -83,10 +107,10 @@ export function useWeeklyCard(userId) {
   const { data: weeklyRecord, isLoading } = useQuery({
     queryKey,
     queryFn: async () => {
-      if (!userId || !session) return null;
+      if (!userId) return null;
       return fetchWeeklyRecord();
     },
-    enabled: !!userId && !!session,
+    enabled: !!userId,
     onSuccess: () => {
       setErrorMessage(null);
     },
@@ -99,8 +123,15 @@ export function useWeeklyCard(userId) {
   const mutation = useMutation({
     mutationFn: async () => {
       if (!userId) throw new Error('Usuário não autenticado.');
-      if (!session) throw new Error('Sessão não encontrada.');
       setErrorMessage(null);
+
+      if (!session) {
+        const { data } = await supabase.auth.getSession();
+        if (!data.session) {
+          throw new Error('Sessão não encontrada.');
+        }
+        setSession(data.session);
+      }
 
       const existing = await fetchWeeklyRecord();
       if (existing) return existing;
@@ -147,7 +178,7 @@ export function useWeeklyCard(userId) {
     weekStart,
     weeklyRecord,
     cardDetails,
-    revealAllowed: !!userId && !!session && !isSessionLoading && !weeklyRecord && !isLoading,
+    revealAllowed: !!userId && !isSessionLoading && !weeklyRecord && !isLoading,
     revealCard: mutation.mutate,
     isRevealing: mutation.isPending,
     isSessionLoading,
