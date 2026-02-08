@@ -15,6 +15,7 @@ const listaDeVideos = [
 ];
 
 const VISITOR_READING_KEY = 'visitorReadingDone';
+const mysticPhrase = 'O que o destino deseja revelar hoje?';
 
 function TarotPage() {
   const navigate = useNavigate();
@@ -31,7 +32,6 @@ function TarotPage() {
   const [formError, setFormError] = useState(null);
   const [name1, setName1] = useState('');
   const [name2, setName2] = useState('');
-
   useEffect(() => {
     if (!user) {
       const hasDoneReading = localStorage.getItem(VISITOR_READING_KEY);
@@ -222,7 +222,10 @@ function TarotPage() {
       </video>
       <div className={styles.videoOverlay}></div>
       <div className={styles.conteudoCentralizado}>
-        <h1 className={styles.mainTitleLogo}>ORÁCULO IA</h1>
+        <h1 className={styles.mainTitleLogo}>ORÁCULO</h1>
+        <p className={styles.mysticText} aria-live="polite">
+          {mysticPhrase}
+        </p>
 
         {formType === 'default' ? defaultForm : pathChoiceForm}
 

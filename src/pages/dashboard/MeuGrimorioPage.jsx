@@ -1,37 +1,41 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-// Certifique-se que o hook useUserProfile está sendo importado corretamente
 import { useUserProfile } from '../../hooks/useUserProfile'; 
-import { useReadingsHistory } from '../../hooks/useReadings';
-import { useCardOfTheWeek } from '../../hooks/useCardOfTheWeek'; 
+import { useRecentReadings } from '../../hooks/useRecentReadings';
+import { formatRelativeDate } from '../../utils/formatRelativeDate';
+import { getCardOfTheWeekLabel } from '../../utils/getCardOfTheWeekLabel';
+import LoggedHeroCard from './LoggedHome/LoggedHeroCard';
+import ContinueReadingSection from './LoggedHome/ContinueReadingSection';
+import QuickActionsGrid from './LoggedHome/QuickActionsGrid';
 import styles from './MeuGrimorioPage.module.css'; 
-// Loader não é mais usado aqui, mas pode ser mantido se outros componentes o usarem
-// import Loader from '../../components/common/Loader/Loader'; 
-import ProfileSummary from './ProfileSummary/ProfileSummary'; 
-import ReadingHistory from './ReadingHistory/ReadingHistory'; 
-import CardOfTheWeek from './CardOfTheWeek/CardOfTheWeek';   
 
 function MeuGrimorioPage() { 
   const [videoAtualIndex, setVideoAtualIndex] = useState(() => Math.floor(Math.random() * 2));
-  const { user } = useAuth(); // authLoading removido pois já é tratado pelo ProtectedRoute
-  
-  // O hook useUserProfile já busca todos os dados do perfil, incluindo life_path_number
-  const { profile, isLoading: profileLoading } = useUserProfile(user?.id); 
-  const { data: readings, isLoading: historyLoading, isError } = useReadingsHistory(user?.id);
-  // O isLoadingCard é usado internamente pelo hook, não precisamos dele aqui
-  const { cardData, revealAllowed, revealCard, isRevealing } = useCardOfTheWeek(user?.id);
+  const { user } = useAuth();
+  const { profile } = useUserProfile(user?.id);
+  const { data: recentReadings = [], isLoading, isError, refetch } = useRecentReadings(user?.id, 3);
 
   const handleVideoEnd = () => setVideoAtualIndex(prev => (prev + 1) % 2);
 
-  // --- MUDANÇA PRINCIPAL ---
-  // O Loader de ecrã inteiro foi REMOVIDO.
-  // A página agora renderiza imediatamente o layout (vídeo, grelha),
-  // e os componentes filhos (ProfileSummary, ReadingHistory)
-  // são responsáveis por mostrar os seus próprios loaders internos.
-  // const isLoading = authLoading || profileLoading || isLoadingCard; 
-  // if (isLoading) return <Loader ... />; 
-  // --- FIM DA MUDANÇA ---
+  const displayName = useMemo(() => {
+    const fullName = profile?.full_name?.trim();
+    if (fullName) {
+      return fullName.split(' ')[0];
+    }
+    return profile?.username || 'Buscador';
+  }, [profile]);
+
+  const lastReadingLabel = useMemo(() => {
+    if (!recentReadings.length) return 'Sem leituras ainda';
+    return formatRelativeDate(recentReadings[0].created_at);
+  }, [recentReadings]);
+
+  const cardOfTheWeek = useMemo(
+    () => getCardOfTheWeekLabel(profile?.card_of_the_week || profile?.card_of_the_week_name),
+    [profile?.card_of_the_week, profile?.card_of_the_week_name],
+  );
+
+  const publicReadingsCount = profile?.public_readings_count;
 
   return (
     <div className={styles.painelContainer}>
@@ -45,43 +49,22 @@ function MeuGrimorioPage() {
       <div className={styles.videoOverlay}></div>
 
       <div className={styles.conteudoSobreposto}>
-        <div className={`content_wrapper ${styles.dashboardGrid}`}>
-          {/* Coluna da Esquerda */}
-          <div className={styles.leftColumn}>
-            <div className={styles.profileCard}> 
-              <ProfileSummary 
-                profile={profile} 
-                readings={readings} // Passa o número de leituras
-                isLoading={profileLoading} // Passa estado de carregamento específico do perfil
-                lifePathNumber={profile?.life_path_number} 
-              />
-            </div>
-            
-            <div className={styles.cardOfTheWeekCard}>
-              <CardOfTheWeek 
-                cardData={cardData} 
-                onReveal={revealCard} 
-                revealAllowed={revealAllowed} 
-                isRevealing={isRevealing} // Passa estado de revelação
-                // prop 'isLoading' removida pois o componente não a utiliza
-              />
-            </div>
+        <div className={styles.dashboardContent}>
+          <LoggedHeroCard
+            displayName={displayName}
+            lastReadingLabel={lastReadingLabel}
+            cardOfTheWeek={cardOfTheWeek}
+            publicReadingsCount={publicReadingsCount}
+          />
 
-            <Link to="/tarot" className={styles.newReadingButtonLarge}>
-              Fazer Nova Leitura
-            </Link>
-          </div>
+          <ContinueReadingSection
+            readings={recentReadings}
+            isLoading={isLoading}
+            isError={isError}
+            onRetry={refetch}
+          />
 
-          {/* Coluna da Direita */}
-          <div className={styles.rightColumn}>
-            <div className={styles.historyCard}>
-              <ReadingHistory 
-                readings={readings} 
-                isLoading={historyLoading} // Passa estado de carregamento específico do histórico
-                isError={isError} 
-              />
-            </div>
-          </div>
+          <QuickActionsGrid />
         </div>
       </div>
     </div>

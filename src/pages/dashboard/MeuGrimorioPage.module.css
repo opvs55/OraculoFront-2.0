@@ -1,6 +1,6 @@
 /* src/pages/dashboard/MeuGrimorioPage.module.css */
 
-.painelContainer { /* Mantendo o nome antigo por compatibilidade por enquanto */
+.painelContainer {
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -8,63 +8,380 @@
   display: flex;
   justify-content: center;
 }
+
 .videoFundo {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: 1;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 1;
 }
+
 .videoOverlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background-color: rgba(13, 12, 29, 0.85); z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(13, 12, 29, 0.82);
+  z-index: 2;
 }
+
 .conteudoSobreposto {
-  position: relative; z-index: 3; width: 100%; padding: 4rem 2rem;
-  max-width: 1400px; margin: 0 auto;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  padding: 3.5rem 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.profileCard,
-.cardOfTheWeekCard,
-.historyCard {
-  background-color: rgba(23, 22, 43, 0.6); /* Um roxo/azul escuro semitransparente - ajuste a cor! */
-  border-radius: 12px; /* Bordas mais arredondadas */
-  padding: 1.5rem; /* Espaçamento interno */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
-  /* backdrop-filter: blur(5px); /* Efeito de vidro fosco (opcional, pode pesar na performance) */
+.dashboardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
-/* Layout principal do Dashboard */
-.dashboardGrid {
-  display: grid; grid-template-columns: 1fr; gap: 2rem;
-}
-.leftColumn, .rightColumn {
-  display: flex; flex-direction: column; gap: 2rem;
-}
-
-/* Botão grande de Nova Leitura */
-.newReadingButtonLarge {
-  display: block; background: #E1B382; color: #0D0C1D;
-  padding: 1rem 2rem; border-radius: 8px; text-decoration: none;
-  font-weight: bold; font-size: 1.2rem; text-align: center;
-  transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(225, 179, 130, 0.3);
-}
-.newReadingButtonLarge:hover {
-  transform: translateY(-3px); box-shadow: 0 6px 20px rgba(225, 179, 130, 0.5);
+.heroCard {
+  background: rgba(18, 16, 33, 0.85);
+  border: 1px solid rgba(225, 179, 130, 0.35);
+  border-radius: 18px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
 }
 
-/* Layout para telas maiores */
-@media (min-width: 1024px) {
-  .dashboardGrid {
-    grid-template-columns: 400px 1fr; gap: 3rem; align-items: flex-start;
-  }
+.heroHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
-/* Ajustes para telas pequenas */
-@media (max-width: 768px) {
+.heroEyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  color: rgba(225, 179, 130, 0.7);
+  margin: 0 0 0.75rem 0;
+}
+
+.heroTitle {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  color: #E1B382;
+  margin: 0 0 0.5rem 0;
+}
+
+.heroSubtitle {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #d7d0c9;
+}
+
+.heroCtaBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.heroPrimaryButton {
+  background: #E1B382;
+  color: #0D0C1D;
+  padding: 0.9rem 2.2rem;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1.05rem;
+  box-shadow: 0 8px 24px rgba(225, 179, 130, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.heroPrimaryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(225, 179, 130, 0.45);
+}
+
+.heroPrimaryButton:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 3px;
+}
+
+.heroMicrocopy {
+  color: #f1e3cf;
+  font-size: 0.95rem;
+}
+
+.quickStatus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2rem 0 1.5rem;
+  color: #cdbfae;
+  font-size: 0.95rem;
+}
+
+.quickStatus span {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  background: rgba(13, 12, 29, 0.6);
+}
+
+.heroSecondaryActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.heroSecondaryButton {
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  color: #f1ece5;
+  text-decoration: none;
+  font-weight: 600;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.heroSecondaryButton:hover {
+  border-color: #E1B382;
+  color: #E1B382;
+}
+
+.section {
+  background: rgba(18, 16, 33, 0.75);
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.sectionTitle {
+  margin: 0 0 1.5rem 0;
+  font-family: 'Cinzel', serif;
+  color: #E1B382;
+  font-size: 1.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.sectionLink {
+  color: #d5c5b1;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.sectionLink:hover {
+  color: #E1B382;
+}
+
+.readingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.readingCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.2rem;
+  background: rgba(13, 12, 29, 0.7);
+  border-radius: 14px;
+  padding: 1.5rem;
+  border: 1px solid rgba(225, 179, 130, 0.2);
+}
+
+.readingTitle {
+  margin: 0 0 0.6rem 0;
+  font-size: 1.05rem;
+  color: #f1ede8;
+}
+
+.readingMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: #bfb7aa;
+  font-size: 0.9rem;
+}
+
+.readingButton {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  color: #E1B382;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.readingButton:hover {
+  border-color: #E1B382;
+  color: #fff;
+}
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.actionCard {
+  background: rgba(13, 12, 29, 0.65);
+  border-radius: 16px;
+  padding: 1.8rem;
+  border: 1px solid rgba(225, 179, 130, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.actionPrimary {
+  border-color: rgba(225, 179, 130, 0.4);
+  box-shadow: 0 8px 24px rgba(225, 179, 130, 0.2);
+}
+
+.actionIcon {
+  font-size: 1.6rem;
+}
+
+.actionButtonPrimary,
+.actionButtonSecondary,
+.actionButtonTertiary {
+  margin-top: auto;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionButtonPrimary {
+  background: #E1B382;
+  color: #0D0C1D;
+}
+
+.actionButtonSecondary {
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  color: #E1B382;
+}
+
+.actionButtonTertiary {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e6ded5;
+}
+
+.stateCard {
+  background: rgba(13, 12, 29, 0.6);
+  border: 1px dashed rgba(225, 179, 130, 0.35);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  color: #e6ded5;
+}
+
+.stateButton {
+  margin-top: 1rem;
+  background: #E1B382;
+  color: #0D0C1D;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.skeletonCard {
+  background: rgba(13, 12, 29, 0.6);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(225, 179, 130, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeletonLine,
+.skeletonLineShort,
+.skeletonButton {
+  background: linear-gradient(90deg, rgba(225, 179, 130, 0.1), rgba(225, 179, 130, 0.25), rgba(225, 179, 130, 0.1));
+  border-radius: 8px;
+  animation: shimmer 1.6s infinite;
+}
+
+.skeletonLine {
+  height: 16px;
+  width: 100%;
+}
+
+.skeletonLineShort {
+  height: 12px;
+  width: 70%;
+}
+
+.skeletonButton {
+  height: 36px;
+  width: 45%;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+@media (max-width: 900px) {
   .conteudoSobreposto {
-    padding: 2rem 1rem;
+    padding: 2.5rem 1.5rem 3rem;
+  }
+
+  .heroHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heroCtaBlock {
+    align-items: flex-start;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
-
-
-/* OBS: Os estilos .editPageContainer, .editPageLayout, .avatarSection, .formSection, etc.
-   foram MOVIDOS para EditarPerfilPage.module.css */
+@media (prefers-reduced-motion: reduce) {
+  .heroPrimaryButton,
+  .heroSecondaryButton,
+  .actionButtonPrimary,
+  .actionButtonSecondary,
+  .actionButtonTertiary,
+  .skeletonLine,
+  .skeletonLineShort,
+  .skeletonButton {
+    transition: none;
+    animation: none;
+  }
+}
