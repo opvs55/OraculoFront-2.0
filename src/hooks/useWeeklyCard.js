@@ -1,15 +1,15 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../supabaseClient';
 import { sortearUmaCarta } from '../services/tarotService';
 import { baralhoDetalhado } from '../tarotDeck';
 
-const getWeekStart = (date = new Date()) => {
+const getWeekStartUtc = (date = new Date()) => {
   const start = new Date(date);
-  const day = start.getDay();
+  const day = start.getUTCDay();
   const diff = (day === 0 ? -6 : 1) - day;
-  start.setDate(start.getDate() + diff);
-  start.setHours(0, 0, 0, 0);
+  start.setUTCDate(start.getUTCDate() + diff);
+  start.setUTCHours(0, 0, 0, 0);
   return start;
 };
 
@@ -28,39 +28,112 @@ const resolveCardDetails = (record) => {
 
 export function useWeeklyCard(userId) {
   const queryClient = useQueryClient();
-  const weekStart = useMemo(() => formatWeekStart(getWeekStart()), []);
+  const weekStart = useMemo(() => formatWeekStart(getWeekStartUtc()), []);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [session, setSession] = useState(null);
+  const [isSessionLoading, setIsSessionLoading] = useState(true);
+  const shouldLog = import.meta.env.DEV;
 
   const queryKey = ['weeklyCard', userId, weekStart];
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (!isMounted) return;
+      if (error) {
+        if (shouldLog) {
+          console.error('[WeeklyCard] supabase error', error);
+        }
+      }
+      setSession(data.session ?? null);
+      setIsSessionLoading(false);
+    };
+
+    loadSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      if (!isMounted) return;
+      setSession(nextSession);
+      setIsSessionLoading(false);
+    });
+
+    return () => {
+      isMounted = false;
+      authListener?.subscription?.unsubscribe();
+    };
+  }, [shouldLog]);
+
+  useEffect(() => {
+    if (shouldLog) {
+      console.log('[WeeklyCard] sessionUser', session?.user?.id, 'userId', userId, 'weekStart', weekStart);
+    }
+  }, [session?.user?.id, userId, weekStart, shouldLog]);
+
+  const logSupabaseError = (error) => {
+    if (shouldLog && error) {
+      console.error('[WeeklyCard] supabase error', error);
+    }
+  };
+
+  const getFriendlyErrorMessage = (error) => {
+    if (!error) return null;
+    if (error.status === 403 || error.code === '42501') {
+      return 'Sua sessão expirou. Faça login novamente.';
+    }
+    if (error.message === 'Sessão não encontrada.') {
+      return 'Sua sessão expirou. Faça login novamente.';
+    }
+    return 'Não foi possível carregar sua carta da semana.';
+  };
+
+  const fetchWeeklyRecord = async () => {
+    const { data, error } = await supabase
+      .from('weekly_cards')
+      .select('id, week_start, card_id, card_name, created_at, metadata')
+      .eq('user_id', userId)
+      .eq('week_start', weekStart)
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (error) {
+      logSupabaseError(error);
+      throw error;
+    }
+    return data?.[0] ?? null;
+  };
 
   const { data: weeklyRecord, isLoading } = useQuery({
     queryKey,
     queryFn: async () => {
       if (!userId) return null;
-      const { data, error } = await supabase
-        .from('weekly_cards')
-        .select('id, week_start, card_id, card_name, created_at, metadata')
-        .eq('user_id', userId)
-        .eq('week_start', weekStart)
-        .maybeSingle();
-
-      if (error) throw error;
-      return data;
+      return fetchWeeklyRecord();
     },
     enabled: !!userId,
+    onSuccess: () => {
+      setErrorMessage(null);
+    },
+    onError: (error) => {
+      logSupabaseError(error);
+      setErrorMessage(getFriendlyErrorMessage(error));
+    },
   });
 
   const mutation = useMutation({
     mutationFn: async () => {
       if (!userId) throw new Error('Usuário não autenticado.');
+      setErrorMessage(null);
 
-      const { data: existing, error: existingError } = await supabase
-        .from('weekly_cards')
-        .select('id, week_start, card_id, card_name, created_at, metadata')
-        .eq('user_id', userId)
-        .eq('week_start', weekStart)
-        .maybeSingle();
+      if (!session) {
+        const { data } = await supabase.auth.getSession();
+        if (!data.session) {
+          throw new Error('Sessão não encontrada.');
+        }
+        setSession(data.session);
+      }
 
-      if (existingError) throw existingError;
+      const existing = await fetchWeeklyRecord();
       if (existing) return existing;
 
       const [drawnCard] = sortearUmaCarta();
@@ -70,7 +143,6 @@ export function useWeeklyCard(userId) {
       const { data, error } = await supabase
         .from('weekly_cards')
         .insert({
-          user_id: userId,
           week_start: weekStart,
           card_id: cardDetails.id,
           card_name: cardDetails.nome,
@@ -81,11 +153,22 @@ export function useWeeklyCard(userId) {
         .select('id, week_start, card_id, card_name, created_at, metadata')
         .single();
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === '23505') {
+          return fetchWeeklyRecord();
+        }
+        logSupabaseError(error);
+        throw error;
+      }
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.setQueryData(queryKey, data ?? null);
       queryClient.invalidateQueries({ queryKey });
+    },
+    onError: (error) => {
+      logSupabaseError(error);
+      setErrorMessage(getFriendlyErrorMessage(error));
     },
   });
 
@@ -95,9 +178,11 @@ export function useWeeklyCard(userId) {
     weekStart,
     weeklyRecord,
     cardDetails,
-    revealAllowed: !weeklyRecord && !isLoading,
+    revealAllowed: !!userId && !isSessionLoading && !weeklyRecord && !isLoading,
     revealCard: mutation.mutate,
     isRevealing: mutation.isPending,
-    isLoading,
+    isSessionLoading,
+    isLoading: isLoading || isSessionLoading,
+    errorMessage,
   };
 }
