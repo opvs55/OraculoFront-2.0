@@ -8,7 +8,6 @@ import { AuthProvider } from './context/AuthContext';
 
 // Importamos os componentes visuais
 import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
 import AppRoutes from './routes/AppRoutes';
 
 // Importamos o estilo global
@@ -34,8 +33,6 @@ function App() {
         <main className="content-container">
           <AppRoutes />
         </main>
-
-        <Footer />
 
       </BrowserRouter>
     </AuthProvider>

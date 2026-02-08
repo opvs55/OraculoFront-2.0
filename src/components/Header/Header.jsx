@@ -1,20 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { NavLink, Link, useLocation } from 'react-router-dom';
+import { useAutoHideHeader } from '../../hooks/useAutoHideHeader';
 import styles from './Header.module.css';
 
 function Header() {
-  const { user, loading, signOut } = useAuth(); 
+  const { user, loading, signOut } = useAuth();
   const location = useLocation();
   const isWelcome = location.pathname === '/';
   const isInternal = Boolean(user) && !isWelcome;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const accountRef = useRef(null);
+  const { isHidden, reveal } = useAutoHideHeader(isInternal);
 
   const handleToggleMenu = () => setIsMenuOpen((prev) => !prev);
   const handleCloseMenu = () => setIsMenuOpen(false);
+
+  const accountInitial = useMemo(() => {
+    const name = user?.user_metadata?.full_name || user?.email || '';
+    return name ? name.trim().charAt(0).toUpperCase() : 'U';
+  }, [user]);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsAccountOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isAccountOpen) return;
+    const handleClickOutside = (event) => {
+      if (accountRef.current && !accountRef.current.contains(event.target)) {
+        setIsAccountOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isAccountOpen]);
+
+  useEffect(() => {
+    if (isMenuOpen || isAccountOpen) reveal();
+  }, [isMenuOpen, isAccountOpen, reveal]);
   
   return (
-    <header className={`${styles.header} ${isWelcome ? styles.headerWelcome : ''} ${isInternal ? styles.headerInternal : ''}`}>
+    <header
+      className={`${styles.header} ${isWelcome ? styles.headerWelcome : ''} ${isInternal ? styles.headerInternal : ''} ${isInternal && isHidden && !isMenuOpen && !isAccountOpen ? styles.headerHidden : ''}`}
+    >
       {/* Navegação Esquerda */}
       <nav className={`${styles.nav} ${styles.navLeft}`} aria-label="Navegação principal">
         {isInternal && (
@@ -52,8 +83,18 @@ function Header() {
             >
               Comunidade
             </NavLink>
-            
-            {/* "Numerologia" foi REMOVIDA DAQUI */}
+            <NavLink 
+              to="/numerologia" 
+              className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+            >
+              Numerologia
+            </NavLink>
+            <NavLink 
+              to="/perfil/editar" 
+              className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+            >
+              Perfil
+            </NavLink>
           </>
         )}
       {/* Placeholder para manter layout quando deslogado */}
@@ -79,32 +120,26 @@ function Header() {
                 <span className={styles.ctaShort}>Leitura</span>
               </Link>
             )}
-            {/* --- "Numerologia" MOVIDA PARA A DIREITA (apenas se logado) --- */}
-            {user && (
-              <NavLink 
-                to="/numerologia" 
-                className={({ isActive }) => 
-                  isActive 
-                  ? `${styles.numerologyButton} ${styles.numerologyActive}` 
-                  : styles.numerologyButton
-                }
-              >
-                Numerologia
-              </NavLink>
-            )}
-            {/* --- FIM DA MUDANÇA --- */}
-
             {/* Links/Botões de Autenticação/Perfil */}
             {user ? (
-              <>
-                <Link to="/perfil/editar" className={styles.profileButton}>
-                  Perfil
-                </Link>
-                {/* "Meu Grimório" foi REMOVIDO DAQUI */}
-                <button onClick={signOut} className={styles.logoutButton}>
-                  Sair
+              <div className={styles.accountWrapper} ref={accountRef}>
+                <button
+                  type="button"
+                  className={styles.accountButton}
+                  onClick={() => setIsAccountOpen((prev) => !prev)}
+                  aria-haspopup="menu"
+                  aria-expanded={isAccountOpen}
+                >
+                  <span>{accountInitial}</span>
                 </button>
-              </>
+                {isAccountOpen && (
+                  <div className={styles.accountMenu} role="menu">
+                    <button type="button" role="menuitem" onClick={signOut}>
+                      Sair
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <NavLink 

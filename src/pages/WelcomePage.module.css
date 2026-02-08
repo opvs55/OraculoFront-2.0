@@ -1,3 +1,9 @@
+.welcomePage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .welcomeContainer {
   --color-bg-overlay: rgba(0, 0, 0, 0.18);
   --color-card-bg: rgba(13, 12, 29, 0.82);
@@ -12,7 +18,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 120px);
   padding: 2rem;
   text-align: center;
   color: var(--color-text);
@@ -78,85 +84,25 @@
   margin-bottom: 2.5rem;
 }
 
-.primaryCtaGroup {
+.monologue {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #e4dbd2;
 }
 
-.ctaButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: var(--color-gold);
-  color: #0D0C1D;
-  padding: 1rem 2.8rem;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.2rem;
-  font-family: 'Cinzel', serif;
-  box-shadow: 0 8px 25px rgba(225, 179, 130, 0.35);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-  min-height: 52px;
-}
-
-.ctaButton:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 30px var(--color-gold-soft);
-  filter: brightness(1.02);
-}
-
-.ctaButton:active {
-  transform: translateY(0) scale(0.99);
-  box-shadow: 0 6px 16px rgba(225, 179, 130, 0.3);
-}
-
-.ctaButton:focus-visible {
-  outline: 3px solid rgba(255, 255, 255, 0.9);
-  outline-offset: 3px;
-}
-
-.ctaMicrocopy {
-  font-size: 0.95rem;
-  color: #f5e6d0;
-  letter-spacing: 0.02em;
-}
-
-.secondaryActions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 2rem;
-}
-
-.secondaryButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.7rem 1.6rem;
-  border-radius: 999px;
-  border: 1px solid rgba(225, 179, 130, 0.4);
-  color: var(--color-text);
+.monologueLink {
+  align-self: center;
+  color: var(--color-gold);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.98rem;
-  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-  min-height: 44px;
 }
 
-.secondaryButton:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold);
-  transform: translateY(-1px);
-}
-
-.secondaryButton:focus-visible {
-  outline: 2px solid rgba(225, 179, 130, 0.9);
-  outline-offset: 3px;
+.monologueLink:hover {
+  text-decoration: underline;
 }
 
 .trustSignals {
@@ -183,15 +129,6 @@
   .subtitle {
     font-size: 1.1rem;
     margin-bottom: 2rem;
-  }
-
-  .secondaryActions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .secondaryButton {
-    width: 100%;
   }
 
   .trustSignals {

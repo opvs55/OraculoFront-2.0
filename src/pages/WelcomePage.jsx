@@ -1,5 +1,6 @@
 import React, { useState } from 'react'; 
 import { Link } from 'react-router-dom';
+import Footer from '../components/Footer/Footer';
 import styles from './WelcomePage.module.css';
 
 // A lista de vídeos
@@ -21,52 +22,52 @@ function WelcomePage() {
   // --- FIM DA LÓGICA DO LOOPING ---
 
   return (
-    <div className={styles.welcomeContainer}>
-      
-      <video 
-        key={videoAtualIndex} 
-        autoPlay 
-        muted 
-        playsInline 
-        onEnded={handleVideoEnd} // <-- O "loop" é ativado aqui
-        className={styles.videoFundo}
-      >
-        <source src={listaDeVideos[videoAtualIndex]} type="video/mp4" />
-        Seu navegador não suporta o elemento de vídeo.
-      </video>
-      
-      <div className={styles.videoOverlay}></div>
+    <div className={styles.welcomePage}>
+      <div className={styles.welcomeContainer}>
+        <video 
+          key={videoAtualIndex} 
+          autoPlay 
+          muted 
+          playsInline 
+          onEnded={handleVideoEnd} // <-- O "loop" é ativado aqui
+          className={styles.videoFundo}
+        >
+          <source src={listaDeVideos[videoAtualIndex]} type="video/mp4" />
+          Seu navegador não suporta o elemento de vídeo.
+        </video>
+        
+        <div className={styles.videoOverlay}></div>
 
-      <div className={styles.content}>
-        <div className={styles.heroCard}>
-          <h1 className={styles.mainTitle}>ESOTERICON</h1>
-          <p className={styles.subtitle}>
-            Descubra respostas com leituras guiadas e conteúdo esotérico curado para sua jornada espiritual.
-          </p>
+        <div className={styles.content}>
+          <div className={styles.heroCard}>
+            <h1 className={styles.mainTitle}>ESOTERICON</h1>
+            <p className={styles.subtitle}>
+              Descubra respostas com leituras guiadas e conteúdo esotérico curado para sua jornada espiritual.
+            </p>
 
-          <div className={styles.primaryCtaGroup}>
-            <Link to="/tarot" className={styles.ctaButton}>
-              Fazer minha leitura
-            </Link>
-            <span className={styles.ctaMicrocopy}>Leva ~3 min</span>
-          </div>
+            <div className={styles.monologue}>
+              <p>
+                Aqui, cada leitura é um convite ao silêncio interno: um espaço para ouvir símbolos,
+                perceber padrões e transformar perguntas em direção.
+              </p>
+              <p>
+                O ESOTERICON foi criado para guiar sua jornada com beleza, profundidade e respeito —
+                uma experiência íntima de autoconhecimento, sem pressa, sem ruído.
+              </p>
+              <Link to="/tarot" className={styles.monologueLink}>
+                Iniciar minha leitura agora
+              </Link>
+            </div>
 
-          <div className={styles.secondaryActions}>
-            <Link to="/numerologia" className={styles.secondaryButton}>
-              Análise Numerológica
-            </Link>
-            <Link to="/biblioteca" className={styles.secondaryButton}>
-              Biblioteca de Cartas
-            </Link>
-          </div>
-
-          <div className={styles.trustSignals}>
-            <span>+2.000 leituras realizadas</span>
-            <span>Privacidade garantida</span>
-            <span>Resposta imediata</span>
+            <div className={styles.trustSignals}>
+              <span>+2.000 leituras realizadas</span>
+              <span>Privacidade garantida</span>
+              <span>Resposta imediata</span>
+            </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { formatRelativeDate } from '../../../utils/formatRelativeDate';
+import { getQuestionText } from '../../../utils/getQuestionText';
 import LoadingSkeleton from './LoadingSkeleton';
 import EmptyState from './EmptyState';
 import ErrorState from './ErrorState';
@@ -56,7 +57,9 @@ function ContinueReadingSection({ readings, isLoading, isError, onRetry }) {
           <article key={reading.id} className={styles.readingCard}>
             <div>
               <h3 className={styles.readingTitle}>
-                {reading.shared_title || reading.question || 'Leitura sem título'}
+                {reading.shared_title
+                  || getQuestionText(reading.question, reading.spread_type)
+                  || 'Leitura sem título'}
               </h3>
               <div className={styles.readingMeta}>
                 <span>{formatRelativeDate(reading.created_at)}</span>

@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useUserProfile } from '../../hooks/useUserProfile'; 
 import { useRecentReadings } from '../../hooks/useRecentReadings';
 import { formatRelativeDate } from '../../utils/formatRelativeDate';
+import { getCardOfTheWeekLabel } from '../../utils/getCardOfTheWeekLabel';
 import LoggedHeroCard from './LoggedHome/LoggedHeroCard';
 import ContinueReadingSection from './LoggedHome/ContinueReadingSection';
 import QuickActionsGrid from './LoggedHome/QuickActionsGrid';
@@ -29,10 +30,10 @@ function MeuGrimorioPage() {
     return formatRelativeDate(recentReadings[0].created_at);
   }, [recentReadings]);
 
-  const cardOfTheWeek = profile?.card_of_the_week?.name
-    || profile?.card_of_the_week_name
-    || profile?.card_of_the_week
-    || 'Ainda não definida';
+  const cardOfTheWeek = useMemo(
+    () => getCardOfTheWeekLabel(profile?.card_of_the_week || profile?.card_of_the_week_name),
+    [profile?.card_of_the_week, profile?.card_of_the_week_name],
+  );
 
   const publicReadingsCount = profile?.public_readings_count;
 
