@@ -14,9 +14,19 @@ function NumerologyPage() {
 
   // O hook de dados (sem alterações)
   const {
-    numerologyData, isLoadingReading, errorLoadingReading, refetchReading,
-    calculateNumerology, isCalculating, errorCalculating, isSuccessCalculating, resetCalculationState,
-    resetNumerology, isResetting, errorResetting, isSuccessResetting, resetResetState
+    numerologyData,
+    isLoadingReading,
+    errorLoadingReading,
+    refetchReading,
+    calculateNumerology,
+    isCalculating,
+    errorCalculating,
+    resetCalculationState,
+    resetNumerology,
+    isResetting,
+    errorResetting,
+    isSuccessResetting,
+    resetResetState,
   } = useNumerologyReading();
 
   // Efeito para limpar o formulário (sem alterações)
@@ -28,26 +38,37 @@ function NumerologyPage() {
   }, [isSuccessResetting]);
 
   // Handler para submeter form (calcular)
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
     setFormError(null);
     resetCalculationState();
     resetResetState();
 
-    if (!birthDate) { setFormError("Insira sua data."); return; }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) { setFormError("Formato inválido."); return; }
+    if (!birthDate) {
+      setFormError('Insira sua data.');
+      return;
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) {
+      setFormError('Formato inválido.');
+      return;
+    }
 
     if (user) {
       calculateNumerology({ birthDate, user });
     } else {
-      setFormError("Você precisa estar logado para calcular.");
+      setFormError('Você precisa estar logado para calcular.');
     }
   };
 
   // Handler para resetar leitura
   const handleResetReading = () => {
-    if (!user) { alert("Você precisa estar logado."); return; }
-    if (window.confirm("Tem certeza que deseja apagar sua leitura? Poderá calcular uma nova.")) {
+    if (!user) {
+      alert('Você precisa estar logado.');
+      return;
+    }
+    if (
+      window.confirm('Tem certeza que deseja apagar sua leitura? Poderá calcular uma nova.')
+    ) {
       resetNumerology({ user });
     }
   };
@@ -64,7 +85,7 @@ function NumerologyPage() {
   };
 
   // --- Renderização Principal da Página ---
-  
+
   // Função interna para decidir o que renderizar
   const renderContent = () => {
     // 1. Loading
@@ -78,9 +99,7 @@ function NumerologyPage() {
     if (combinedError) {
       return (
         <div className={styles.errorContainer}>
-          <p className={styles.errorMessage}>
-            Ocorreu um erro: {combinedError.message}
-          </p>
+          <p className={styles.errorMessage}>Ocorreu um erro: {combinedError.message}</p>
           <button onClick={handleRetry} className={styles.secondaryButton}>
             Tentar Novamente
           </button>
@@ -118,8 +137,10 @@ function NumerologyPage() {
     <div className={`content_wrapper ${styles.pageContainer}`}>
       <div className={styles.content}>
         <h1 className={styles.mainTitle}>Numerologia Pessoal</h1>
-        <p className={styles.subtitle}>Descubra os números que guiam sua jornada através da sua data de nascimento.</p>
-        
+        <p className={styles.subtitle}>
+          Descubra os números que guiam sua jornada através da sua data de nascimento.
+        </p>
+
         {/* Renderiza o conteúdo (Loading, Erro, Form ou Resultados) */}
         {renderContent()}
       </div>

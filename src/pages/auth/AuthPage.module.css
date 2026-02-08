@@ -11,26 +11,43 @@
   border-radius: 12px;
   border: 1px solid #C36E97;
 }
+
+.authPageWrapper {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .title {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-size: 2.5rem;
 }
+
+.subtitle {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #c7c7c7;
+  line-height: 1.5;
+}
+
 .form {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
+
 .inputGroup {
   display: flex;
   flex-direction: column;
   text-align: left;
 }
+
 .inputGroup label {
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
   color: #c7c7c7;
 }
+
 .inputGroup input {
   background: #0D0C1D;
   border: 1px solid #2c2c54;
@@ -39,6 +56,38 @@
   border-radius: 8px;
   font-size: 1rem;
 }
+
+.inputWithAction {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWithAction input {
+  width: 100%;
+  padding-right: 5.5rem;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: #E1B382;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.passwordToggle:hover {
+  color: #d1a372;
+}
+
+.helperText {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: #9fa0b0;
+}
+
 .button {
   background-color: #E1B382;
   color: #0D0C1D;
@@ -50,8 +99,16 @@
   font-size: 1.1rem;
   transition: background-color 0.3s;
 }
-.button:disabled { background-color: #555; cursor: not-allowed; }
-.button:hover:not(:disabled) { background-color: #d1a372; }
+
+.button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.button:hover:not(:disabled) {
+  background-color: #d1a372;
+}
+
 .error {
   color: #ff8a80;
   background-color: rgba(255, 138, 128, 0.1);
@@ -61,6 +118,31 @@
   text-align: center;
   margin-top: 1.5rem;
 }
+
+.successMessage {
+  margin-top: 1rem;
+  padding: 10px;
+  background: #d4edda;
+  color: #155724;
+  border-radius: 4px;
+  border: 1px solid #c3e6cb;
+  text-align: center;
+}
+
+.success {
+  margin-top: 1rem;
+  color: #7ee081;
+  text-align: center;
+}
+
+.linksContainer {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .link {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }

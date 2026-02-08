@@ -7,14 +7,14 @@ import styles from '../../pages/NumerologyPage.module.css'; // Reutiliza os esti
 const renderFormattedText = (text) => {
   if (!text) return null; // Retorna null em vez de <p> para não renderizar secções vazias
   const regex = /\*\*(.*?)\*\*/g;
-  
+
   // Adiciona a classe meaningText aqui
   return (
     <div className={styles.meaningText}>
       {text.split('\n').map((paragraph, pIndex) => {
         const trimmedParagraph = paragraph.trim();
         if (!trimmedParagraph) return null;
-        
+
         const parts = trimmedParagraph.split(regex);
         return (
           <p key={pIndex}>
@@ -30,22 +30,33 @@ const renderFormattedText = (text) => {
 
 // --- Componente de Resultados ---
 function NumerologyResults({ resultData, onReset, isResetting, errorResetting }) {
-
   // --- 1. Lógica de Parsing (Caminho de Vida) ---
   const lifePathParts = {
     essence: resultData?.life_path_meaning?.split('* **')[0]?.trim() || '',
-    light: resultData?.life_path_meaning?.match(/\* \*\*Luz:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() || '',
-    shadow: resultData?.life_path_meaning?.match(/\* \*\*Sombra:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() || '',
-    mission: resultData?.life_path_meaning?.match(/\* \*\*Missão:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() || ''
+    light:
+      resultData?.life_path_meaning?.match(/\* \*\*Luz:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() ||
+      '',
+    shadow:
+      resultData?.life_path_meaning?.match(/\* \*\*Sombra:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() ||
+      '',
+    mission:
+      resultData?.life_path_meaning?.match(/\* \*\*Missão:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() ||
+      '',
   };
   // Limpeza extra (como no teu original)
-  if (lifePathParts.light.startsWith('Luz:**')) lifePathParts.light = lifePathParts.light.substring(6).trim();
-  if (lifePathParts.shadow.startsWith('Sombra:**')) lifePathParts.shadow = lifePathParts.shadow.substring(9).trim();
-  if (lifePathParts.mission.startsWith('Missão:**')) lifePathParts.mission = lifePathParts.mission.substring(9).trim();
+  if (lifePathParts.light.startsWith('Luz:**')) {
+    lifePathParts.light = lifePathParts.light.substring(6).trim();
+  }
+  if (lifePathParts.shadow.startsWith('Sombra:**')) {
+    lifePathParts.shadow = lifePathParts.shadow.substring(9).trim();
+  }
+  if (lifePathParts.mission.startsWith('Missão:**')) {
+    lifePathParts.mission = lifePathParts.mission.substring(9).trim();
+  }
 
   // --- 2. Lógica de Parsing (Data) ---
   const dateStr = resultData?.input_birth_date;
-  const dateObj = dateStr ? new Date(dateStr + 'T00:00:00') : null;
+  const dateObj = dateStr ? new Date(`${dateStr}T00:00:00`) : null;
   const isValidDate = dateObj instanceof Date && !isNaN(dateObj.getTime());
   const formattedDate = isValidDate ? dateObj.toLocaleString('pt-BR') : 'Data Inválida';
   const dayOfMonth = isValidDate ? dateObj.getDate() : 'NaN';
@@ -60,24 +71,25 @@ function NumerologyResults({ resultData, onReset, isResetting, errorResetting })
     try {
       // Tenta parsear como JSON (novo formato)
       archetypeData = JSON.parse(rawArchetypeText);
-    } catch (e) {
+    } catch (error) {
       // Falhou? É texto antigo (retrocompatibilidade)
       // ou um JSON de erro do backend
       if (rawArchetypeText.startsWith('{"error":')) {
-         archetypeParseError = JSON.parse(rawArchetypeText).error;
+        archetypeParseError = JSON.parse(rawArchetypeText).error;
       } else {
-         // É só texto antigo
-         archetypeData = { 
-           archetype_title: "O Arquétipo do Seu Dia de Nascimento",
-           archetype_description: rawArchetypeText,
-           // Define os outros campos como null para não renderizar
-           numerology_details: null,
-           tarot_card: null,
-           advice: null,
-           strengths: [],
-           weaknesses: []
-         };
+        // É só texto antigo
+        archetypeData = {
+          archetype_title: 'O Arquétipo do Seu Dia de Nascimento',
+          archetype_description: rawArchetypeText,
+          // Define os outros campos como null para não renderizar
+          numerology_details: null,
+          tarot_card: null,
+          advice: null,
+          strengths: [],
+          weaknesses: [],
+        };
       }
+      console.warn('Falha ao interpretar o JSON do arquétipo:', error);
     }
   }
 
@@ -98,36 +110,37 @@ function NumerologyResults({ resultData, onReset, isResetting, errorResetting })
     // Se é texto antigo, usa o estilo antigo
     if (!archetypeData.numerology_details) {
       return (
-         <div className={`${styles.resultCard} ${styles.secretMeaningCard}`}>
-           <h3 className={styles.cardTitle}>{archetypeData.archetype_title}</h3>
-           <div className={styles.cardSubSection}>
-             {renderFormattedText(archetypeData.archetype_description)}
-           </div>
-         </div>
+        <div className={`${styles.resultCard} ${styles.secretMeaningCard}`}>
+          <h3 className={styles.cardTitle}>{archetypeData.archetype_title}</h3>
+          <div className={styles.cardSubSection}>
+            {renderFormattedText(archetypeData.archetype_description)}
+          </div>
+        </div>
       );
     }
 
     // --- Se for JSON (NOVO LAYOUT DE GRELHA) ---
     return (
       <div className={`${styles.resultCard} ${styles.secretMeaningCard}`}>
-        <h3 className={styles.cardTitle}>{archetypeData.archetype_title || "O Arquétipo do Seu Dia de Nascimento"}</h3>
-        
+        <h3 className={styles.cardTitle}>
+          {archetypeData.archetype_title || 'O Arquétipo do Seu Dia de Nascimento'}
+        </h3>
+
         {/* Container da Grelha */}
         <div className={styles.archetypeGridContainer}>
-          
           {/* Coluna Principal (Esquerda) */}
           <div className={styles.archetypeMain}>
             <div className={styles.archetypeSection}>
               {renderFormattedText(archetypeData.archetype_description)}
             </div>
-            
+
             {archetypeData.numerology_details && (
               <div className={styles.archetypeSection}>
                 <h4>Numerologia e Planetas</h4>
                 {renderFormattedText(archetypeData.numerology_details)}
               </div>
             )}
-            
+
             {archetypeData.tarot_card && (
               <div className={styles.archetypeSection}>
                 <h4>Tarot</h4>
@@ -135,7 +148,7 @@ function NumerologyResults({ resultData, onReset, isResetting, errorResetting })
               </div>
             )}
           </div>
-          
+
           {/* Coluna Lateral (Direita) */}
           <div className={styles.archetypeSidebar}>
             {archetypeData.advice && (
@@ -144,31 +157,33 @@ function NumerologyResults({ resultData, onReset, isResetting, errorResetting })
                 {renderFormattedText(archetypeData.advice)}
               </div>
             )}
-            
+
             {archetypeData.strengths?.length > 0 && (
               <div className={`${styles.archetypeListCard} ${styles.strengthsCard}`}>
                 <h5>Pontos Fortes</h5>
                 <ul className={styles.archetypeList}>
-                  {archetypeData.strengths.map((item, i) => <li key={i}>{item}</li>)}
+                  {archetypeData.strengths.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
                 </ul>
               </div>
             )}
-            
+
             {archetypeData.weaknesses?.length > 0 && (
               <div className={`${styles.archetypeListCard} ${styles.weaknessesCard}`}>
                 <h5>Pontos Fracos</h5>
                 <ul className={styles.archetypeList}>
-                  {archetypeData.weaknesses.map((item, i) => <li key={i}>{item}</li>)}
+                  {archetypeData.weaknesses.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
                 </ul>
               </div>
             )}
           </div>
-          
-        </div> {/* Fim .archetypeGridContainer */}
+        </div>
       </div>
     );
   };
-
 
   // --- Renderização Principal dos Resultados ---
   return (
@@ -179,7 +194,9 @@ function NumerologyResults({ resultData, onReset, isResetting, errorResetting })
       <div className={styles.resultContent}>
         <h2 className={styles.resultTitle}>Sua Análise Numerológica</h2>
         <p className={styles.resultDate}>Data Analisada: {formattedDate}</p>
-        {resultData?.warning && <p className={styles.warningMessage}>{resultData.warning}</p>}
+        {resultData?.warning && (
+          <p className={styles.warningMessage}>{resultData.warning}</p>
+        )}
 
         {/* Card: Caminho de Vida (sempre primeiro) */}
         <div className={`${styles.resultCard} ${styles.lifePathCard}`}>
@@ -190,32 +207,57 @@ function NumerologyResults({ resultData, onReset, isResetting, errorResetting })
             <h4>Essência da Jornada:</h4>
             {renderFormattedText(lifePathParts.essence)}
           </div>
-          {lifePathParts.light && (<div className={styles.cardSubSection}> <h4 className={styles.lightTitle}>Luz:</h4> {renderFormattedText(lifePathParts.light)} </div>)}
-          {lifePathParts.shadow && (<div className={styles.cardSubSection}> <h4 className={styles.shadowTitle}>Sombra:</h4> {renderFormattedText(lifePathParts.shadow)} </div>)}
-          {lifePathParts.mission && (<div className={styles.cardSubSection}> <h4 className={styles.missionTitle}>Missão:</h4> {renderFormattedText(lifePathParts.mission)} </div>)}
+          {lifePathParts.light && (
+            <div className={styles.cardSubSection}>
+              <h4 className={styles.lightTitle}>Luz:</h4>
+              {renderFormattedText(lifePathParts.light)}
+            </div>
+          )}
+          {lifePathParts.shadow && (
+            <div className={styles.cardSubSection}>
+              <h4 className={styles.shadowTitle}>Sombra:</h4>
+              {renderFormattedText(lifePathParts.shadow)}
+            </div>
+          )}
+          {lifePathParts.mission && (
+            <div className={styles.cardSubSection}>
+              <h4 className={styles.missionTitle}>Missão:</h4>
+              {renderFormattedText(lifePathParts.mission)}
+            </div>
+          )}
         </div>
 
         {/* Card: Número do Aniversário */}
         <div className={`${styles.resultCard} ${styles.birthdayCard}`}>
-          <h3 className={styles.cardTitle}>Número do Aniversário: {resultData?.birthday_number ?? 'N/A'} (Dia {dayOfMonth})</h3>
+          <h3 className={styles.cardTitle}>
+            Número do Aniversário: {resultData?.birthday_number ?? 'N/A'} (Dia{' '}
+            {dayOfMonth})
+          </h3>
           <div className={styles.cardSubSection}>
             {renderFormattedText(resultData?.birthday_meaning || 'Significado não disponível.')}
           </div>
         </div>
-        
+
         {/* Card: Significado Secreto (Agora com Grelha) */}
         {renderArchetypeCard()}
-
-      </div> {/* Fim .resultContent */}
+      </div>
 
       {/* Botão Reset */}
       <div className={styles.resultActions}>
-        <button onClick={onReset} className={styles.resetButton} disabled={isResetting}>
+        <button
+          onClick={onReset}
+          className={styles.resetButton}
+          disabled={isResetting}
+        >
           {isResetting ? 'Apagando...' : 'Apagar Leitura (Resetar)'}
         </button>
       </div>
-      {errorResetting && <p className={`${styles.errorMessage} ${styles.resetError}`}>Erro ao apagar: {errorResetting.message}</p>}
-    </div> // Fim .resultsContainer
+      {errorResetting && (
+        <p className={`${styles.errorMessage} ${styles.resetError}`}>
+          Erro ao apagar: {errorResetting.message}
+        </p>
+      )}
+    </div>
   );
 }
 

@@ -42,9 +42,12 @@ const parseLifePathMeaning = (lifePathMeaning) => {
   if (!lifePathMeaning) return null;
   const parts = {
     essence: lifePathMeaning.split('* **')[0]?.trim() || '',
-    light: lifePathMeaning.match(/\* \*\*Luz:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() || '',
-    shadow: lifePathMeaning.match(/\* \*\*Sombra:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() || '',
-    mission: lifePathMeaning.match(/\* \*\*Missão:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() || ''
+    light:
+      lifePathMeaning.match(/\* \*\*Luz:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() || '',
+    shadow:
+      lifePathMeaning.match(/\* \*\*Sombra:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() || '',
+    mission:
+      lifePathMeaning.match(/\* \*\*Missão:\*\*(.*?)(?=\* \*\*|$)/s)?.[1]?.trim() || '',
   };
   if (parts.light.startsWith('Luz:**')) parts.light = parts.light.substring(6).trim();
   if (parts.shadow.startsWith('Sombra:**')) parts.shadow = parts.shadow.substring(9).trim();
@@ -62,21 +65,21 @@ const parseArchetype = (birthdaySecretMeaning) => {
     const data = JSON.parse(birthdaySecretMeaning);
     if (data.error) return null;
     return data;
-  } catch (e) {
+  } catch (error) {
+    console.warn('Não foi possível parsear o arquétipo:', error);
     // Fallback para texto antigo (se não for JSON)
     return {
-      archetype_title: "O Arquétipo do Dia",
+      archetype_title: 'O Arquétipo do Dia',
       archetype_description: birthdaySecretMeaning,
       // Define os outros campos como nulos para o renderArchetypeCard usar o modo simples
       numerology_details: null,
       tarot_card: null,
       advice: null,
       strengths: [],
-      weaknesses: []
+      weaknesses: [],
     };
   }
 };
-
 
 // --- 2. HOOKS DE BUSCA DE DADOS ---
 
@@ -90,11 +93,13 @@ function usePublicProfile(username) {
       if (!username) return null;
       const { data, error } = await supabase
         .from('profiles')
-        .select(`
+        .select(
+          `
           id, username, full_name, avatar_url, bio,
           minha_historia, entidade_cultuada,
           life_path_number, birthday_number
-        `)
+        `
+        )
         .eq('username', username)
         .single();
 
@@ -149,7 +154,6 @@ function usePublicNumerology(userId) {
   });
 }
 
-
 // --- 3. COMPONENTE PRINCIPAL ---
 
 function ProfilePage() {
@@ -158,7 +162,12 @@ function ProfilePage() {
   const location = useLocation();
 
   // Busca o perfil base
-  const { data: profile, isLoading: isLoadingProfile, isError, error } = usePublicProfile(username);
+  const {
+    data: profile,
+    isLoading: isLoadingProfile,
+    isError,
+    error,
+  } = usePublicProfile(username);
 
   // Obtém o ID do perfil (se existir)
   const profileId = profile?.id;
@@ -169,7 +178,7 @@ function ProfilePage() {
 
   // Função "Voltar"
   const handleBackClick = () => {
-    if (location.key !== "default") navigate(-1);
+    if (location.key !== 'default') navigate(-1);
     else navigate('/');
   };
 
@@ -218,7 +227,9 @@ function ProfilePage() {
             <div className={`${styles.archetypeListCard} ${styles.strengthsCard}`}>
               <h5>Pontos Fortes</h5>
               <ul className={styles.archetypeList}>
-                {archetypeData.strengths.map((item, i) => <li key={i}>{item}</li>)}
+                {archetypeData.strengths.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
               </ul>
             </div>
           )}
@@ -226,7 +237,9 @@ function ProfilePage() {
             <div className={`${styles.archetypeListCard} ${styles.weaknessesCard}`}>
               <h5>Pontos Fracos</h5>
               <ul className={styles.archetypeList}>
-                {archetypeData.weaknesses.map((item, i) => <li key={i}>{item}</li>)}
+                {archetypeData.weaknesses.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
               </ul>
             </div>
           )}
@@ -248,7 +261,11 @@ function ProfilePage() {
       return (
         <div className={styles.notFound}>
           <h1>Erro</h1>
-          <p>{error.message === 'Perfil não encontrado.' ? `O perfil @${username} não existe.` : 'Ocorreu um erro ao carregar o perfil.'}</p>
+          <p>
+            {error.message === 'Perfil não encontrado.'
+              ? `O perfil @${username} não existe.`
+              : 'Ocorreu um erro ao carregar o perfil.'}
+          </p>
         </div>
       );
     }
@@ -260,7 +277,6 @@ function ProfilePage() {
 
       return (
         <div className={styles.profileLayoutGrid}>
-
           {/* --- Coluna da Esquerda (Avatar e Bio) --- */}
           <aside className={styles.profileLeftColumn}>
             <img
@@ -268,12 +284,12 @@ function ProfilePage() {
               alt={`Avatar de ${profile.username}`}
               className={styles.profileAvatar}
             />
-            <h1 className={styles.profileFullName}>{profile.full_name || profile.username}</h1>
+            <h1 className={styles.profileFullName}>
+              {profile.full_name || profile.username}
+            </h1>
             <p className={styles.profileUsername}>@{profile.username}</p>
 
-            {profile.bio && (
-              <p className={styles.profileBio}>"{profile.bio}"</p>
-            )}
+            {profile.bio && <p className={styles.profileBio}>"{profile.bio}"</p>}
 
             {/* --- CARTÃO DE ESTATÍSTICAS --- */}
             <div className={styles.statsCard}>
@@ -292,12 +308,13 @@ function ProfilePage() {
             </div>
             {/* --- FIM DO CARTÃO --- */}
 
-            <button onClick={handleBackClick} className={styles.backButton}>← Voltar</button>
+            <button onClick={handleBackClick} className={styles.backButton}>
+              ← Voltar
+            </button>
           </aside>
 
           {/* --- Coluna da Direita (Números e História) --- */}
           <main className={styles.profileRightColumn}>
-
             {/* --- CARTÃO CAMINHO DE VIDA --- */}
             {lifePathParts ? (
               <section className={`${styles.profileSection} ${styles.numerologyCard}`}>
@@ -306,26 +323,54 @@ function ProfilePage() {
                   <h4>Essência da Jornada:</h4>
                   {renderFormattedText(lifePathParts.essence)}
                 </div>
-                {lifePathParts.light && (<div className={styles.cardSubSection}> <h4 className={styles.lightTitle}>Luz:</h4> {renderFormattedText(lifePathParts.light)} </div>)}
-                {lifePathParts.shadow && (<div className={styles.cardSubSection}> <h4 className={styles.shadowTitle}>Sombra:</h4> {renderFormattedText(lifePathParts.shadow)} </div>)}
-                {lifePathParts.mission && (<div className={styles.cardSubSection}> <h4 className={styles.missionTitle}>Missão:</h4> {renderFormattedText(lifePathParts.mission)} </div>)}
+                {lifePathParts.light && (
+                  <div className={styles.cardSubSection}>
+                    <h4 className={styles.lightTitle}>Luz:</h4>
+                    {renderFormattedText(lifePathParts.light)}
+                  </div>
+                )}
+                {lifePathParts.shadow && (
+                  <div className={styles.cardSubSection}>
+                    <h4 className={styles.shadowTitle}>Sombra:</h4>
+                    {renderFormattedText(lifePathParts.shadow)}
+                  </div>
+                )}
+                {lifePathParts.mission && (
+                  <div className={styles.cardSubSection}>
+                    <h4 className={styles.missionTitle}>Missão:</h4>
+                    {renderFormattedText(lifePathParts.mission)}
+                  </div>
+                )}
               </section>
             ) : (
-                // Mensagem se o user não tiver calculado numerologia
-                 profileId && !isLoadingNumerology && <section className={styles.profileSection}><p className={styles.noDataMessage}>Dados de numerologia ainda não calculados por este usuário.</p></section>
+              // Mensagem se o user não tiver calculado numerologia
+              profileId &&
+              !isLoadingNumerology && (
+                <section className={styles.profileSection}>
+                  <p className={styles.noDataMessage}>
+                    Dados de numerologia ainda não calculados por este usuário.
+                  </p>
+                </section>
+              )
             )}
 
             {/* --- CARTÃO ARQUÉTIPO --- */}
             {archetypeData ? (
               <section className={`${styles.profileSection} ${styles.archetypeCard}`}>
-                <h2>{archetypeData.archetype_title || "Arquétipo do Aniversário"}</h2>
+                <h2>{archetypeData.archetype_title || 'Arquétipo do Aniversário'}</h2>
                 {renderArchetypeCard(archetypeData)}
               </section>
             ) : (
-                // Mensagem se o user não tiver calculado OU se deu erro na IA
-                 profileId && !isLoadingNumerology && <section className={styles.profileSection}><p className={styles.noDataMessage}>Arquétipo do aniversário não disponível.</p></section>
+              // Mensagem se o user não tiver calculado OU se deu erro na IA
+              profileId &&
+              !isLoadingNumerology && (
+                <section className={styles.profileSection}>
+                  <p className={styles.noDataMessage}>
+                    Arquétipo do aniversário não disponível.
+                  </p>
+                </section>
+              )
             )}
-
 
             {/* --- Cartões Originais --- */}
             {profile.entidade_cultuada && (
@@ -346,11 +391,15 @@ function ProfilePage() {
               </section>
             )}
 
-             {/* Mensagem se não houver NADA na coluna direita */}
-             {!lifePathParts && !archetypeData && !profile.entidade_cultuada && !profile.minha_historia && (
-                 <p className={styles.noDataMessage}>Este perfil ainda não adicionou informações adicionais.</p>
-             )}
-
+            {/* Mensagem se não houver NADA na coluna direita */}
+            {!lifePathParts &&
+              !archetypeData &&
+              !profile.entidade_cultuada &&
+              !profile.minha_historia && (
+                <p className={styles.noDataMessage}>
+                  Este perfil ainda não adicionou informações adicionais.
+                </p>
+              )}
           </main>
         </div>
       );
@@ -361,9 +410,7 @@ function ProfilePage() {
   return (
     // O wrapper renderiza instantaneamente
     <div className={`content_wrapper ${styles.profileGridWrapper}`}>
-      <div className={styles.profileContainer}>
-        {renderContent()}
-      </div>
+      <div className={styles.profileContainer}>{renderContent()}</div>
     </div>
   );
 }

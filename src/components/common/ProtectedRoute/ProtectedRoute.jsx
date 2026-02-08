@@ -1,28 +1,26 @@
 // src/components/common/ProtectedRoute/ProtectedRoute.jsx
 
 import React from 'react';
-// 1. Importar o Outlet
 import { Navigate, useLocation, Outlet } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext'; // Importe o hook useAuth
+import { useAuth } from '../../../context/AuthContext';
 import Loader from '../Loader/Loader';
 
-// 2. Remover a prop { children } da função
 function ProtectedRoute() {
-  const { user, loading } = useAuth(); // Pegue o usuário E o estado de loading do contexto
+  const { user, loading, needsOnboarding } = useAuth();
   const location = useLocation();
 
-  // A tua lógica de "loading" está perfeita e mantém-se.
   if (loading) {
     return <Loader />;
   }
 
-  // A tua lógica de "não autenticado" está perfeita e mantém-se.
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // 3. Se a verificação terminou e existe um usuário, renderize o Outlet.
-  // O Outlet vai renderizar a rota filha (ex: <MeuGrimorioPage />)
+  if (needsOnboarding && !location.pathname.startsWith('/perfil/editar')) {
+    return <Navigate to="/perfil/editar" replace />;
+  }
+
   return <Outlet />;
 }
 

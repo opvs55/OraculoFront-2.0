@@ -4,21 +4,21 @@ import { supabase } from '../../supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import styles from './AuthPage.module.css';
 import Loader from '../../components/common/Loader/Loader';
-// Importamos o tradutor (embora usemos menos aqui)
 import { translateSupabaseError } from '../../utils/authErrorUtils';
+import { isEmail, normalizeIdentifier } from '../../utils/authValidation';
 
 function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    // CORREÇÃO: Redirecionar para /meu-grimorio
-    if (user) navigate('/meu-grimorio'); 
+    if (user) navigate('/meu-grimorio');
   }, [user, navigate]);
 
   const handleSubmit = async (e) => {
@@ -26,40 +26,46 @@ function LoginPage() {
     setError('');
     setLoading(true);
 
+    const normalizedIdentifier = normalizeIdentifier(identifier);
+
     try {
-      // 1. Busca o e-mail pelo username
-      const { data: userEmail, error: rpcError } = await supabase.rpc(
-        'get_email_by_username', 
-        { p_username: username }
-      );
-      
-      // Se não encontrar o usuário ou der erro na busca, mostra erro genérico
-      if (rpcError || !userEmail) {
-        // Usamos a mensagem padrão de credenciais inválidas
-        throw new Error('Invalid login credentials'); 
-      }
-      
-      // 2. Tenta o login com e-mail e senha
+      const email = isEmail(normalizedIdentifier)
+        ? normalizedIdentifier
+        : await resolveEmailByUsername(normalizedIdentifier);
+
       const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: userEmail,
-        password: password,
+        email,
+        password,
       });
 
-      // Se o login falhar, mostra o erro genérico
       if (signInError) {
-        throw signInError; // Lança o erro para ser traduzido
+        throw signInError;
       }
 
-      // Se tudo deu certo, redireciona
-      navigate('/meu-grimorio'); // CORREÇÃO: Redirecionar para /meu-grimorio
-
+      navigate('/meu-grimorio');
     } catch (err) {
-      // ALTERAÇÃO: Usamos o tradutor para garantir a mensagem padrão de login inválido
-      setError(translateSupabaseError(err)); 
-      console.error("Erro no login:", err); // Mantém o log detalhado
+      setError(translateSupabaseError(err));
+      console.error('Erro no login:', err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const resolveEmailByUsername = async (username) => {
+    if (!username) {
+      throw new Error('Invalid login credentials');
+    }
+
+    const { data: userEmail, error: rpcError } = await supabase.rpc(
+      'get_email_by_username',
+      { p_username: username }
+    );
+
+    if (rpcError || !userEmail) {
+      throw new Error('Invalid login credentials');
+    }
+
+    return userEmail;
   };
 
   if (authLoading) return <Loader />;
@@ -68,23 +74,57 @@ function LoginPage() {
     <div className="content_wrapper">
       <div className={styles.authContainer}>
         <h1 className={styles.title}>Login</h1>
+        <p className={styles.subtitle}>
+          Entre com seu e-mail ou nome de usuário para acessar sua conta.
+        </p>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
-            <label htmlFor="username">Nome de Usuário</label>
-            <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+            <label htmlFor="identifier">E-mail ou usuário</label>
+            <input
+              id="identifier"
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              autoComplete="username"
+              required
+            />
           </div>
           <div className={styles.inputGroup}>
             <label htmlFor="password">Senha</label>
-            <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <div className={styles.inputWithAction}>
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                className={styles.passwordToggle}
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? 'Ocultar' : 'Mostrar'}
+              </button>
+            </div>
           </div>
           <button type="submit" className={styles.button} disabled={loading}>
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
-        {error && <p className={styles.error}>{error}</p>}
+        {error && (
+          <p className={styles.error} role="alert">
+            {error}
+          </p>
+        )}
         <div className={styles.linksContainer}>
-          <p className={styles.link}>Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link></p>
-          <p className={styles.link}><Link to="/recuperar-senha">Esqueci minha senha</Link></p>
+          <p className={styles.link}>
+            Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
+          </p>
+          <p className={styles.link}>
+            <Link to="/recuperar-senha">Esqueci minha senha</Link>
+          </p>
         </div>
       </div>
     </div>
