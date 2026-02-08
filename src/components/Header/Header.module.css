@@ -11,6 +11,23 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.4); 
 }
 
+.headerWelcome {
+  grid-template-columns: 1fr;
+}
+
+.headerWelcome .headerCenter {
+  display: none;
+}
+
+.headerWelcome .navLeft {
+  display: none;
+}
+
+.headerWelcome .navRight {
+  grid-column: 1;
+  justify-content: center;
+}
+
 /* --- Título Central --- */
 .headerCenter {
   text-align: center;

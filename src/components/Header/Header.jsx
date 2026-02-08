@@ -1,13 +1,15 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
 
 function Header() {
   const { user, loading, signOut } = useAuth(); 
+  const location = useLocation();
+  const isWelcome = location.pathname === '/';
   
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${isWelcome ? styles.headerWelcome : ''}`}>
       {/* Navegação Esquerda */}
       <nav className={`${styles.nav} ${styles.navLeft}`}>
         {!loading && user && ( 
@@ -42,11 +44,13 @@ function Header() {
       </nav>
 
       {/* Título Central */}
-      <div className={styles.headerCenter}>
-        <Link to="/" className={styles.headerLogo}>
-          ESOTERICON
-        </Link>
-      </div>
+      {!isWelcome && (
+        <div className={styles.headerCenter}>
+          <Link to="/" className={styles.headerLogo}>
+            ESOTERICON
+          </Link>
+        </div>
+      )}
 
       {/* Navegação Direita */}
       <nav className={`${styles.nav} ${styles.navRight}`}>
