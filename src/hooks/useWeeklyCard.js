@@ -32,35 +32,43 @@ export function useWeeklyCard(userId) {
 
   const queryKey = ['weeklyCard', userId, weekStart];
 
+  const { data: session, isLoading: isSessionLoading } = useQuery({
+    queryKey: ['supabaseSession'],
+    queryFn: async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      return data.session;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const fetchWeeklyRecord = async () => {
+    const { data, error } = await supabase
+      .from('weekly_cards')
+      .select('id, week_start, card_id, card_name, created_at, metadata')
+      .eq('week_start', weekStart)
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (error) throw error;
+    return data?.[0] ?? null;
+  };
+
   const { data: weeklyRecord, isLoading } = useQuery({
     queryKey,
     queryFn: async () => {
-      if (!userId) return null;
-      const { data, error } = await supabase
-        .from('weekly_cards')
-        .select('id, week_start, card_id, card_name, created_at, metadata')
-        .eq('user_id', userId)
-        .eq('week_start', weekStart)
-        .maybeSingle();
-
-      if (error) throw error;
-      return data;
+      if (!userId || !session) return null;
+      return fetchWeeklyRecord();
     },
-    enabled: !!userId,
+    enabled: !!userId && !!session,
   });
 
   const mutation = useMutation({
     mutationFn: async () => {
       if (!userId) throw new Error('Usuário não autenticado.');
+      if (!session) throw new Error('Sessão não encontrada.');
 
-      const { data: existing, error: existingError } = await supabase
-        .from('weekly_cards')
-        .select('id, week_start, card_id, card_name, created_at, metadata')
-        .eq('user_id', userId)
-        .eq('week_start', weekStart)
-        .maybeSingle();
-
-      if (existingError) throw existingError;
+      const existing = await fetchWeeklyRecord();
       if (existing) return existing;
 
       const [drawnCard] = sortearUmaCarta();
@@ -70,7 +78,6 @@ export function useWeeklyCard(userId) {
       const { data, error } = await supabase
         .from('weekly_cards')
         .insert({
-          user_id: userId,
           week_start: weekStart,
           card_id: cardDetails.id,
           card_name: cardDetails.nome,
@@ -83,21 +90,14 @@ export function useWeeklyCard(userId) {
 
       if (error) {
         if (error.code === '23505') {
-          const { data: retryData, error: retryError } = await supabase
-            .from('weekly_cards')
-            .select('id, week_start, card_id, card_name, created_at, metadata')
-            .eq('user_id', userId)
-            .eq('week_start', weekStart)
-            .maybeSingle();
-
-          if (retryError) throw retryError;
-          return retryData;
+          return fetchWeeklyRecord();
         }
         throw error;
       }
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.setQueryData(queryKey, data ?? null);
       queryClient.invalidateQueries({ queryKey });
     },
   });
@@ -108,9 +108,9 @@ export function useWeeklyCard(userId) {
     weekStart,
     weeklyRecord,
     cardDetails,
-    revealAllowed: !weeklyRecord && !isLoading,
+    revealAllowed: !!userId && !!session && !isSessionLoading && !weeklyRecord && !isLoading,
     revealCard: mutation.mutate,
     isRevealing: mutation.isPending,
-    isLoading,
+    isLoading: isLoading || isSessionLoading,
   };
 }
