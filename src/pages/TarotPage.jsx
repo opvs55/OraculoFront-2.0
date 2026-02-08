@@ -83,15 +83,23 @@ function TarotPage() {
     setVideoAtualIndex((prevIndex) => (prevIndex + 1) % listaDeVideos.length);
   };
 
-  const typedPhrase = useTypewriter(
-    reduceMotion ? mysticPhrases[0] : mysticPhrases[phraseIndex],
-    45,
-    () => {
-      if (reduceMotion) return;
-      phraseTimeoutRef.current = setTimeout(() => {
-        setPhraseIndex((prev) => (prev + 1) % mysticPhrases.length);
-      }, 1800);
+  useEffect(() => {
+    if (reduceMotion) {
+      setPhraseIndex(0);
     }
+  }, [reduceMotion]);
+
+  const handlePhraseComplete = useCallback(() => {
+    if (reduceMotion) return;
+    phraseTimeoutRef.current = setTimeout(() => {
+      setPhraseIndex((prev) => (prev + 1) % mysticPhrases.length);
+    }, 1800);
+  }, [reduceMotion]);
+
+  const typedPhrase = useTypewriter(
+    mysticPhrases[phraseIndex],
+    reduceMotion ? 0 : 45,
+    handlePhraseComplete
   );
 
   const handleGenerateReading = useCallback((spreadType, questionData) => {
