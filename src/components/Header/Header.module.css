@@ -234,7 +234,8 @@
   z-index: 12;
 }
 
-.accountMenu button {
+.accountMenu button,
+.accountMenuLink {
   width: 100%;
   background: transparent;
   border: none;
@@ -243,13 +244,17 @@
   padding: 0.5rem 0.7rem;
   border-radius: 8px;
   cursor: pointer;
+  text-decoration: none;
+  display: block;
 }
 
-.accountMenu button:hover {
+.accountMenu button:hover,
+.accountMenuLink:hover {
   background: rgba(225, 179, 130, 0.12);
 }
 
-.accountMenu button:focus-visible {
+.accountMenu button:focus-visible,
+.accountMenuLink:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.9);
   outline-offset: 2px;
 }

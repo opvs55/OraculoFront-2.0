@@ -8,7 +8,8 @@ function Header() {
   const { user, loading, signOut } = useAuth();
   const location = useLocation();
   const isWelcome = location.pathname === '/';
-  const isInternal = Boolean(user) && !isWelcome;
+  const isInternal = Boolean(user);
+  const isPublicHome = isWelcome && !user;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const accountRef = useRef(null);
@@ -44,7 +45,7 @@ function Header() {
   
   return (
     <header
-      className={`${styles.header} ${isWelcome ? styles.headerWelcome : ''} ${isInternal ? styles.headerInternal : ''} ${isInternal && isHidden && !isMenuOpen && !isAccountOpen ? styles.headerHidden : ''}`}
+      className={`${styles.header} ${isPublicHome ? styles.headerWelcome : ''} ${isInternal ? styles.headerInternal : ''} ${isInternal && isHidden && !isMenuOpen && !isAccountOpen ? styles.headerHidden : ''}`}
     >
       {/* Navegação Esquerda */}
       <nav className={`${styles.nav} ${styles.navLeft}`} aria-label="Navegação principal">
@@ -89,12 +90,6 @@ function Header() {
             >
               Numerologia
             </NavLink>
-            <NavLink 
-              to="/perfil/editar" 
-              className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
-            >
-              Perfil
-            </NavLink>
           </>
         )}
       {/* Placeholder para manter layout quando deslogado */}
@@ -102,7 +97,7 @@ function Header() {
       </nav>
 
       {/* Título Central */}
-      {!isWelcome && !isInternal && (
+      {!isPublicHome && !isInternal && (
         <div className={styles.headerCenter}>
           <Link to="/" className={styles.headerLogo}>
             ESOTERICON
@@ -134,6 +129,9 @@ function Header() {
                 </button>
                 {isAccountOpen && (
                   <div className={styles.accountMenu} role="menu">
+                    <Link to="/perfil/editar" role="menuitem" className={styles.accountMenuLink}>
+                      Perfil
+                    </Link>
                     <button type="button" role="menuitem" onClick={signOut}>
                       Sair
                     </button>

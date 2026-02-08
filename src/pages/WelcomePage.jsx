@@ -1,6 +1,5 @@
 import React, { useState } from 'react'; 
 import { Link } from 'react-router-dom';
-import Footer from '../components/Footer/Footer';
 import styles from './WelcomePage.module.css';
 
 // A lista de vídeos
@@ -22,8 +21,7 @@ function WelcomePage() {
   // --- FIM DA LÓGICA DO LOOPING ---
 
   return (
-    <div className={styles.welcomePage}>
-      <div className={styles.welcomeContainer}>
+    <div className={styles.welcomeContainer}>
         <video 
           key={videoAtualIndex} 
           autoPlay 
@@ -66,8 +64,6 @@ function WelcomePage() {
             </div>
           </div>
         </div>
-      </div>
-      <Footer />
     </div>
   );
 }
