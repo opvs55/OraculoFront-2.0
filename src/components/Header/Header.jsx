@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import styles from './Header.module.css';
@@ -7,11 +7,28 @@ function Header() {
   const { user, loading, signOut } = useAuth(); 
   const location = useLocation();
   const isWelcome = location.pathname === '/';
+  const isInternal = Boolean(user) && !isWelcome;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleToggleMenu = () => setIsMenuOpen((prev) => !prev);
+  const handleCloseMenu = () => setIsMenuOpen(false);
   
   return (
-    <header className={`${styles.header} ${isWelcome ? styles.headerWelcome : ''}`}>
+    <header className={`${styles.header} ${isWelcome ? styles.headerWelcome : ''} ${isInternal ? styles.headerInternal : ''}`}>
       {/* Navegação Esquerda */}
-      <nav className={`${styles.nav} ${styles.navLeft}`}>
+      <nav className={`${styles.nav} ${styles.navLeft}`} aria-label="Navegação principal">
+        {isInternal && (
+          <button
+            type="button"
+            className={styles.menuButton}
+            onClick={handleToggleMenu}
+            aria-label="Abrir menu"
+            aria-expanded={isMenuOpen}
+            aria-controls="menu-interno"
+          >
+            <span className={styles.menuIcon} />
+          </button>
+        )}
         {!loading && user && ( 
           <> 
             {/* --- "Meu Grimório" MOVIDO PARA A ESQUERDA --- */}
@@ -53,9 +70,14 @@ function Header() {
       )}
 
       {/* Navegação Direita */}
-      <nav className={`${styles.nav} ${styles.navRight}`}>
+      <nav className={`${styles.nav} ${styles.navRight}`} aria-label="Ações do usuário">
         {!loading && (
           <>
+            {isInternal && (
+              <Link to="/tarot" className={styles.primaryButton}>
+                Fazer leitura
+              </Link>
+            )}
             {/* --- "Numerologia" MOVIDA PARA A DIREITA (apenas se logado) --- */}
             {user && (
               <NavLink 
@@ -71,7 +93,6 @@ function Header() {
               </NavLink>
             )}
             {/* --- FIM DA MUDANÇA --- */}
-
 
             {/* Links/Botões de Autenticação/Perfil */}
             {user ? (
@@ -100,6 +121,31 @@ function Header() {
           </>
         )}
       </nav>
+
+      {isInternal && (
+        <div
+          id="menu-interno"
+          className={`${styles.mobileMenu} ${isMenuOpen ? styles.mobileMenuOpen : ''}`}
+        >
+          <div className={styles.mobileMenuContent}>
+            <NavLink to="/meu-grimorio" className={styles.mobileLink} onClick={handleCloseMenu}>
+              Meu Grimório
+            </NavLink>
+            <NavLink to="/biblioteca" className={styles.mobileLink} onClick={handleCloseMenu}>
+              Biblioteca
+            </NavLink>
+            <NavLink to="/comunidade" className={styles.mobileLink} onClick={handleCloseMenu}>
+              Comunidade
+            </NavLink>
+            <NavLink to="/numerologia" className={styles.mobileLink} onClick={handleCloseMenu}>
+              Numerologia
+            </NavLink>
+            <button type="button" className={styles.mobileGhostButton} onClick={signOut}>
+              Sair
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

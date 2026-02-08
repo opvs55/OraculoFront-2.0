@@ -11,6 +11,12 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.4); 
 }
 
+.headerInternal {
+  min-height: 60px;
+  padding: 0.75rem 2rem;
+  align-items: center;
+}
+
 .headerWelcome {
   grid-template-columns: 1fr;
 }
@@ -65,6 +71,57 @@
 .navRight {
   grid-column: 3; 
   justify-content: flex-end; 
+}
+
+.menuButton {
+  display: none;
+  background: none;
+  border: 1px solid rgba(225, 179, 130, 0.5);
+  color: #E1B382;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.menuButton:hover {
+  border-color: #E1B382;
+  transform: translateY(-1px);
+}
+
+.menuButton:focus-visible {
+  outline: 2px solid rgba(225, 179, 130, 0.9);
+  outline-offset: 2px;
+}
+
+.menuIcon {
+  position: relative;
+  width: 20px;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 999px;
+}
+
+.menuIcon::before,
+.menuIcon::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background-color: currentColor;
+  left: 0;
+  border-radius: 999px;
+}
+
+.menuIcon::before {
+  top: -6px;
+}
+
+.menuIcon::after {
+  top: 6px;
 }
 
 /* --- Estilos dos Links e Botões --- */
@@ -123,6 +180,70 @@
   color: #fff;
 }
 
+.primaryButton {
+  background-color: #E1B382;
+  color: #0D0C1D;
+  padding: 0.55rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.primaryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(225, 179, 130, 0.35);
+}
+
+.primaryButton:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 2px;
+}
+
+.mobileMenu {
+  display: none;
+}
+
+.mobileMenuContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mobileLink {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.6rem 0;
+}
+
+.mobileLink:focus-visible {
+  outline: 2px solid rgba(225, 179, 130, 0.9);
+  outline-offset: 2px;
+}
+
+.mobileGhostButton {
+  background: none;
+  border: 1px solid #4a5568;
+  color: #a0a0a0;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.mobileGhostButton:hover {
+  background-color: #4a5568;
+  color: #fff;
+}
+
 /* --- Responsividade --- */
 @media (max-width: 768px) {
   .header {
@@ -158,6 +279,62 @@
     padding-top: 0;
     border-top: none;
     margin-top: -1rem; /* Compensa o gap do grid */
+  }
+
+  .headerInternal {
+    grid-template-columns: auto 1fr;
+    padding: 0.6rem 1rem;
+  }
+
+  .headerInternal .navLeft {
+    justify-content: flex-start;
+    border-top: none;
+    padding-top: 0;
+    grid-row: 1;
+  }
+
+  .headerInternal .navRight {
+    justify-content: flex-end;
+    grid-row: 1;
+  }
+
+  .headerInternal .navLeft .navLink,
+  .headerInternal .navRight .numerologyButton,
+  .headerInternal .navRight .logoutButton {
+    display: none;
+  }
+
+  .headerInternal .menuButton {
+    display: inline-flex;
+  }
+
+  .headerInternal .primaryButton {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .mobileMenu {
+    display: block;
+    grid-column: 1 / -1;
+    background: rgba(13, 12, 29, 0.95);
+    border-top: 1px solid #2c2c54;
+    padding: 0 1rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+
+  .mobileMenuOpen {
+    max-height: 320px;
+    padding: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuButton,
+  .primaryButton,
+  .mobileMenu {
+    transition: none;
   }
 }
 
