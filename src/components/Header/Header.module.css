@@ -7,7 +7,7 @@
   background-color: #0D0C1D; 
   position: sticky; 
   top: 0;
-  z-index: 10;
+  z-index: 20;
   border-bottom: 1px solid #4a415a; 
   box-shadow: 0 2px 10px rgba(0,0,0,0.4); 
   transition: transform 0.35s ease, opacity 0.35s ease;
@@ -171,15 +171,17 @@
 }
 
 .primaryButton {
-  background-color: #E1B382;
-  color: #0D0C1D;
-  padding: 0.55rem 1.2rem;
-  border-radius: 8px;
+  background: transparent;
+  color: #E1B382;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
   text-decoration: none;
   font-weight: bold;
   font-size: 0.95rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  min-height: 44px;
+  line-height: 1;
+  border: 1px solid rgba(225, 179, 130, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  min-height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -191,7 +193,9 @@
 
 .primaryButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(225, 179, 130, 0.35);
+  background: rgba(225, 179, 130, 0.12);
+  border-color: rgba(225, 179, 130, 0.85);
+  box-shadow: 0 6px 16px rgba(225, 179, 130, 0.25);
 }
 
 .primaryButton:focus-visible {
@@ -215,11 +219,28 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .accountButton:focus-visible {
   outline: 2px solid rgba(225, 179, 130, 0.9);
   outline-offset: 3px;
+}
+
+.accountIcon {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.accountButtonActive {
+  box-shadow: 0 0 12px rgba(225, 179, 130, 0.55);
+  transform: rotate(3deg);
+}
+
+.accountButtonActive .accountIcon {
+  transform: rotate(12deg);
+  filter: drop-shadow(0 0 6px rgba(225, 179, 130, 0.75));
 }
 
 .accountMenu {
@@ -394,7 +415,9 @@
 @media (prefers-reduced-motion: reduce) {
   .menuButton,
   .primaryButton,
-  .mobileMenu {
+  .mobileMenu,
+  .accountButton,
+  .accountIcon {
     transition: none;
   }
 }
