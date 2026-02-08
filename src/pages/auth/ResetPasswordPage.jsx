@@ -73,27 +73,55 @@ function ResetPasswordPage() {
 
   if (!canReset) {
     return (
-        <div className="content_wrapper">
-            <div className={styles.authContainer}>
-                <p>Verificando o link de recuperação...</p>
-                <p>Se você não foi redirecionado pelo seu e-mail, por favor, <Link to="/recuperar-senha">solicite um novo link</Link>.</p>
-            </div>
+      <div className={styles.authPage}>
+        <div className={styles.authContainer}>
+          <div className={styles.header}>
+            <h1 className={styles.title}>Redefinição em andamento</h1>
+            <p className={styles.subtitle}>Estamos validando seu link de recuperação.</p>
+          </div>
+          <p className={styles.helperText}>Se algo der errado, solicite um novo link para continuar.</p>
+          <div className={styles.linksContainer}>
+            <p className={styles.link}>
+              <Link to="/recuperar-senha">Solicitar novo link</Link>
+            </p>
+          </div>
         </div>
+      </div>
     )
   }
 
   return (
-    <div className="content_wrapper">
+    <div className={styles.authPage}>
       <div className={styles.authContainer}>
-        <h1 className={styles.title}>Cadastrar Nova Senha</h1>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Cadastrar Nova Senha</h1>
+          <p className={styles.subtitle}>Defina uma senha forte para manter sua conta protegida.</p>
+        </div>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <label htmlFor="password">Nova Senha</label>
-            <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Mínimo de 6 caracteres"
+              autoComplete="new-password"
+              required
+            />
+            <span className={styles.helperText}>Use uma combinação de letras, números e símbolos.</span>
           </div>
           <div className={styles.inputGroup}>
             <label htmlFor="confirmPassword">Confirme a Nova Senha</label>
-            <input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+            <input
+              id="confirmPassword"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Repita a nova senha"
+              autoComplete="new-password"
+              required
+            />
           </div>
           <button type="submit" className={styles.button} disabled={loading || message}>
             {loading ? 'Salvando...' : 'Salvar Nova Senha'}
