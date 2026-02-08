@@ -46,6 +46,7 @@ export function useWeeklyCard(userId) {
     const { data, error } = await supabase
       .from('weekly_cards')
       .select('id, week_start, card_id, card_name, created_at, metadata')
+      .eq('user_id', userId)
       .eq('week_start', weekStart)
       .order('created_at', { ascending: false })
       .limit(1);
