@@ -44,7 +44,7 @@ function CardDetailPage() {
       backLinkUrl: `/leitura/${readingId}`,
       interpretation: specificInterpretation
     };
-  }, [readingData, position]);
+  }, [readingData, position, readingId]);
 
   if (isLoadingReading) return <Loader />;
   if (isError) return <div className="content_wrapper"><p>Erro ao carregar leitura: {error.message}</p></div>;

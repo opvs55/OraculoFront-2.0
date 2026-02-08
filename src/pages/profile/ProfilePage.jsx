@@ -62,8 +62,9 @@ const parseArchetype = (birthdaySecretMeaning) => {
     const data = JSON.parse(birthdaySecretMeaning);
     if (data.error) return null;
     return data;
-  } catch (e) {
+  } catch (error) {
     // Fallback para texto antigo (se não for JSON)
+    console.warn('Falha ao interpretar o arquétipo da IA:', error);
     return {
       archetype_title: "O Arquétipo do Dia",
       archetype_description: birthdaySecretMeaning,

@@ -1,70 +1,682 @@
 /* src/pages/dashboard/MeuGrimorioPage.module.css */
 
-.painelContainer { /* Mantendo o nome antigo por compatibilidade por enquanto */
+.painelContainer {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  overflow-y: auto;
   display: flex;
   justify-content: center;
 }
+
 .videoFundo {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: 1;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
 }
+
 .videoOverlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background-color: rgba(13, 12, 29, 0.85); z-index: 2;
+  position: absolute;
+  inset: 0;
+  background-color: rgba(13, 12, 29, 0.82);
+  z-index: 2;
 }
+
 .conteudoSobreposto {
-  position: relative; z-index: 3; width: 100%; padding: 4rem 2rem;
-  max-width: 1400px; margin: 0 auto;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  padding: 3.5rem 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.profileCard,
-.cardOfTheWeekCard,
+.grimorioLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 2rem;
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.ritualSection {
+  background: rgba(18, 16, 33, 0.88);
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  border-radius: 20px;
+  padding: 2.4rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+.ritualHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.ritualEyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  color: rgba(225, 179, 130, 0.7);
+  margin: 0 0 0.6rem 0;
+}
+
+.ritualTitle {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: #E1B382;
+  margin: 0 0 0.5rem 0;
+}
+
+.ritualSubtitle {
+  margin: 0;
+  color: #d7d0c9;
+  max-width: 460px;
+}
+
+.ritualBody {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.ritualCardFrame {
+  position: relative;
+  width: 180px;
+  height: 280px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  background: rgba(13, 12, 29, 0.75);
+}
+
+.ritualCardImage,
+.ritualCardPlaceholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ritualCardGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(225, 179, 130, 0.35), transparent 60%);
+  pointer-events: none;
+}
+
+.ritualCardBack {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, rgba(29, 27, 48, 0.9), rgba(12, 10, 24, 0.95));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ritualCardSigil {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid rgba(225, 179, 130, 0.6);
+  box-shadow: 0 0 18px rgba(225, 179, 130, 0.35);
+  position: relative;
+}
+
+.ritualCardSigil::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px dashed rgba(225, 179, 130, 0.6);
+  border-radius: 50%;
+}
+
+.ritualContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #e6ded5;
+}
+
+.ritualCopy {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.ritualRevealButton {
+  align-self: flex-start;
+  background: #E1B382;
+  color: #0D0C1D;
+  padding: 0.9rem 2.1rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 26px rgba(225, 179, 130, 0.35);
+}
+
+.ritualRevealButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(225, 179, 130, 0.45);
+}
+
+.ritualRevealButton:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+}
+
+.ritualKeyword {
+  margin: 0;
+  color: #f4e7d4;
+  font-weight: 600;
+}
+
+.ritualRecommendation {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.ritualLinks {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ritualLinkButton {
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  color: #E1B382;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.continueSection {
+  background: rgba(18, 16, 33, 0.75);
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  border-radius: 18px;
+  padding: 2rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  color: #E1B382;
+  font-size: 1.4rem;
+}
+
+.sectionNote {
+  color: #cdbfae;
+  font-size: 0.95rem;
+}
+
+.continueCard {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  background: rgba(13, 12, 29, 0.7);
+  border-radius: 14px;
+  padding: 1.6rem;
+  border: 1px solid rgba(225, 179, 130, 0.25);
+}
+
+.continueLabel {
+  margin: 0 0 0.4rem 0;
+  color: rgba(225, 179, 130, 0.8);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.continueTitle {
+  margin: 0 0 0.6rem 0;
+  color: #f1ede8;
+  font-size: 1.2rem;
+}
+
+.continueMeta {
+  margin: 0;
+  color: #bfb7aa;
+}
+
+.continueButton {
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.5);
+  color: #E1B382;
+  padding: 0.7rem 1.6rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.historySection {
+  background: rgba(18, 16, 33, 0.75);
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  border-radius: 18px;
+  padding: 2rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.toolbarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.toolbarEyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: rgba(225, 179, 130, 0.6);
+  margin: 0 0 0.4rem 0;
+}
+
+.toolbarTitle {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  color: #E1B382;
+}
+
+.toolbarCount {
+  color: #cdbfae;
+  font-size: 0.95rem;
+}
+
+.toolbarRow {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.toolbarField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1 1 180px;
+  min-width: 180px;
+}
+
+.toolbarLabel {
+  font-size: 0.85rem;
+  color: #cdbfae;
+}
+
+.toolbarInput,
+.toolbarSelect {
+  background: rgba(13, 12, 29, 0.7);
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  color: #f4eee5;
+}
+
+.toolbarToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #cdbfae;
+  font-size: 0.9rem;
+}
+
+.toolbarToggle input {
+  accent-color: #E1B382;
+}
+
+.activeFilter {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(13, 12, 29, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  padding: 0.8rem 1.2rem;
+  color: #f1ede8;
+}
+
+.activeFilter button {
+  background: transparent;
+  color: #E1B382;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
 .historyCard {
-  background-color: rgba(23, 22, 43, 0.6); /* Um roxo/azul escuro semitransparente - ajuste a cor! */
-  border-radius: 12px; /* Bordas mais arredondadas */
-  padding: 1.5rem; /* Espaçamento interno */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra suave */
-  /* backdrop-filter: blur(5px); /* Efeito de vidro fosco (opcional, pode pesar na performance) */
+  background: rgba(13, 12, 29, 0.7);
+  border-radius: 16px;
+  padding: 1.6rem;
+  border: 1px solid rgba(225, 179, 130, 0.2);
 }
 
-/* Layout principal do Dashboard */
-.dashboardGrid {
-  display: grid; grid-template-columns: 1fr; gap: 2rem;
-}
-.leftColumn, .rightColumn {
-  display: flex; flex-direction: column; gap: 2rem;
-}
-
-/* Botão grande de Nova Leitura */
-.newReadingButtonLarge {
-  display: block; background: #E1B382; color: #0D0C1D;
-  padding: 1rem 2rem; border-radius: 8px; text-decoration: none;
-  font-weight: bold; font-size: 1.2rem; text-align: center;
-  transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(225, 179, 130, 0.3);
-}
-.newReadingButtonLarge:hover {
-  transform: translateY(-3px); box-shadow: 0 6px 20px rgba(225, 179, 130, 0.5);
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
 
-/* Layout para telas maiores */
-@media (min-width: 1024px) {
-  .dashboardGrid {
-    grid-template-columns: 400px 1fr; gap: 3rem; align-items: flex-start;
+.historyMeta {
+  margin: 0 0 0.4rem 0;
+  color: #cdbfae;
+  font-size: 0.85rem;
+}
+
+.historyTitle {
+  margin: 0;
+  color: #f1ede8;
+  font-size: 1.2rem;
+}
+
+.historyTitleEdit {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.historyTitleInput {
+  min-width: 220px;
+  flex: 1;
+  background: rgba(12, 10, 24, 0.8);
+  border: 1px solid rgba(225, 179, 130, 0.35);
+  border-radius: 10px;
+  padding: 0.5rem 0.7rem;
+  color: #f4eee5;
+}
+
+.historyActions {
+  position: relative;
+}
+
+.historyMenuButton {
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.3);
+  color: #E1B382;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.historyMenu {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: rgba(12, 10, 24, 0.95);
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  border-radius: 12px;
+  padding: 0.5rem;
+  min-width: 180px;
+  z-index: 5;
+}
+
+.historyMenuItem,
+.historyMenuItemDanger {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.8rem;
+  background: transparent;
+  border: none;
+  color: #f1ede8;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.historyMenuItem:hover {
+  background: rgba(225, 179, 130, 0.12);
+}
+
+.historyMenuItemDanger {
+  color: #f09393;
+}
+
+.historyMenuItemDanger:hover {
+  background: rgba(240, 147, 147, 0.1);
+}
+
+.historyContent {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.historyCardsPreview {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.historyCardThumb,
+.historyCardThumbPlaceholder {
+  width: 60px;
+  height: 92px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  background: rgba(12, 10, 24, 0.8);
+}
+
+.historyCardThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.historyIndicators {
+  display: flex;
+  gap: 1rem;
+  color: #cdbfae;
+  font-size: 0.9rem;
+}
+
+.historyLoadMore {
+  align-self: center;
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  color: #E1B382;
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.historyEmpty {
+  background: rgba(13, 12, 29, 0.7);
+  border: 1px dashed rgba(225, 179, 130, 0.35);
+  padding: 1.6rem;
+  border-radius: 12px;
+  text-align: center;
+  color: #e6ded5;
+}
+
+.historyActionPrimary {
+  margin-top: 0.8rem;
+  background: #E1B382;
+  color: #0D0C1D;
+  padding: 0.6rem 1.4rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.historyActionGhost {
+  background: transparent;
+  border: 1px solid rgba(225, 179, 130, 0.3);
+  color: #E1B382;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.historySkeleton {
+  height: 120px;
+  border-radius: 16px;
+  border: 1px solid rgba(225, 179, 130, 0.2);
+  background: linear-gradient(90deg, rgba(225, 179, 130, 0.1), rgba(225, 179, 130, 0.25), rgba(225, 179, 130, 0.1));
+  animation: shimmer 1.6s infinite;
+}
+
+.insightsColumn {
+  position: sticky;
+  top: 120px;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.insightsPanel {
+  background: rgba(18, 16, 33, 0.82);
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  border-radius: 18px;
+  padding: 1.6rem;
+}
+
+.insightsTitle {
+  margin: 0 0 1rem 0;
+  font-family: 'Cinzel', serif;
+  color: #E1B382;
+}
+
+.insightsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #f1ede8;
+}
+
+.insightItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.insightLabel {
+  color: #cdbfae;
+  font-size: 0.9rem;
+}
+
+.insightsPlaceholder {
+  color: #cdbfae;
+  font-size: 0.95rem;
+}
+
+.insightsAccordion {
+  background: rgba(18, 16, 33, 0.82);
+  border: 1px solid rgba(225, 179, 130, 0.25);
+  border-radius: 16px;
+  padding: 0.8rem 1.2rem;
+}
+
+.insightsSummary {
+  cursor: pointer;
+  color: #E1B382;
+  font-weight: 600;
+}
+
+.insightsMobile {
+  display: none;
+}
+
+.insightsFootnote {
+  font-size: 0.8rem;
+  color: rgba(205, 191, 174, 0.8);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
   }
 }
 
-/* Ajustes para telas pequenas */
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
+  .grimorioLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .insightsColumn {
+    position: static;
+    display: none;
+  }
+
+  .insightsMobile {
+    display: block;
+  }
+}
+
+@media (max-width: 900px) {
   .conteudoSobreposto {
-    padding: 2rem 1rem;
+    padding: 2.5rem 1.5rem 3rem;
+  }
+
+  .ritualBody {
+    grid-template-columns: 1fr;
+  }
+
+  .ritualCardFrame {
+    width: 160px;
+    height: 250px;
+    margin: 0 auto;
+  }
+
+  .continueCard,
+  .historyContent,
+  .historyHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
-
-
-/* OBS: Os estilos .editPageContainer, .editPageLayout, .avatarSection, .formSection, etc.
-   foram MOVIDOS para EditarPerfilPage.module.css */
+@media (prefers-reduced-motion: reduce) {
+  .ritualRevealButton,
+  .historyLoadMore,
+  .historySkeleton {
+    transition: none;
+    animation: none;
+  }
+}

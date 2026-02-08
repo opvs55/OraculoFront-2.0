@@ -8,6 +8,65 @@
   color: #e0e0e0; /* Cor padrão do texto */
 }
 
+.pageHeader {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgba(17, 17, 34, 0.85);
+  border: 1px solid #2c2c54;
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  text-align: left;
+}
+
+.pageHeader h1 {
+  margin: 0;
+  font-size: 2.1rem;
+}
+
+.pageHeader p {
+  margin: 0;
+  color: #b5b5c8;
+}
+
+.firstLoginBadge {
+  align-self: flex-start;
+  background: linear-gradient(120deg, #E1B382, #C36E97);
+  color: #0D0C1D;
+  font-weight: bold;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.welcomeCard {
+  width: 100%;
+  background: rgba(22, 22, 44, 0.85);
+  border: 1px solid #3a3a6a;
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  margin-top: 1.5rem;
+  text-align: left;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.welcomeCard h2 {
+  margin-top: 0;
+  color: #E1B382;
+}
+
+.welcomeCard p {
+  color: #d1d1e6;
+  line-height: 1.6;
+}
+
+.welcomeHint {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
 .editPageLayout {
   display: grid;
   grid-template-columns: 1fr; /* Começa com coluna única */
@@ -59,6 +118,11 @@
   box-shadow: 0 5px 20px rgba(0,0,0,0.3);
   border: 1px solid #3a3a50;
 }
+.avatarHint {
+  font-size: 0.95rem;
+  color: #b7b7d5;
+  text-align: center;
+}
 .editProfileButton { /* Botão 'Escolher Carta' */
   display: inline-block;
   background-color: transparent;
@@ -92,6 +156,23 @@
   border-radius: 12px;
   border: 1px solid #2c2c54;
   backdrop-filter: blur(5px);
+}
+
+.formHeader {
+  border-bottom: 1px solid #2c2c54;
+  padding-bottom: 1rem;
+}
+
+.formHeader h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #E1B382;
+}
+
+.formHeader p {
+  margin: 0.4rem 0 0;
+  color: #b7b7d5;
+  font-size: 0.95rem;
 }
 
 .formGroup {
@@ -160,38 +241,53 @@
   text-align: center;
 }
 
-/* --- Seção de Segurança --- */
-.securitySection {
-  grid-column: 1 / -1; /* Ocupa a largura total no layout de grid */
+/* --- Acordeões de Segurança e Perigo --- */
+.accordionSection {
+  grid-column: 1 / -1;
+  margin-top: 1.5rem;
   background-color: rgba(26, 26, 46, 0.7);
   border: 1px solid #2c2c54;
-  border-radius: 8px;
-  padding: 2rem;
-  margin-top: 2rem;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
   backdrop-filter: blur(5px);
 }
-.securitySection h2 {
+
+.accordionSection summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-family: 'Cinzel', serif;
-  margin-top: 0;
-  border-bottom: 1px solid #2c2c54;
-  padding-bottom: 1rem;
-  margin-bottom: 2rem;
+  font-size: 1.1rem;
   color: #E0E0E0;
+}
+
+.accordionSection summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordionHint {
+  font-size: 0.85rem;
+  color: #b7b7d5;
+  font-family: 'Lato', sans-serif;
+}
+
+.accordionContent {
+  margin-top: 1.5rem;
+}
+
+.dangerAccordion {
+  border-color: #4a1f2f;
 }
 
 /* --- Área de Perigo --- */
 .dangerZone {
-  grid-column: 1 / -1;
-  margin-top: 2rem; /* Reduzido um pouco */
   padding: 1.5rem;
   border: 2px solid #b71c1c;
   border-radius: 8px;
   text-align: center;
   background-color: rgba(183, 28, 28, 0.1); /* Fundo sutil */
-}
-.dangerZone h3 {
-  color: #ff8a80;
-  margin-top: 0;
 }
 .dangerZone p {
   color: #c7c7c7;

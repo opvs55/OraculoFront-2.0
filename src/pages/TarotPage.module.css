@@ -2,7 +2,7 @@
 .homeContainer {
   position: relative;
   width: 100%;
-  height: 100vh; /* Ocupa a altura total da tela */
+  min-height: 100vh; /* Ocupa a altura total da tela */
   overflow: hidden; /* Esconde qualquer parte do vídeo que vaze */
   display: flex;
   align-items: center;
@@ -11,23 +11,17 @@
 
 /* --- Fundo de Vídeo e Overlay --- */
 .videoFundo {
-  position: fixed; /* Fica fixo no fundo, não rola com a página */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
+  position: absolute; /* Mantém o vídeo no fundo apenas desta seção */
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   z-index: 1; /* Camada mais baixa */
 }
 
 .videoOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   /* Overlay escuro para garantir que o texto branco seja legível */
   background-color: rgba(13, 12, 29, 0.75);
   z-index: 2; /* Fica acima do vídeo */
@@ -60,6 +54,16 @@
   margin-bottom: 1rem;
 }
 
+.mysticText {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: #e7d3b4;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 12px rgba(225, 179, 130, 0.25);
+  min-height: 1.6rem;
+  margin: 0 0 2rem 0;
+}
+
 .subtitle {
   font-family: 'Lato', sans-serif;
   font-size: 1.2rem;
@@ -68,6 +72,7 @@
   line-height: 1.6;
   margin-bottom: 2.5rem;
 }
+
 
 .formContainer {
   width: 100%;

@@ -60,7 +60,7 @@ function NumerologyResults({ resultData, onReset, isResetting, errorResetting })
     try {
       // Tenta parsear como JSON (novo formato)
       archetypeData = JSON.parse(rawArchetypeText);
-    } catch (e) {
+    } catch (error) {
       // Falhou? É texto antigo (retrocompatibilidade)
       // ou um JSON de erro do backend
       if (rawArchetypeText.startsWith('{"error":')) {
@@ -78,6 +78,7 @@ function NumerologyResults({ resultData, onReset, isResetting, errorResetting })
            weaknesses: []
          };
       }
+      console.warn('Falha ao interpretar o arquétipo secreto:', error);
     }
   }
 

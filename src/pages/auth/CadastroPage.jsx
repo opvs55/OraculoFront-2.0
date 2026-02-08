@@ -101,79 +101,78 @@ function CadastroPage() {
   if (user) return null;
 
   return (
-    <main>
-      <div className="content_wrapper">
-        <div className={styles.authContainer}>
+    <div className={styles.authPage}>
+      <div className={styles.authContainer}>
+        <div className={styles.header}>
           <h1 className={styles.title}>Criar Conta</h1>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="username">Nome de Usuário</label>
-              <input 
-                id="username" 
-                type="text" 
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
-                required 
-              />
-            </div>
-            <div className={styles.inputGroup}>
-              <label htmlFor="email">Email</label>
-              <input 
-                id="email" 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                required 
-              />
-            </div>
-            <div className={styles.inputGroup}>
-              <label htmlFor="password">Senha (mínimo 6 caracteres)</label>
-              <input 
-                id="password" 
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
-              />
-            </div>
-            <div className={styles.inputGroup}>
-              <label htmlFor="confirmPassword">Confirmar Senha</label>
-              <input 
-                id="confirmPassword" 
-                type="password" 
-                value={confirmPassword} 
-                onChange={(e) => setConfirmPassword(e.target.value)} 
-                required 
-              />
-            </div>
-            <button type="submit" className={styles.button} disabled={loading}>
-              {loading ? 'Criando...' : 'Cadastrar'}
-            </button>
-          </form>
-          
-          {/* Exibe erro se houver */}
-          {error && <p className={styles.error}>{error}</p>}
-          
-          {/* EXIBE MENSAGEM DE SUCESSO (Verde) */}
-          {msgSucesso && (
-            <div style={{
-              marginTop: '1rem', 
-              padding: '10px', 
-              background: '#d4edda', 
-              color: '#155724', 
-              borderRadius: '4px',
-              border: '1px solid #c3e6cb'
-            }}>
-              {msgSucesso}
-            </div>
-          )}
-          
+          <p className={styles.subtitle}>Crie seu acesso e desbloqueie leituras ilimitadas.</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.inputGroup}>
+            <label htmlFor="username">Nome de Usuário</label>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Escolha um nome único"
+              autoComplete="username"
+              required
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="seu@email.com"
+              autoComplete="email"
+              required
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label htmlFor="password">Senha</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Mínimo de 6 caracteres"
+              autoComplete="new-password"
+              required
+            />
+            <span className={styles.helperText}>Use uma combinação de letras, números e símbolos para maior segurança.</span>
+          </div>
+          <div className={styles.inputGroup}>
+            <label htmlFor="confirmPassword">Confirmar Senha</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Repita sua senha"
+              autoComplete="new-password"
+              required
+            />
+          </div>
+          <button type="submit" className={styles.button} disabled={loading}>
+            {loading ? 'Criando...' : 'Cadastrar'}
+          </button>
+        </form>
+
+        {error && <p className={styles.error}>{error}</p>}
+        {msgSucesso && <p className={styles.success}>{msgSucesso}</p>}
+
+        <div className={styles.linksContainer}>
           <p className={styles.link}>
             Já tem uma conta? <Link to="/login">Faça Login</Link>
           </p>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
