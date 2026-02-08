@@ -60,6 +60,23 @@
   margin-bottom: 1rem;
 }
 
+.mysticText {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: #e7d3b4;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 12px rgba(225, 179, 130, 0.25);
+  min-height: 1.6rem;
+  margin: 0 0 2rem 0;
+}
+
+.mysticCursor {
+  display: inline-block;
+  margin-left: 4px;
+  color: rgba(225, 179, 130, 0.6);
+  animation: mysticBlink 1s infinite;
+}
+
 .subtitle {
   font-family: 'Lato', sans-serif;
   font-size: 1.2rem;
@@ -67,6 +84,23 @@
   max-width: 650px; /* Evita que o texto fique muito longo */
   line-height: 1.6;
   margin-bottom: 2.5rem;
+}
+
+@keyframes mysticBlink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mysticCursor {
+    animation: none;
+  }
 }
 
 .formContainer {

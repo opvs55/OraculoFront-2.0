@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useGenerateReading } from '../hooks/useReadings';
+import { useTypewriter } from '../hooks/useTypewriter';
 import Loader from '../components/common/Loader/Loader';
 import { suggestedQuestions } from '../constants/suggestionConstants';
 import styles from './TarotPage.module.css';
@@ -15,6 +16,12 @@ const listaDeVideos = [
 ];
 
 const VISITOR_READING_KEY = 'visitorReadingDone';
+const mysticPhrases = [
+  'O que o destino deseja revelar hoje?',
+  'Qual caminho pede a sua coragem agora?',
+  'Que resposta ecoa no silêncio do seu coração?',
+  'Que sinal o universo já colocou diante de você?',
+];
 
 function TarotPage() {
   const navigate = useNavigate();
@@ -31,6 +38,9 @@ function TarotPage() {
   const [formError, setFormError] = useState(null);
   const [name1, setName1] = useState('');
   const [name2, setName2] = useState('');
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  const phraseTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!user) {
@@ -40,6 +50,22 @@ function TarotPage() {
       }
     }
   }, [user]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleChange = () => setReduceMotion(mediaQuery.matches);
+    handleChange();
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (phraseTimeoutRef.current) {
+        clearTimeout(phraseTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const stableReset = useCallback(reset, [reset]);
 
@@ -56,6 +82,17 @@ function TarotPage() {
   const handleVideoEnd = () => {
     setVideoAtualIndex((prevIndex) => (prevIndex + 1) % listaDeVideos.length);
   };
+
+  const typedPhrase = useTypewriter(
+    reduceMotion ? mysticPhrases[0] : mysticPhrases[phraseIndex],
+    45,
+    () => {
+      if (reduceMotion) return;
+      phraseTimeoutRef.current = setTimeout(() => {
+        setPhraseIndex((prev) => (prev + 1) % mysticPhrases.length);
+      }, 1800);
+    }
+  );
 
   const handleGenerateReading = useCallback((spreadType, questionData) => {
     setFormError(null);
@@ -222,7 +259,11 @@ function TarotPage() {
       </video>
       <div className={styles.videoOverlay}></div>
       <div className={styles.conteudoCentralizado}>
-        <h1 className={styles.mainTitleLogo}>ORÁCULO IA</h1>
+        <h1 className={styles.mainTitleLogo}>ORÁCULO</h1>
+        <p className={styles.mysticText} aria-live="polite">
+          {typedPhrase}
+          <span className={styles.mysticCursor} aria-hidden="true">▍</span>
+        </p>
 
         {formType === 'default' ? defaultForm : pathChoiceForm}
 
