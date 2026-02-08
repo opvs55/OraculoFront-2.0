@@ -15,7 +15,7 @@ function NumerologyPage() {
   // O hook de dados (sem alterações)
   const {
     numerologyData, isLoadingReading, errorLoadingReading, refetchReading,
-    calculateNumerology, isCalculating, errorCalculating, isSuccessCalculating, resetCalculationState,
+    calculateNumerology, isCalculating, errorCalculating, resetCalculationState,
     resetNumerology, isResetting, errorResetting, isSuccessResetting, resetResetState
   } = useNumerologyReading();
 

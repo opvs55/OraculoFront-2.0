@@ -1,7 +1,7 @@
 // src/pages/auth/ResetPasswordPage.jsx
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import styles from './AuthPage.module.css'; // Reutilizamos o mesmo estilo!
 
@@ -18,7 +18,7 @@ function ResetPasswordPage() {
   // Ele escuta o evento de autenticação que acontece quando o usuário
   // chega nesta página através do link de recuperação de senha.
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
         // Se o evento for de recuperação de senha, o Supabase já criou uma sessão segura.
         // Agora, permitimos que o formulário seja exibido para o usuário.
