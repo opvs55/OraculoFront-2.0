@@ -61,7 +61,7 @@ function Header() {
       </nav>
 
       {/* Título Central */}
-      {!isWelcome && (
+      {!isWelcome && !isInternal && (
         <div className={styles.headerCenter}>
           <Link to="/" className={styles.headerLogo}>
             ESOTERICON
@@ -75,14 +75,14 @@ function Header() {
           <>
             {isInternal && (
               <Link to="/tarot" className={styles.primaryButton}>
-                Fazer leitura
+                <span className={styles.ctaFull}>Fazer leitura</span>
+                <span className={styles.ctaShort}>Leitura</span>
               </Link>
             )}
             {/* --- "Numerologia" MOVIDA PARA A DIREITA (apenas se logado) --- */}
             {user && (
               <NavLink 
                 to="/numerologia" 
-                /* Aplicando o novo estilo único */
                 className={({ isActive }) => 
                   isActive 
                   ? `${styles.numerologyButton} ${styles.numerologyActive}` 
@@ -97,6 +97,9 @@ function Header() {
             {/* Links/Botões de Autenticação/Perfil */}
             {user ? (
               <>
+                <Link to="/perfil/editar" className={styles.profileButton}>
+                  Perfil
+                </Link>
                 {/* "Meu Grimório" foi REMOVIDO DAQUI */}
                 <button onClick={signOut} className={styles.logoutButton}>
                   Sair
@@ -139,6 +142,9 @@ function Header() {
             </NavLink>
             <NavLink to="/numerologia" className={styles.mobileLink} onClick={handleCloseMenu}>
               Numerologia
+            </NavLink>
+            <NavLink to="/perfil/editar" className={styles.mobileLink} onClick={handleCloseMenu}>
+              Perfil
             </NavLink>
             <button type="button" className={styles.mobileGhostButton} onClick={signOut}>
               Sair

@@ -195,6 +195,34 @@
   justify-content: center;
 }
 
+.ctaShort {
+  display: none;
+}
+
+.profileButton {
+  border: 1px solid rgba(225, 179, 130, 0.4);
+  color: #e0d8cf;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.profileButton:hover {
+  border-color: #E1B382;
+  color: #E1B382;
+}
+
+.profileButton:focus-visible {
+  outline: 2px solid rgba(225, 179, 130, 0.9);
+  outline-offset: 2px;
+}
+
 .primaryButton:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(225, 179, 130, 0.35);
@@ -300,6 +328,7 @@
 
   .headerInternal .navLeft .navLink,
   .headerInternal .navRight .numerologyButton,
+  .headerInternal .navRight .profileButton,
   .headerInternal .navRight .logoutButton {
     display: none;
   }
@@ -311,6 +340,14 @@
   .headerInternal .primaryButton {
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
+  }
+
+  .ctaFull {
+    display: none;
+  }
+
+  .ctaShort {
+    display: inline;
   }
 
   .mobileMenu {
