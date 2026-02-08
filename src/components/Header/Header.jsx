@@ -104,6 +104,12 @@ function Header() {
             >
               Numerologia
             </NavLink>
+            <NavLink 
+              to="/mapa-astral" 
+              className={({ isActive }) => isActive ? `${styles.navLink} ${styles.activeLink}` : styles.navLink}
+            >
+              Mapa Astral
+            </NavLink>
           </>
         )}
       {/* Placeholder para manter layout quando deslogado */}
@@ -204,6 +210,9 @@ function Header() {
             </NavLink>
             <NavLink to="/numerologia" className={styles.mobileLink} onClick={handleCloseMenu}>
               Numerologia
+            </NavLink>
+            <NavLink to="/mapa-astral" className={styles.mobileLink} onClick={handleCloseMenu}>
+              Mapa Astral
             </NavLink>
             <NavLink to="/perfil/editar" className={styles.mobileLink} onClick={handleCloseMenu}>
               Perfil
