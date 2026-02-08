@@ -4,12 +4,12 @@ import { supabase } from '../supabaseClient';
 import { sortearUmaCarta } from '../services/tarotService';
 import { baralhoDetalhado } from '../tarotDeck';
 
-const getWeekStart = (date = new Date()) => {
+const getWeekStartUtc = (date = new Date()) => {
   const start = new Date(date);
-  const day = start.getDay();
+  const day = start.getUTCDay();
   const diff = (day === 0 ? -6 : 1) - day;
-  start.setDate(start.getDate() + diff);
-  start.setHours(0, 0, 0, 0);
+  start.setUTCDate(start.getUTCDate() + diff);
+  start.setUTCHours(0, 0, 0, 0);
   return start;
 };
 
@@ -28,7 +28,7 @@ const resolveCardDetails = (record) => {
 
 export function useWeeklyCard(userId) {
   const queryClient = useQueryClient();
-  const weekStart = useMemo(() => formatWeekStart(getWeekStart()), []);
+  const weekStart = useMemo(() => formatWeekStart(getWeekStartUtc()), []);
 
   const queryKey = ['weeklyCard', userId, weekStart];
 
@@ -81,7 +81,20 @@ export function useWeeklyCard(userId) {
         .select('id, week_start, card_id, card_name, created_at, metadata')
         .single();
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === '23505') {
+          const { data: retryData, error: retryError } = await supabase
+            .from('weekly_cards')
+            .select('id, week_start, card_id, card_name, created_at, metadata')
+            .eq('user_id', userId)
+            .eq('week_start', weekStart)
+            .maybeSingle();
+
+          if (retryError) throw retryError;
+          return retryData;
+        }
+        throw error;
+      }
       return data;
     },
     onSuccess: () => {
