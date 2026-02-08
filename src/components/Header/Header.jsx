@@ -52,11 +52,6 @@ function Header() {
       <nav className={`${styles.nav} ${styles.navRight}`}>
         {!loading && (
           <>
-            {/* Botão Fazer Leitura */}
-            <Link to="/tarot" className={styles.ctaButton}>
-              Fazer Leitura
-            </Link>
-
             {/* --- "Numerologia" MOVIDA PARA A DIREITA (apenas se logado) --- */}
             {user && (
               <NavLink 

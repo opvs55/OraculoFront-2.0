@@ -38,25 +38,34 @@ function WelcomePage() {
       <div className={styles.videoOverlay}></div>
 
       <div className={styles.content}>
-        <h1 className={styles.mainTitle}>ESOTERICON</h1>
-        <p className={styles.subtitle}>
-          Um portal para desvendar os mistérios do oculto. Explore oráculos, grimórios e sabedorias ancestrais.
-        </p>
-        
-        <Link to="/tarot" className={styles.ctaButton}>
-          Consultar o Oráculo de Tarot
-        </Link>
+        <div className={styles.heroCard}>
+          <h1 className={styles.mainTitle}>ESOTERICON</h1>
+          <p className={styles.subtitle}>
+            Descubra respostas com leituras guiadas e conteúdo esotérico curado para sua jornada espiritual.
+          </p>
 
-        <Link 
-          to="/numerologia" 
-          className={`${styles.secondaryLink} ${styles.numerologyLink}`}
-        >
-          Analisar Meus Números
-        </Link>
-        
-        <Link to="/biblioteca" className={styles.secondaryLink}>
-          Explorar a Biblioteca de Cartas
-        </Link>
+          <div className={styles.primaryCtaGroup}>
+            <Link to="/tarot" className={styles.ctaButton}>
+              Fazer minha leitura
+            </Link>
+            <span className={styles.ctaMicrocopy}>Leva ~3 min</span>
+          </div>
+
+          <div className={styles.secondaryActions}>
+            <Link to="/numerologia" className={styles.secondaryButton}>
+              Análise Numerológica
+            </Link>
+            <Link to="/biblioteca" className={styles.secondaryButton}>
+              Biblioteca de Cartas
+            </Link>
+          </div>
+
+          <div className={styles.trustSignals}>
+            <span>+2.000 leituras realizadas</span>
+            <span>Privacidade garantida</span>
+            <span>Resposta imediata</span>
+          </div>
+        </div>
       </div>
     </div>
   );
