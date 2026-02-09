@@ -1,19 +1,20 @@
 // src/hooks/useNumerologyReading.js (REFATORADO com useQuery, useMutation e ENVIO DE TOKEN)
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 // Importa o cliente Supabase e o hook de autenticação (VERIFIQUE OS CAMINHOS!)
-import { supabase } from '../supabaseClient'; 
-import { useAuth } from '../context/AuthContext'; 
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
+import { API_ENDPOINTS, parseApiResponse, buildApiUrl } from '../services/apiClient';
 
 // Define a URL base da API de numerologia
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
-const API_ENDPOINT = `${BACKEND_URL}/api/numerology`; // Endpoint base
+const API_ENDPOINT = API_ENDPOINTS.numerologyReading; // Endpoint base
+const RESET_ENDPOINT = API_ENDPOINTS.numerologyReset;
 
 // --- Função da API: BUSCAR Leitura Existente ---
 // Usa o cliente Supabase diretamente, respeitando RLS automaticamente se configurado corretamente
 const fetchNumerologyReadingAPI = async (userId) => {
   if (!userId) {
     console.log("[useNumerologyReading] fetch: Usuário não logado, retornando null.");
-    return null; 
+    return null;
   }
 
   console.log(`[useNumerologyReading] fetch: Buscando leitura existente para user ${userId} via Supabase client`);
@@ -21,7 +22,7 @@ const fetchNumerologyReadingAPI = async (userId) => {
     .from('numerology_readings')
     .select('*')
     .eq('user_id', userId)
-    .maybeSingle(); 
+    .maybeSingle();
 
   if (error) {
     console.error("[useNumerologyReading] fetch: Erro ao buscar leitura existente via client:", error);
@@ -29,7 +30,7 @@ const fetchNumerologyReadingAPI = async (userId) => {
   }
 
   console.log("[useNumerologyReading] fetch: Leitura existente encontrada (ou null):", data);
-  return data; 
+  return data;
 };
 
 // --- Função da API: CALCULAR Nova Leitura (Envia Token) ---
@@ -49,25 +50,23 @@ const calculateNumerologyAPI = async ({ birthDate, user }) => {
   console.log("[useNumerologyReading] calculate API: Chamando backend para CALCULAR:", { birthDate, userId: user.id });
 
   try {
-    const response = await fetch(API_ENDPOINT, {
+    const response = await fetch(buildApiUrl(API_ENDPOINT), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         // Envia o token JWT no cabeçalho Authorization
-        'Authorization': `Bearer ${token}` 
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({ birthDate, user }), // Envia data e usuário (backend pode usar ID do token)
     });
 
-    const data = await response.json();
-    if (!response.ok) {
-       // Se for 404 (retornado pelo backend se data inválida e sem leitura), trata como "não encontrado"
-       if (response.status === 404) {
-           console.log("[useNumerologyReading] calculate API: Backend retornou 404 (leitura não existe).");
-           return null; // Indica que precisa calcular (ou que data era inválida)
-       }
-      throw new Error(data.error || `Erro HTTP ${response.status} ao calcular.`);
+    if (response.status === 404) {
+      await response.json().catch(() => null);
+      console.log("[useNumerologyReading] calculate API: Backend retornou 404 (leitura não existe).");
+      return null; // Indica que precisa calcular (ou que data era inválida)
     }
+
+    const data = await parseApiResponse(response);
     console.log("[useNumerologyReading] calculate API: Nova leitura calculada:", data);
     return data;
   } catch (error) {
@@ -92,7 +91,7 @@ const resetNumerologyAPI = async ({ user }) => {
   console.log("[useNumerologyReading] reset API: Chamando backend para RESET para user:", user.id);
 
   try {
-    const response = await fetch(`${API_ENDPOINT}/reset`, { // Chama a sub-rota /reset
+    const response = await fetch(buildApiUrl(RESET_ENDPOINT), { // Chama a sub-rota /reset
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -100,13 +99,10 @@ const resetNumerologyAPI = async ({ user }) => {
         'Authorization': `Bearer ${token}`
       },
       // Envia user no corpo (backend pode usar ID do token ou do body)
-      body: JSON.stringify({ user }), 
+      body: JSON.stringify({ user }),
     });
 
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || `Erro HTTP ${response.status} ao resetar.`);
-    }
+    const data = await parseApiResponse(response);
     console.log("[useNumerologyReading] reset API: Reset bem-sucedido:", data);
     return data; // Retorna a mensagem de sucesso
   } catch (error) {
@@ -123,27 +119,27 @@ export function useNumerologyReading() {
 
   // 1. QUERY para BUSCAR a leitura existente
   const {
-    data: numerologyData,     
-    isLoading: isLoadingReading, 
-    error: errorLoadingReading,  
-    refetch: refetchReading    
+    data: numerologyData,
+    isLoading: isLoadingReading,
+    error: errorLoadingReading,
+    refetch: refetchReading
   } = useQuery({
     queryKey: ['numerologyReading', userId], // Chave única por usuário
     queryFn: () => fetchNumerologyReadingAPI(userId), // Função de busca
     enabled: !!userId, // Só busca se logado
-    staleTime: 1000 * 60 * 15, 
-    cacheTime: 1000 * 60 * 60, 
-    retry: 1                   
+    staleTime: 1000 * 60 * 15,
+    cacheTime: 1000 * 60 * 60,
+    retry: 1
   });
 
   // 2. MUTATION para CALCULAR uma nova leitura
   const calculationMutation = useMutation({
     mutationFn: calculateNumerologyAPI, // Função que faz o POST com token
-    onSuccess: (calculatedData, variables) => { 
+    onSuccess: (calculatedData, variables) => {
       console.log("[useNumerologyReading] Mutate Calculate Success:", calculatedData);
       // Atualiza o cache da query com os novos dados
       if (calculatedData) { // Só atualiza se o cálculo retornou dados (não null por 404)
-          queryClient.setQueryData(['numerologyReading', variables.user.id], calculatedData);
+        queryClient.setQueryData(['numerologyReading', variables.user.id], calculatedData);
       }
       // Invalida o perfil para buscar os números atualizados
       queryClient.invalidateQueries({ queryKey: ['profile', variables.user.id] });
@@ -163,7 +159,7 @@ export function useNumerologyReading() {
       // Invalida o perfil para remover os números
       queryClient.invalidateQueries({ queryKey: ['profile', variables.user.id] });
     },
-     onError: (error) => {
+    onError: (error) => {
       console.error("[useNumerologyReading] Mutate Reset Error:", error);
     },
   });
@@ -171,23 +167,23 @@ export function useNumerologyReading() {
   // 4. Retorna os estados da query e as funções/estados das mutações
   return {
     // Dados e estados da Query (Busca inicial)
-    numerologyData,          
-    isLoadingReading,        
-    errorLoadingReading,     
-    refetchReading,          
+    numerologyData,
+    isLoadingReading,
+    errorLoadingReading,
+    refetchReading,
 
     // Funções e estados da Mutação de Cálculo
-    calculateNumerology: calculationMutation.mutate, 
-    isCalculating: calculationMutation.isPending,     
-    errorCalculating: calculationMutation.error,      
-    isSuccessCalculating: calculationMutation.isSuccess,  
-    resetCalculationState: calculationMutation.reset,   
+    calculateNumerology: calculationMutation.mutate,
+    isCalculating: calculationMutation.isPending,
+    errorCalculating: calculationMutation.error,
+    isSuccessCalculating: calculationMutation.isSuccess,
+    resetCalculationState: calculationMutation.reset,
 
     // Funções e estados da Mutação de Reset
-    resetNumerology: resetMutation.mutate,       
-    isResetting: resetMutation.isPending,        
-    errorResetting: resetMutation.error,          
-    isSuccessResetting: resetMutation.isSuccess,      
-    resetResetState: resetMutation.reset         
+    resetNumerology: resetMutation.mutate,
+    isResetting: resetMutation.isPending,
+    errorResetting: resetMutation.error,
+    isSuccessResetting: resetMutation.isSuccess,
+    resetResetState: resetMutation.reset
   };
 }
