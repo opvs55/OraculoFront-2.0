@@ -1,10 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../context/AuthContext';
+
 import { supabase } from '../../supabaseClient';
 import {
   saveOrGetPersonalNumerology as saveOrGetPersonalNumerologyAction,
   upsertWeeklyNumerology as upsertWeeklyNumerologyAction,
 } from '../../services/oracleActionsService';
+
+import { oraclesApi } from '../../services/api/oraclesApi';
+import { supabase } from '../../supabaseClient';
+import { saveOrGetPersonalNumerology, upsertWeeklyNumerology } from '../../services/supabase/oraclesRepo';
+
 
 function getWeekStart(date = new Date()) {
   const current = new Date(date);
@@ -37,7 +43,18 @@ export function useNumerology() {
 
   const calculatePersonal = useMutation({
     mutationFn: async ({ birthDate }) => {
+
       return saveOrGetPersonalNumerologyAction({ birthDate, userId });
+
+      const apiData = await oraclesApi.getPersonalNumerology({ birthDate, userId });
+      return saveOrGetPersonalNumerology({
+        userId,
+        payload: {
+          input_birth_date: birthDate,
+          ...apiData,
+        },
+      });
+
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['numerology', 'personal', userId], data);
@@ -47,7 +64,16 @@ export function useNumerology() {
   const calculateWeekly = useMutation({
     mutationFn: async ({ birthDate }) => {
       const weekStart = getWeekStart();
+
       return upsertWeeklyNumerologyAction({ birthDate, userId, weekStart });
+
+      const apiData = await oraclesApi.getWeeklyNumerology({ birthDate, userId, weekStart });
+      return upsertWeeklyNumerology({
+        userId,
+        weekStart,
+        readingData: apiData,
+      });
+
     },
   });
 

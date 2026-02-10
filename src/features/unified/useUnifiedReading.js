@@ -1,6 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '../../context/AuthContext';
+
 import { createUnifiedReading as createUnifiedReadingAction } from '../../services/oracleActionsService';
+
+import { oraclesApi } from '../../services/api/oraclesApi';
+import { insertUnifiedReading } from '../../services/supabase/oraclesRepo';
+
 
 export function useUnifiedReading() {
   const { user } = useAuth();
@@ -8,7 +13,20 @@ export function useUnifiedReading() {
 
   const createUnifiedReading = useMutation({
     mutationFn: async ({ inputPayload }) => {
+
       return createUnifiedReadingAction({ ...inputPayload, userId });
+
+      const response = await oraclesApi.createUnifiedReading(inputPayload);
+
+      return insertUnifiedReading({
+        userId,
+        weekRef: inputPayload?.weekRef,
+        inputPayload,
+        moduleOutputs: response?.module_outputs || response?.moduleOutputs,
+        warnings: response?.warnings || [],
+        finalReading: response?.final_reading || response?.finalReading || response,
+      });
+
     },
   });
 

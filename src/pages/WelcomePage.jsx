@@ -59,7 +59,10 @@ function WelcomePage() {
             </div>
           </div>
 
+
           <TecnomagiaSection />
+
+
 
           <div className={styles.trustSignals}>
             <span>+2.000 leituras realizadas</span>
