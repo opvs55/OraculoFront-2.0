@@ -1,0 +1,9 @@
+.section { margin-top: 1.4rem; border: 1px solid rgba(225,179,130,.24); border-radius: 16px; padding: 1rem; background: rgba(15,13,31,.78); text-align: left; }
+.section h2 { margin: 0 0 .5rem; color: #e1b382; font-size: 1.18rem; }
+.section p { margin: 0; color: #d9d1dd; line-height: 1.6; }
+.pillars { margin-top: .8rem; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .6rem; }
+.pillars article { border: 1px solid rgba(225,179,130,.18); border-radius: 12px; padding: .6rem; background: rgba(20,17,40,.75); }
+.pillars h3 { margin: 0 0 .4rem; font-size: .95rem; color: #f5d7b7; }
+.pillars p { font-size: .86rem; }
+.cta { margin-top: .8rem; display: inline-flex; text-decoration: none; color: #0d0c1d; background: #e1b382; border-radius: 999px; padding: .45rem .9rem; font-weight: 700; }
+@media (max-width: 768px) { .pillars { grid-template-columns: 1fr; } }

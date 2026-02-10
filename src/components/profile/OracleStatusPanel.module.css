@@ -1,0 +1,24 @@
+.panel {
+  background: rgba(13, 12, 29, 0.84);
+  border: 1px solid rgba(225, 179, 130, 0.22);
+  border-radius: 18px;
+  padding: 1.2rem;
+}
+.panel h2 { margin: 0 0 .35rem; color: #e1b382; }
+.subtitle { margin: 0 0 1rem; color: #d6cfde; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: .9rem; }
+.card { background: rgba(17, 16, 34, .86); border: 1px solid rgba(225,179,130,.2); border-radius: 14px; padding: .9rem; display: flex; flex-direction: column; gap: .7rem; }
+.card header { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+.card h3 { margin: 0; font-size: 1rem; }
+.card p { margin: 0; color: #cfc7d8; font-size: .9rem; }
+.doneBadge, .pendingBadge { padding: .22rem .55rem; border-radius: 999px; font-size: .74rem; font-weight: 700; }
+.doneBadge { background: rgba(85, 173, 121, .2); color: #9fdab6; }
+.pendingBadge { background: rgba(225, 179, 130, .2); color: #f3d8b6; }
+.cardFooter { margin-top: auto; }
+.primaryAction, .secondaryAction, .retryButton { display: inline-flex; text-decoration: none; align-items: center; justify-content: center; border-radius: 999px; padding: .45rem .8rem; font-weight: 700; }
+.primaryAction { background: #e1b382; color: #0d0c1d; }
+.secondaryAction { border: 1px solid rgba(225,179,130,.45); color: #f5d8b5; }
+.errorText { color: #f4b2b2; }
+.retryButton { border: 1px solid rgba(225,179,130,.45); background: transparent; color: #f5d8b5; }
+.skeleton { min-height: 138px; border-radius: 14px; background: linear-gradient(90deg, rgba(40,35,61,.8), rgba(66,57,98,.8), rgba(40,35,61,.8)); background-size: 200% 100%; animation: pulse 1.2s infinite; }
+@keyframes pulse { 0% { background-position: 0% 50%; } 100% { background-position: -200% 50%; } }

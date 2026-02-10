@@ -41,6 +41,8 @@ const LearningCardDetailPage = lazy(() => import('../pages/learning/LearningCard
 const MeuGrimorioPage = lazy(() => import('../pages/dashboard/MeuGrimorioPage'));
 const EditarPerfilPage = lazy(() => import('../pages/dashboard/EditarPerfilPage'));
 const CommunityFeedPage = lazy(() => import('../pages/community/CommunityFeedPage'));
+const UnifiedReadingPage = lazy(() => import('../pages/unified/UnifiedReadingPage'));
+const PerfilOraculosPage = lazy(() => import('../pages/dashboard/PerfilOraculosPage/PerfilOraculosPage'));
 
 function AppRoutes() {
   return (
@@ -52,6 +54,7 @@ function AppRoutes() {
         <Route path="/tarot" element={<TarotPage />} />
         <Route path="/numerologia" element={<NumerologyPage />} />
         <Route path="/mapa-astral" element={<AstrologyPage />} />
+        <Route path="/leitura-unificada" element={<UnifiedReadingPage />} />
         
         {/* Rotas de Autenticação */}
         <Route path="/cadastro" element={<CadastroPage />} />
@@ -69,6 +72,7 @@ function AppRoutes() {
         {/* --- Rotas Protegidas (Agrupadas) --- */}
         <Route element={<ProtectedRoute />}>
           <Route path="/meu-grimorio" element={<MeuGrimorioPage />} />
+          <Route path="/perfil" element={<PerfilOraculosPage />} />
           <Route path="/perfil/editar" element={<EditarPerfilPage />} />
           <Route path="/biblioteca" element={<CardLibraryPage />} />
           <Route path="/biblioteca/:cardSlug" element={<LearningCardDetailPage />} />
