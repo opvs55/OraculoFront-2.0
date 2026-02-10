@@ -116,6 +116,13 @@
   background: rgba(225, 179, 130, 0.1);
 }
 
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
 .error {
   color: #f2a8a8;
   background: rgba(74, 28, 28, 0.6);

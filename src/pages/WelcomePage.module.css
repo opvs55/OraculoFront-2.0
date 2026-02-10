@@ -3,137 +3,33 @@
   --color-card-bg: rgba(13, 12, 29, 0.82);
   --color-card-border: rgba(225, 179, 130, 0.18);
   --color-gold: #E1B382;
-  --color-gold-soft: rgba(225, 179, 130, 0.35);
   --color-text: #f0f0f4;
   --color-text-muted: #c7c7d2;
   --radius-card: 18px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 80px);
-  padding: 2rem;
-  text-align: center;
-  color: var(--color-text);
-  position: relative;
-  overflow: hidden;
+  display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 80px);
+  padding: 2rem; text-align: center; color: var(--color-text); position: relative; overflow: hidden;
 }
+.videoFundo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; object-fit: cover; z-index: 1; }
+.videoOverlay { position: absolute; inset: 0; background-color: var(--color-bg-overlay); z-index: 2; }
+.content { position: relative; z-index: 3; width: 100%; display: flex; justify-content: center; }
+.heroCard { max-width: 820px; width: min(92vw, 820px); background-color: var(--color-card-bg); padding: 3rem 3.5rem; border-radius: var(--radius-card); border: 1px solid var(--color-card-border); box-shadow: 0 20px 50px rgba(0,0,0,.45); backdrop-filter: blur(6px); }
+.mainTitle { font-family: 'Cinzel', serif; font-size: clamp(2.8rem, 4vw, 4.5rem); color: var(--color-gold); margin: 0 0 1rem; letter-spacing: .08em; }
+.subtitle { font-size: 1.25rem; color: var(--color-text-muted); line-height: 1.7; margin-bottom: 2.5rem; }
+.monologue { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; font-size: 1.05rem; line-height: 1.8; color: #e4dbd2; }
+.monologueLink { align-self: center; color: var(--color-gold); text-decoration: none; font-weight: 600; }
+.trustSignals { margin-top: 2.5rem; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; font-size: .95rem; color: #cfc7b7; }
 
-.videoFundo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: 1;
-  object-fit: cover;
-}
-
-.videoOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--color-bg-overlay);
-  z-index: 2;
-}
-
-.content {
-  position: relative;
-  z-index: 3;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.heroCard {
-  max-width: 820px;
-  width: min(92vw, 820px);
-  background-color: var(--color-card-bg);
-  padding: 3rem 3.5rem;
-  border-radius: var(--radius-card);
-  border: 1px solid var(--color-card-border);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(6px);
-}
-
-.mainTitle {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(2.8rem, 4vw, 4.5rem);
-  color: var(--color-gold);
-  text-shadow: 0 0 18px rgba(225, 179, 130, 0.45);
-  margin: 0 0 1rem 0;
-  letter-spacing: 0.08em;
-}
-
-.subtitle {
-  font-size: 1.25rem;
-  color: var(--color-text-muted);
-  line-height: 1.7;
-  margin-bottom: 2.5rem;
-}
-
-.monologue {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  font-size: 1.05rem;
-  line-height: 1.8;
-  color: #e4dbd2;
-}
-
-.monologueLink {
-  align-self: center;
-  color: var(--color-gold);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.monologueLink:hover {
-  text-decoration: underline;
-}
-
-.trustSignals {
-  margin-top: 2.5rem;
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  font-size: 0.95rem;
-  color: #cfc7b7;
-}
-
-.trustSignals span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+.mobileOraclesSection { display: none; }
 
 @media (max-width: 768px) {
-  .heroCard {
-    padding: 2.4rem 2rem;
-  }
-
-  .subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-  }
-
-  .trustSignals {
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ctaButton,
-  .secondaryButton {
-    transition: none;
-  }
+  .heroCard { padding: 2.2rem 1.3rem; }
+  .subtitle { font-size: 1.03rem; margin-bottom: 1.5rem; }
+  .mobileOraclesSection { display: block; text-align: left; margin-top: 1.4rem; }
+  .mobileOraclesSection h2 { font-size: 1.05rem; color: var(--color-gold); margin-bottom: .7rem; }
+  .mobileOraclesScroller { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
+  .oracleCard { border: 1px solid rgba(225,179,130,.3); border-radius: 12px; padding: .8rem; background: rgba(20,16,38,.8); display: flex; flex-direction: column; gap: .45rem; }
+  .oracleCard h3 { margin: 0; font-size: .95rem; }
+  .oracleCard p { margin: 0; color: #d4cfde; font-size: .82rem; line-height: 1.4; }
+  .oracleCta { color: #f4d5ac; font-size: .82rem; text-decoration: none; font-weight: 700; }
+  .trustSignals { flex-direction: column; gap: .45rem; margin-top: 1.6rem; }
 }
