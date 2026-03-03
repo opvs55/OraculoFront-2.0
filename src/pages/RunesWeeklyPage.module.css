@@ -1,0 +1,65 @@
+.page {
+  min-height: calc(100vh - 120px);
+  padding: 2rem 1rem 4rem;
+}
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  color: #f7ebce;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: #f5ddb0;
+}
+
+.header p {
+  margin: 0.65rem 0 0;
+  color: rgba(248, 234, 201, 0.78);
+}
+
+.weekRef {
+  display: inline-flex;
+  margin-top: 0.95rem;
+  padding: 0.35rem 0.72rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(232, 204, 140, 0.35);
+  background: rgba(25, 18, 33, 0.72);
+}
+
+.infoBox,
+.errorBox {
+  margin: 1.4rem 0;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(232, 204, 140, 0.25);
+  background: rgba(16, 12, 25, 0.82);
+}
+
+.errorBox {
+  border-color: rgba(218, 99, 99, 0.55);
+}
+
+.actionBtn {
+  margin-top: 0.8rem;
+  border: 1px solid rgba(240, 211, 150, 0.4);
+  background: linear-gradient(180deg, rgba(185, 142, 60, 0.22), rgba(140, 102, 38, 0.22));
+  color: #f8e9c5;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.devOnly {
+  margin-top: 1.4rem;
+  opacity: 0.75;
+}
+
+.devOnly pre {
+  white-space: pre-wrap;
+}
