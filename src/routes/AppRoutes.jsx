@@ -21,6 +21,7 @@ const WelcomePage = lazy(() => import('../pages/WelcomePage'));
 const TarotPage = lazy(() => import('../pages/TarotPage'));
 const NumerologyPage = lazy(() => import('../pages/NumerologyPage.jsx'));
 const AstrologyPage = lazy(() => import('../pages/AstrologyPage'));
+const RunesWeeklyPage = lazy(() => import('../pages/RunesWeeklyPage'));
 
 // Autenticação
 const CadastroPage = lazy(() => import('../pages/auth/CadastroPage'));
@@ -52,6 +53,7 @@ function AppRoutes() {
         <Route path="/tarot" element={<TarotPage />} />
         <Route path="/numerologia" element={<NumerologyPage />} />
         <Route path="/mapa-astral" element={<AstrologyPage />} />
+        <Route path="/runas-semanais" element={<RunesWeeklyPage />} />
         
         {/* Rotas de Autenticação */}
         <Route path="/cadastro" element={<CadastroPage />} />
