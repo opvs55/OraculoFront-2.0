@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tansta
 import { supabase } from '../supabaseClient';
 import { sortearCruzCelta, sortearTresCartas, sortearUmaCarta, sortearTemploDeAfrodite, sortearEscolhaDeCaminho } from '../services/tarotService';
 import { getInterpretation } from '../services/aiService';
+import { trackEvent } from '../lib/analytics';
 
 const READINGS_PER_PAGE = 12;
 
@@ -194,7 +195,11 @@ export function useGenerateReading() {
       }
     },
     onSuccess: (data, variables) => {
-      if (data.user_id && variables.user?.id) { 
+      trackEvent('tarot_reading_generated', {
+        spread_type: variables.spreadType,
+        guest: !variables.user?.id,
+      });
+      if (data.user_id && variables.user?.id) {
         console.log("Invalidando histórico para usuário:", variables.user.id);
         queryClient.invalidateQueries({ queryKey: ['readings', 'history', variables.user.id] });
       } else {

@@ -4,6 +4,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../supabaseClient';
+import { identifyUser, resetAnalytics, trackEvent } from '../lib/analytics';
 
 export const AuthContext = createContext(undefined);
 
@@ -58,15 +59,23 @@ export function AuthProvider({ children }) {
         if (currentUser) {
           // Utilizador logado: Busca o perfil
           fetchProfile(currentUser.id);
+          identifyUser(currentUser.id, { email: currentUser.email });
         } else {
           // Utilizador deslogado: Limpa o perfil e termina o loading
           setProfile(null);
           setLoading(false);
         }
 
+        // SIGNED_IN só dispara em um login/cadastro de fato (não na restauração
+        // de sessão existente ao abrir a página, que é INITIAL_SESSION).
+        if (event === 'SIGNED_IN') {
+          trackEvent('login');
+        }
+
         if (event === 'SIGNED_OUT') {
           queryClient.clear();
           setProfile(null);
+          resetAnalytics();
         }
       }
     );

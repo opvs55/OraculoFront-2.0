@@ -2,6 +2,7 @@
 
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../supabaseClient';
+import { trackEvent } from '../lib/analytics';
 
 const COMMENTS_PER_PAGE = 10; // Define quantos comentários carregar de cada vez
 
@@ -76,7 +77,11 @@ export function useReadingComments(readingId, sortBy = { column: 'created_at', a
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
+      trackEvent('reading_commented', {
+        reading_id: readingId,
+        is_reply: !!variables.parentCommentId,
+      });
       // Invalida a query para forçar o recarregamento com o novo comentário
       queryClient.invalidateQueries({ queryKey: ['readingComments', readingId] });
     },

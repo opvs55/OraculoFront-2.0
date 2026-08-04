@@ -4,6 +4,7 @@ import { supabase } from '../../supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import styles from './AuthPage.module.css';
 import { translateSupabaseError } from '../../utils/authErrorUtils';
+import { trackEvent } from '../../lib/analytics';
 
 function CadastroPage() {
   const [username, setUsername] = useState('');
@@ -80,6 +81,7 @@ function CadastroPage() {
       // Cenário A: Confirmação de email ATIVADA (O que você quer)
       // O usuário é criado, mas data.session é null.
       if (data.user && !data.session) {
+         trackEvent('sign_up_completed', { needs_email_confirmation: true });
          setMsgSucesso(`Cadastro realizado! Enviamos um link de confirmação para ${email}. Verifique sua caixa de entrada (e spam).`);
          // Limpa o formulário
          setUsername('');
@@ -89,6 +91,7 @@ function CadastroPage() {
       } 
       // Cenário B: Caso a confirmação esteja desligada (fallback)
       else if (data.session) {
+         trackEvent('sign_up_completed', { needs_email_confirmation: false });
          navigate('/meu-grimorio');
       }
 

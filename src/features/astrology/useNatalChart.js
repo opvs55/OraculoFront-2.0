@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { oraclesApi } from '../../services/api/oraclesApi';
 import { supabase } from '../../supabaseClient';
 import { saveOrGetNatalChart } from '../../services/supabase/oraclesRepo';
+import { trackEvent } from '../../lib/analytics';
 
 export function useNatalChart() {
   const queryClient = useQueryClient();
@@ -39,6 +40,7 @@ export function useNatalChart() {
       });
     },
     onSuccess: (data) => {
+      trackEvent('astrology_reading_generated');
       queryClient.setQueryData(['astrology', 'natal-chart', userId], data);
     },
   });

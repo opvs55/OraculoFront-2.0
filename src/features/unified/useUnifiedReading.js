@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '../../context/AuthContext';
 import { oraclesApi } from '../../services/api/oraclesApi';
 import { insertUnifiedReading } from '../../services/supabase/oraclesRepo';
+import { trackEvent } from '../../lib/analytics';
 
 export function useUnifiedReading() {
   const { user } = useAuth();
@@ -19,6 +20,9 @@ export function useUnifiedReading() {
         warnings: response?.warnings || [],
         finalReading: response?.final_reading || response?.finalReading || response,
       });
+    },
+    onSuccess: () => {
+      trackEvent('unified_reading_generated');
     },
   });
 

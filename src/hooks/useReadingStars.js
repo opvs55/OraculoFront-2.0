@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../supabaseClient'; // Ajuste o caminho se necessário
+import { trackEvent } from '../lib/analytics';
 
 /**
  * Hook personalizado para gerir as "estrelas" (likes) de uma leitura.
@@ -61,6 +62,7 @@ export function useReadingStars(readingId, userId) {
       if (error) throw error;
     },
     onSuccess: () => {
+      trackEvent('reading_starred', { reading_id: readingId });
       // Atualiza o cache localmente para uma UI instantânea
       queryClient.setQueryData(queryKey, (oldData) => {
         if (!oldData) return { totalStars: 1, userHasStarred: true };

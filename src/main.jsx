@@ -5,6 +5,9 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
 import './styles/globals.css';
+import { initAnalytics } from './lib/analytics';
+
+initAnalytics();
 
 // 1. Criamos uma instância do QueryClient
 const queryClient = new QueryClient({

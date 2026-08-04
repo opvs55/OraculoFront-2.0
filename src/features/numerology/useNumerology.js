@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { oraclesApi } from '../../services/api/oraclesApi';
 import { supabase } from '../../supabaseClient';
 import { saveOrGetPersonalNumerology, upsertWeeklyNumerology } from '../../services/supabase/oraclesRepo';
+import { trackEvent } from '../../lib/analytics';
 
 function getWeekStart(date = new Date()) {
   const current = new Date(date);
@@ -45,6 +46,7 @@ export function useNumerology() {
       });
     },
     onSuccess: (data) => {
+      trackEvent('numerology_reading_generated', { type: 'personal' });
       queryClient.setQueryData(['numerology', 'personal', userId], data);
     },
   });
@@ -58,6 +60,9 @@ export function useNumerology() {
         weekStart,
         readingData: apiData,
       });
+    },
+    onSuccess: () => {
+      trackEvent('numerology_reading_generated', { type: 'weekly' });
     },
   });
 
