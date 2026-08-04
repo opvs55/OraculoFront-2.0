@@ -57,7 +57,10 @@ export function useGrimorioReadings({
         .eq('user_id', userId);
 
       if (searchTerm) {
-        const safeTerm = searchTerm.replace(/%/g, '').trim();
+        // Remove caracteres com significado especial na sintaxe de filtro do PostgREST
+        // (`,` separa condições, `()` agrupa, `%` é o wildcard do ilike) para que o termo
+        // de busca do usuário não consiga alterar a estrutura do filtro `.or()` abaixo.
+        const safeTerm = searchTerm.replace(/[%,()]/g, '').trim();
         if (safeTerm) {
           request = request.or(
             `question.ilike.%${safeTerm}%,shared_title.ilike.%${safeTerm}%,main_interpretation.ilike.%${safeTerm}%,cards_data::text.ilike.%${safeTerm}%`,

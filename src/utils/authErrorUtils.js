@@ -34,6 +34,12 @@ export function translateSupabaseError(error) {
       return "Muitas tentativas. Por favor, aguarde um pouco.";
   }
 
+  // Violação da constraint UNIQUE de username no banco (ex.: duas tentativas de
+  // cadastro simultâneas com o mesmo username, mesmo após a checagem prévia).
+  if (error.code === "23505" || error.message.includes("duplicate key value")) {
+      return "Este nome de usuário já está em uso.";
+  }
+
   // Se não encontrar uma tradução específica, retorna a mensagem padrão ou a original (para debug)
   // Em produção, talvez seja melhor retornar sempre a padrão por segurança.
   console.warn("Erro Supabase não traduzido:", error.message); // Log para debug

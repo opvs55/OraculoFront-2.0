@@ -41,7 +41,9 @@ function CadastroPage() {
     setLoading(true);
 
     try {
-      // 1. Verifica se o username já existe
+      // 1. Verifica se o username já existe (feedback rápido; não é a fonte da verdade —
+      // a constraint UNIQUE no banco é quem previne a condição de corrida de fato,
+      // e o erro dela é traduzido em translateSupabaseError()).
       const { data: existingUser, error: usernameError } = await supabase
         .from('profiles')
         .select('username')
