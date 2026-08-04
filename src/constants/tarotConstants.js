@@ -1,12 +1,15 @@
+// Mantidos em sincronia com os rótulos de "posicao" gerados pela IA em
+// controllers/tarotController.js (prompt da Cruz Celta) — a imagem da
+// tiragem e o texto da leitura precisam contar a mesma história por posição.
 export const POSICOES_CRUZ_CELTA = [
-  "1. A Situação Atual",
+  "1. O Coração da Matéria",
   "2. O Desafio Imediato",
   "3. A Base da Questão",
-  "4. O Passado Recente",
-  "5. A Coroação (Melhor Resultado Possível)",
-  "6. O Futuro Próximo",
-  "7. Sua Posição (Como você se vê)",
-  "8. O Ambiente (Influências externas)",
+  "4. O Passado Distante",
+  "5. O Objetivo",
+  "6. O Caminho",
+  "7. O Consulente",
+  "8. O Ambiente",
   "9. Esperanças e Medos",
   "10. O Resultado Final",
 ];
